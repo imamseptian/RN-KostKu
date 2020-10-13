@@ -1,22 +1,28 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {
-  Animated,
-  Dimensions,
-  Image,
-  StatusBar,
   StyleSheet,
+  Text,
   View,
+  Image,
+  Dimensions,
+  StatusBar,
+  ScrollView,
+  FlatList,
+  Animated,
 } from 'react-native';
 import {SharedElement} from 'react-navigation-shared-element';
-import {PenghuniInfo} from './penghuni';
+import {PenghuniInfo} from '../../penghuni';
+import {myColor} from '../../../function/MyVar';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
-const DetailPenghuni = ({navigation, route}) => {
-  const {item} = route.params;
+const DetailPenyewa = ({navigation}) => {
   const datapage = [
-    {id: 'page0', page: <PenghuniInfo data={item} />},
-    {id: 'page1', page: <PenghuniInfo data={item} />},
+    {id: 'page0', page: <PenghuniInfo />},
+    {id: 'page1', page: <PenghuniInfo />},
   ];
   const ref = useRef();
 
@@ -53,12 +59,11 @@ const DetailPenghuni = ({navigation, route}) => {
     <View style={{flex: 1}}>
       <StatusBar translucent backgroundColor="transparent" />
       <View>
-        <SharedElement id={`item.${item.id}.icon`}>
+        <SharedElement id={`item.111111.icon`}>
           <Image
             source={{
               uri:
-                'https://dry-forest-53707.herokuapp.com/kostdata/pendaftar/foto/' +
-                item.foto_diri,
+                'https://dry-forest-53707.herokuapp.com/kostdata/pendaftar/foto/UK75Xye6zv.jpeg',
             }}
             style={{
               width: screenWidth,
@@ -110,13 +115,13 @@ const DetailPenghuni = ({navigation, route}) => {
   );
 };
 
-DetailPenghuni.sharedElements = (route, otherRoute, showing) => {
-  const {item} = route.params;
+DetailPenyewa.sharedElements = (route, otherRoute, showing) => {
+  // const {item} = route.params;
   // return DATA_ICON.map((item) => `item.${item.id}.icon`);
 
-  return [`item.${item.id}.icon`];
+  return [`item.111111.icon`];
 };
 
-export default DetailPenghuni;
+export default DetailPenyewa;
 
 const styles = StyleSheet.create({});

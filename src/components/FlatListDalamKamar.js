@@ -59,7 +59,7 @@ const FlatListDalamKamar = (props) => {
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text>Status Tagihan</Text>
 
-            {props.data.tagihan >= 0 ? (
+            {props.data.tagihan <= 0 ? (
               <View style={{flexDirection: 'row'}}>
                 <View
                   style={{
@@ -99,7 +99,8 @@ const FlatListDalamKamar = (props) => {
                       color: myColor.darkText,
                       fontSize: 12,
                     }}>
-                    {props.data.tagihan}
+                    {0 - props.data.tagihan}
+                    {/* {props.data.mytagihan.length} */}
                   </Text>
                 </View>
               </View>
@@ -135,7 +136,7 @@ const FlatListDalamKamar = (props) => {
                   }}>
                   <Text
                     style={{fontWeight: 'bold', color: 'white', fontSize: 12}}>
-                    -1
+                    {0 - props.data.tagihan}
                   </Text>
                 </View>
               </View>

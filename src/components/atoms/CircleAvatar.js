@@ -7,7 +7,7 @@ import {
   Image,
 } from 'react-native';
 import {myColor, APIUrl} from '../../function/MyVar';
-
+import {SharedElement} from 'react-navigation-shared-element';
 const CircleAvatar = (props) => {
   const [img, setimg] = useState(
     APIUrl + '/kostdata/pendaftar/foto/' + props.data.foto_diri,
@@ -17,20 +17,22 @@ const CircleAvatar = (props) => {
     <TouchableNativeFeedback onPress={props.onPress}>
       <View style={styles.scrollWrapper}>
         <View style={styles.imageScrollWrapper}>
-          <Image
-            source={{
-              uri: img,
-            }}
-            onError={(e) =>
-              setimg(
-                'https://liquipedia.net/commons/images/thumb/6/66/AdmiralBulldog_EPICENTER_XL.jpg/600px-AdmiralBulldog_EPICENTER_XL.jpg',
-              )
-            }
-            // source={require('../asset/imgdefault/avatar.jpeg')}
-            // defaultSource={require('../asset/imgdefault/avatar.jpeg')}
-            style={styles.avatarScroll}
-            resizeMode="cover"
-          />
+          <SharedElement id={`item.${props.data.id}.icon`}>
+            <Image
+              source={{
+                uri: img,
+              }}
+              onError={(e) =>
+                setimg(
+                  'https://liquipedia.net/commons/images/thumb/6/66/AdmiralBulldog_EPICENTER_XL.jpg/600px-AdmiralBulldog_EPICENTER_XL.jpg',
+                )
+              }
+              // source={require('../asset/imgdefault/avatar.jpeg')}
+              // defaultSource={require('../asset/imgdefault/avatar.jpeg')}
+              style={styles.avatarScroll}
+              resizeMode="cover"
+            />
+          </SharedElement>
         </View>
         <Text style={styles.avatarName} numberOfLines={1}>
           {/* {item.nama_depan} */}

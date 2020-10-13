@@ -2,7 +2,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useEffect} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Easing} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {fcmService} from '../FCMService';
 import {localNotificationService} from '../LocalNotificationService';
@@ -28,22 +28,20 @@ import CustomDrawer from '../pages/Drawer/CustomDrawer';
 import FirstTimeNavigator from './FirstTimeNavigator';
 
 // import FirstTimeNavigator from './FirstTimeNavigator';
+import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 
 const BundleStack = createStackNavigator();
 const PendaftarStack = createStackNavigator();
 const PenghuniStack = createStackNavigator();
 const FirstStack = createStackNavigator();
-const MainStack = createStackNavigator();
+const MainStack = createSharedElementStackNavigator();
 const KamarStack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tabs = createMaterialBottomTabNavigator();
 
 const DrawerScreen = () => (
   <Drawer.Navigator drawerContent={(props) => <CustomDrawer {...props} />}>
-    <Drawer.Screen name="HomeDrawer" component={HomeScreen} />
-    <Drawer.Screen name="KamarScreen" component={KamarScreen} />
-    <Drawer.Screen name="PenghuniScreen" component={PenghuniScreen} />
-    <Drawer.Screen name="PendaftarScreen" component={PendaftarScreen} />
+    <Drawer.Screen name="MainStack" component={MainStackScreen} />
     {/* <Drawer.Screen name="ListKamar" component={ListKamar} />
     <Drawer.Screen name="CreateKelas" component={FormKelasKamar} />
     <Drawer.Screen name="DetailKelas" component={DetailKelasKamar} />
@@ -54,6 +52,52 @@ const DrawerScreen = () => (
     <Drawer.Screen name="DetailKamar" component={DetailKamar} />
     <Drawer.Screen name="EditKamar" component={EditKamar} /> */}
   </Drawer.Navigator>
+);
+
+const MainStackScreen = () => (
+  <MainStack.Navigator headerMode={false}>
+    <MainStack.Screen name="HomeScreen" component={HomeScreen} />
+
+    <MainStack.Screen name="ListPenghuni" component={ListPenghuni} />
+    <MainStack.Screen
+      name="DetailPenghuni"
+      component={DetailPenghuni}
+      options={() => ({
+        gestureEnabled: false,
+        transitionSpec: {
+          open: {
+            animation: 'timing',
+            config: {duration: 500, easing: Easing.inOut(Easing.ease)},
+          },
+          close: {
+            animation: 'timing',
+            config: {duration: 500, easing: Easing.inOut(Easing.linear)},
+          },
+        },
+        cardStyleInterpolator: ({current: {progress}}) => {
+          return {
+            cardStyle: {
+              opacity: progress,
+            },
+          };
+        },
+      })}
+    />
+
+    <MainStack.Screen name="ListPendaftar" component={ListPendaftar} />
+    <MainStack.Screen name="DetailPendaftar" component={DetailPendaftar} />
+
+    <MainStack.Screen name="ListKamar" component={ListKamar} />
+    <MainStack.Screen name="CreateKelas" component={FormKelasKamar} />
+    <MainStack.Screen name="DetailKelas" component={DetailKelasKamar} />
+    <MainStack.Screen name="CreateKamar" component={CreateKamar} />
+    <MainStack.Screen name="EditKelas" component={EditKelasKamar} />
+    <MainStack.Screen name="DaftarKamar" component={DaftarKamar} />
+    <MainStack.Screen name="FormKelasKamar" component={FormKelasKamar} />
+    <MainStack.Screen name="DetailKamar" component={DetailKamar} />
+    <MainStack.Screen name="EditKamar" component={EditKamar} />
+    <MainStack.Screen name="PageTest" component={PageTest} />
+  </MainStack.Navigator>
 );
 
 const PenghuniScreen = () => (

@@ -25,6 +25,7 @@ import DetailPendaftar from './DetailPendaftar';
 import ListPenghuni from './ListPenghuni';
 import DetailPenghuni from './DetailPenghuni';
 import DetailInfoPenghuni from './DetailInfoPenghuni';
+import TagihanPenghuni from './TagihanPenghuni';
 
 export {
   LoginScreen,
@@ -54,4 +55,5 @@ export {
   ListPenghuni,
   DetailPenghuni,
   DetailInfoPenghuni,
+  TagihanPenghuni,
 };

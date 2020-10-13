@@ -120,7 +120,13 @@ const CustomDrawer = (props) => {
               )}
               label="Home"
               onPress={() => {
-                props.navigation.navigate('HomeDrawer');
+                // props.navigation.navigate('HomeDrawer');
+                props.navigation.closeDrawer();
+                // props.navigation.popToTop();
+                props.navigation.reset({
+                  index: 0,
+                  routes: [{name: 'HomeScreen'}],
+                });
               }}
             />
           </Drawer.Section>
@@ -133,7 +139,13 @@ const CustomDrawer = (props) => {
               label="List Kamar"
               onPress={() => {
                 // props.navigation.push('ListKamar');
-                props.navigation.navigate('KamarScreen');
+                // props.navigation.navigate('KamarScreen');
+                props.navigation.closeDrawer();
+                // props.navigation.push('ListKamar');
+                props.navigation.reset({
+                  index: 0,
+                  routes: [{name: 'ListKamar'}],
+                });
               }}
             />
           </Drawer.Section>
@@ -146,8 +158,14 @@ const CustomDrawer = (props) => {
               label="Penghuni"
               onPress={() => {
                 // props.navigation.push('ListKamar');
-                props.navigation.navigate('PenghuniScreen', {
-                  screen: 'ListPenghuni',
+                // props.navigation.navigate('PenghuniScreen', {
+                //   screen: 'ListPenghuni',
+                // });
+                props.navigation.closeDrawer();
+                // props.navigation.push('ListPenghuni');
+                props.navigation.reset({
+                  index: 0,
+                  routes: [{name: 'ListPenghuni'}],
                 });
               }}
             />
@@ -160,7 +178,13 @@ const CustomDrawer = (props) => {
               )}
               label="Pendaftar"
               onPress={() => {
-                props.navigation.navigate('PendaftarScreen');
+                // props.navigation.navigate('PendaftarScreen');
+                props.navigation.closeDrawer();
+                // props.navigation.push('ListPendaftar');
+                props.navigation.reset({
+                  index: 0,
+                  routes: [{name: 'ListPendaftar'}],
+                });
               }}
             />
           </Drawer.Section>

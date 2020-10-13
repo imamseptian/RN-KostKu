@@ -95,8 +95,8 @@ const ListPenghuni = ({navigation}) => {
   );
 
   useEffect(() => {
+    const source = axios.CancelToken.source();
     if (page != 1) {
-      const source = axios.CancelToken.source();
       setIsLoading(true);
       myAxios.postAxios(
         APIUrl + '/api/daftarpenghuni?page=' + page,
