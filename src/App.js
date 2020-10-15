@@ -21,6 +21,7 @@ import {
   MyHome,
   Kamarque,
 } from './pages/Example';
+import {Catlin1, ActiveIndex} from './pages/Example/Animation';
 import {DetailPendaftar, Splash, DetailKamar} from './pages';
 import {
   MarketSlider,
@@ -29,6 +30,7 @@ import {
   DetailPenyewa,
   Home,
 } from './pages/Example/SharedElement';
+import {HalamanBayar} from './pages/transaksi';
 import {FlatListKamar, FlatListTagihan} from './components';
 import {enableScreens} from 'react-native-screens';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
@@ -41,8 +43,11 @@ const Stack = createSharedElementStackNavigator();
 export default function App() {
   return (
     <Provider store={store}>
+      {/* <ActiveIndex /> */}
+      {/* <Catlin1 /> */}
       {/* <NavigationContainer>
         <Stack.Navigator headerMode={false}>
+          <Stack.Screen name="List" component={ActiveIndex} />
           <Stack.Screen name="List" component={List} />
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen
@@ -118,6 +123,7 @@ export default function App() {
       {/* <FormKelas /> */}
       {/* <NavigationContainer ref={navigationRef}> */}
 
+      {/* <HalamanBayar /> */}
       <NavigationContainer>
         <AppNavigator />
       </NavigationContainer>

@@ -153,6 +153,25 @@ const CustomDrawer = (props) => {
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({color, size}) => (
+                <Icon name="bed" color={color} size={size} />
+              )}
+              label="Halaman Bayar"
+              onPress={() => {
+                // props.navigation.push('ListKamar');
+                // props.navigation.navigate('KamarScreen');
+                props.navigation.closeDrawer();
+                // props.navigation.push('ListKamar');
+                props.navigation.reset({
+                  index: 0,
+                  routes: [{name: 'HalamanBayar'}],
+                });
+              }}
+            />
+          </Drawer.Section>
+
+          <Drawer.Section style={styles.drawerSection}>
+            <DrawerItem
+              icon={({color, size}) => (
                 <FontAwesome5 name="users" color={color} size={size} />
               )}
               label="Penghuni"

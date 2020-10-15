@@ -7,6 +7,8 @@ import FormPager from './FormPager';
 import FormAwal from './FormAwal';
 import FadeInView from './FadeInView';
 import CobaAnim from './CobaAnim';
+import Catlin1 from './Catlin1';
+import ActiveIndex from './ActiveIndex';
 
 export {
   Ball,
@@ -18,4 +20,6 @@ export {
   FormAwal,
   FadeInView,
   CobaAnim,
+  Catlin1,
+  ActiveIndex,
 };

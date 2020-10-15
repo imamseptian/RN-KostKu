@@ -1,27 +1,79 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Animated,
   Dimensions,
   Image,
   StatusBar,
   StyleSheet,
+  Text,
   View,
+  Modal,
+  TouchableNativeFeedback,
 } from 'react-native';
 import {SharedElement} from 'react-navigation-shared-element';
-import {PenghuniInfo} from './penghuni';
+import {PenghuniBerkas, PenghuniInfo, PenghuniTagihan} from './penghuni';
+import ImageViewer from 'react-native-image-zoom-viewer';
+import StepIndicator from 'react-native-step-indicator';
+import {myColor, APIUrl} from '../function/MyVar';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
 const DetailPenghuni = ({navigation, route}) => {
+  const [showImg, setshowImg] = useState(false);
+  const [imageIndex, setimageIndex] = useState(0);
   const {item} = route.params;
   const datapage = [
     {id: 'page0', page: <PenghuniInfo data={item} />},
-    {id: 'page1', page: <PenghuniInfo data={item} />},
+    {id: 'page1', page: <PenghuniBerkas data={item} />},
+    {id: 'page3', page: <PenghuniTagihan data={item} />},
   ];
+
+  const labels = ['Info', 'Berkas', 'Tagihan'];
+  const customStyles = {
+    stepIndicatorSize: 25,
+    currentStepIndicatorSize: 30,
+    separatorStrokeWidth: 2,
+    currentStepStrokeWidth: 3,
+    stepStrokeCurrentColor: '#fe7013',
+    stepStrokeWidth: 3,
+    stepStrokeFinishedColor: '#aaaaaa',
+    stepStrokeUnFinishedColor: '#aaaaaa',
+    separatorFinishedColor: '#aaaaaa',
+    separatorUnFinishedColor: '#aaaaaa',
+    stepIndicatorFinishedColor: '#ffffff',
+    stepIndicatorUnFinishedColor: '#ffffff',
+    stepIndicatorCurrentColor: '#ffffff',
+    stepIndicatorLabelFontSize: 13,
+    currentStepIndicatorLabelFontSize: 13,
+    stepIndicatorLabelCurrentColor: '#fe7013',
+    stepIndicatorLabelFinishedColor: '#aaaaaa',
+    stepIndicatorLabelUnFinishedColor: '#aaaaaa',
+    labelColor: '#999999',
+    labelSize: 13,
+    currentStepLabelColor: '#fe7013',
+  };
+
   const ref = useRef();
+  const [currentPage, setcurrentPage] = useState(0);
+  const images = [
+    {
+      url: APIUrl + '/kostdata/pendaftar/foto/' + item.foto_diri,
+
+      props: {
+        // headers: ...
+      },
+    },
+    {
+      url: APIUrl + '/kostdata/pendaftar/foto/' + item.foto_ktp,
+
+      props: {
+        // headers: ...
+      },
+    },
+  ];
 
   const mountedAnimated = useRef(new Animated.Value(0)).current;
-  //   const activeIndex = useRef(new Animated.Value(0)).current;
+  const activeIndex = useRef(new Animated.Value(0)).current;
 
   const animation = (toValue, delay) =>
     Animated.timing(mountedAnimated, {
@@ -50,25 +102,45 @@ const DetailPenghuni = ({navigation, route}) => {
   });
 
   return (
-    <View style={{flex: 1}}>
-      <StatusBar translucent backgroundColor="transparent" />
+    <View style={{flex: 1, backgroundColor: 'white'}}>
+      {/* {showImg ? null : <StatusBar hidden translucent backgroundColor="transparent" />} */}
+      <StatusBar hidden={!showImg} translucent backgroundColor="transparent" />
+
+      <Modal
+        visible={showImg}
+        transparent={true}
+        onRequestClose={() => setshowImg(false)}>
+        <ImageViewer
+          imageUrls={images}
+          enableSwipeDown={true}
+          index={imageIndex}
+          onSwipeDown={() => setshowImg(false)}
+        />
+      </Modal>
       <View>
-        <SharedElement id={`item.${item.id}.icon`}>
-          <Image
-            source={{
-              uri:
-                'https://dry-forest-53707.herokuapp.com/kostdata/pendaftar/foto/' +
-                item.foto_diri,
-            }}
-            style={{
-              width: screenWidth,
-              height: (2 / 3) * screenWidth,
-            }}
-            resizeMode="cover"
-          />
-        </SharedElement>
+        <TouchableNativeFeedback
+          onPress={() => {
+            setimageIndex(0);
+            setshowImg(true);
+          }}>
+          <SharedElement id={`item.${item.id}.icon`}>
+            <Image
+              source={{
+                uri: APIUrl + '/kostdata/pendaftar/foto/' + item.foto_diri,
+              }}
+              style={{
+                width: screenWidth,
+                height: (2 / 3) * screenWidth,
+              }}
+              resizeMode="cover"
+            />
+          </SharedElement>
+        </TouchableNativeFeedback>
       </View>
       <View style={{flex: 1, paddingTop: 15}}>
+        <Text style={{textAlign: 'center', fontSize: 20}}>
+          {item.nama_depan} {item.nama_belakang}
+        </Text>
         <Animated.FlatList
           style={{opacity: mountedAnimated, transform: [{translateY}]}}
           ref={ref}
@@ -88,8 +160,9 @@ const DetailPenghuni = ({navigation, route}) => {
               ev.nativeEvent.contentOffset.x / screenWidth,
             );
             console.log('index om', newIndex);
-
-            // activeIndex.setValue(newIndex);
+            console.log(activeIndex);
+            activeIndex.setValue(newIndex);
+            setcurrentPage(newIndex);
           }}
           renderItem={({item, index, separator}) => {
             return item.page;
@@ -106,6 +179,19 @@ const DetailPenghuni = ({navigation, route}) => {
           borderRadius: 25,
           backgroundColor: 'red',
         }}></View>
+      <StepIndicator
+        customStyles={customStyles}
+        currentPosition={currentPage}
+        labels={labels}
+        stepCount={3}
+        onPress={(e) => {
+          setcurrentPage(e);
+          ref.current.scrollToIndex({
+            index: e,
+            animated: true,
+          });
+        }}
+      />
     </View>
   );
 };

@@ -1,3 +1,5 @@
 import PenghuniInfo from './PenghuniInfo';
+import PenghuniBerkas from './PenghuniBerkas';
+import PenghuniTagihan from './PenghuniTagihan';
 
-export {PenghuniInfo};
+export {PenghuniInfo, PenghuniBerkas, PenghuniTagihan};

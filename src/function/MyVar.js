@@ -34,6 +34,9 @@ const myColor = {
   applynow: '#fea000',
   addfacility: '#c0ca33',
   etcbuble: '#55efc4',
+  bgfb: '#f5f5f5',
+  fbtx: '#161616',
+  fbtx1:'#a5a5a5'
 };
 
 // const colorTheme = '#ffaa91';

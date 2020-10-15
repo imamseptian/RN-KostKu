@@ -24,6 +24,7 @@ import {
   Profile,
   SettingScreen,
 } from '../pages';
+import {HalamanBayar} from '../pages/transaksi';
 import CustomDrawer from '../pages/Drawer/CustomDrawer';
 import FirstTimeNavigator from './FirstTimeNavigator';
 
@@ -70,7 +71,7 @@ const MainStackScreen = () => (
             config: {duration: 500, easing: Easing.inOut(Easing.ease)},
           },
           close: {
-            animation: 'timing',
+            animation: 'spring',
             config: {duration: 500, easing: Easing.inOut(Easing.linear)},
           },
         },
@@ -97,6 +98,8 @@ const MainStackScreen = () => (
     <MainStack.Screen name="DetailKamar" component={DetailKamar} />
     <MainStack.Screen name="EditKamar" component={EditKamar} />
     <MainStack.Screen name="PageTest" component={PageTest} />
+
+    <MainStack.Screen name="HalamanBayar" component={HalamanBayar} />
   </MainStack.Navigator>
 );
 

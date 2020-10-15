@@ -5,6 +5,7 @@ import ButtonLoad from './ButtonLoad';
 import GetBackButton from './GetBackButton';
 import HomeClipper from './HomeClipper';
 import CircleAvatar from './CircleAvatar';
+import TabBayar from './TabBayar';
 
 export {
   TagSearch,
@@ -14,4 +15,5 @@ export {
   GetBackButton,
   HomeClipper,
   CircleAvatar,
+  TabBayar,
 };

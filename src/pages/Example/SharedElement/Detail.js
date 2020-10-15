@@ -88,15 +88,18 @@ const Detail = ({navigation, route}) => {
     });
 
   useEffect(() => {
+    console.log('a');
     Animated.parallel([
       Animated.timing(activeIndexAnimation, {
         toValue: activeIndex,
-        duration: 300,
+        duration: 1000,
         useNativeDriver: true,
       }),
       animation(1, 500),
-    ]).start();
-    console.log('a');
+    ]).start(() => {
+      console.log('kntl');
+    });
+    console.log('b');
   });
 
   const translateY = mountedAnimated.interpolate({
@@ -133,6 +136,7 @@ const Detail = ({navigation, route}) => {
               key={item.id}
               style={{padding: 10}}
               onPress={() => {
+                console.log(activeIndex);
                 activeIndex.setValue(index);
                 ref.current.scrollToIndex({
                   index,
@@ -156,7 +160,7 @@ const Detail = ({navigation, route}) => {
         keyExtractor={(item) => item.id}
         horizontal
         pagingEnabled
-        initialScrollIndex={selectedItemIndex}
+        initialScrollIndex={activeIndex}
         nestedScrollEnabled
         getItemLayout={(data, index) => ({
           length: screenWidth,
@@ -169,6 +173,7 @@ const Detail = ({navigation, route}) => {
             ev.nativeEvent.contentOffset.x / screenWidth,
           );
           console.log('index om', newIndex);
+          console.log(selectedItemIndex);
 
           activeIndex.setValue(newIndex);
         }}

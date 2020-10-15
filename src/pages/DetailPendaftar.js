@@ -155,7 +155,6 @@ const DetailPendaftar = ({navigation, route}) => {
 
     return () => {
       source.cancel('Api Canceled');
-      console.log('asu');
     };
   }, []);
 

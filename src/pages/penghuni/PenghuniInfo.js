@@ -1,18 +1,63 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Dimensions} from 'react-native';
 import {myColor} from '../../function/MyVar';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import axios from 'axios';
+import {useSelector} from 'react-redux';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
 const PenghuniInfo = ({data}) => {
+  const dataRedux = useSelector((state) => state.AuthReducer);
+  const [asalDaerah, setasalDaerah] = useState({
+    kota: '',
+    provinsi: '',
+  });
+
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    let one =
+      'https://dev.farizdotid.com/api/daerahindonesia/kota/' + data.kota;
+    let two =
+      'https://dev.farizdotid.com/api/daerahindonesia/provinsi/' +
+      data.provinsi;
+    const requestOne = axios.get(one, {
+      cancelToken: source.token,
+    });
+    const requestTwo = axios.get(two, {
+      cancelToken: source.token,
+    });
+    axios
+      .all([requestOne, requestTwo])
+      .then(
+        axios.spread((...responses) => {
+          const responseOne = responses[0];
+          const responseTwo = responses[1];
+
+          setasalDaerah({
+            ...asalDaerah,
+            kota: responseOne.data.nama,
+            provinsi: responseTwo.data.nama,
+          });
+          // use/access the results
+        }),
+      )
+      .catch((errors) => {
+        // react on errors.
+      });
+
+    return () => {
+      source.cancel('Api Canceled');
+    };
+  });
+
   return (
     <View>
-      <Text style={{textAlign: 'center', fontSize: 20}}>
+      {/* <Text style={{textAlign: 'center', fontSize: 20}}>
         {data.nama_depan} {data.nama_belakang}
-      </Text>
+      </Text> */}
       <View
         style={{
           marginTop: 20,
@@ -97,7 +142,7 @@ const PenghuniInfo = ({data}) => {
             color={myColor.darkText}
           />
           <Text style={{marginLeft: 10}}>
-            Jl Cempaka Putih no 6, Kota Semarang, Jawa Tengah
+            {data.alamat}, {asalDaerah.kota}, {asalDaerah.provinsi}
           </Text>
         </View>
 
@@ -108,7 +153,9 @@ const PenghuniInfo = ({data}) => {
             marginBottom: 15,
           }}>
           <MaterialIcons name="info" size={25} color={myColor.darkText} />
-          <Text style={{marginLeft: 10}}>Pelajar</Text>
+          <Text style={{marginLeft: 10}}>
+            {data.status === 1 ? 'Pelajar' : 'Pekerja'}
+          </Text>
         </View>
 
         <View
@@ -118,7 +165,10 @@ const PenghuniInfo = ({data}) => {
             marginBottom: 15,
           }}>
           <MaterialIcons name="web" size={25} color={myColor.darkText} />
-          <Text style={{marginLeft: 10}}>UDINUS</Text>
+          <Text style={{marginLeft: 10}}>
+            {data.status === 1 ? 'Belajar di' : 'Bejerja di '}{' '}
+            {data.tempat_kerja_pendidikan}
+          </Text>
         </View>
       </View>
     </View>

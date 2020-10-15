@@ -8,6 +8,8 @@ import FlatListPenghuni from './FlatListPenghuni';
 import FlatListKamar from './FlatListKamar';
 import FlatListDalamKamar from './FlatListDalamKamar';
 import FlatListTagihan from './FlatListTagihan';
+import FlatListTransaksi from './FlatListTransaksi';
+import FlatListModal from './FlatListModal';
 
 export {
   FlatListPendaftar,
@@ -20,4 +22,6 @@ export {
   FlatListKamar,
   FlatListDalamKamar,
   FlatListTagihan,
+  FlatListTransaksi,
+  FlatListModal,
 };
