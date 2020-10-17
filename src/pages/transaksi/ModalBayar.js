@@ -1,14 +1,14 @@
 import React from 'react';
 import {
+  Alert,
+  Dimensions,
   StyleSheet,
   Text,
-  View,
-  Dimensions,
-  TouchableOpacity,
   TextInput,
-  Alert,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import {APIUrl, myColor} from '../../function/MyVar';
+import {myColor} from '../../function/MyVar';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);

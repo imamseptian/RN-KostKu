@@ -33,10 +33,9 @@ const HalamanBayar = () => {
   const [showModalRiwayat, setshowModalRiwayat] = useState(false);
   const [showModalBayar, setshowModalBayar] = useState(false);
   const [penghuni, setpenghuni] = useState(undefined);
-  const [dataTagihan, setDataTagihan] = useState([]);
   const [currentPage, setcurrentPage] = useState(0);
   const [nominalBayar, setnominalBayar] = useState(0);
-  const [dataRiwayat, setdataRiwayat] = useState([]);
+
   const [selectedRiwayat, setSelectedRiwayat] = useState({
     nama: '',
     jumlah: 11,
@@ -60,7 +59,7 @@ const HalamanBayar = () => {
       id: 'page0',
       page: (
         <TabTransaksi
-          data={dataTagihan}
+          token={dataRedux.token}
           penghuni={penghuni}
           onPress={() => setshowModalBayar(true)}
         />
@@ -68,7 +67,13 @@ const HalamanBayar = () => {
     },
     {
       id: 'page1',
-      page: <TabRiwayat data={dataRiwayat} fungsiparent={showDetailRiwayat} />,
+      page: (
+        <TabRiwayat
+          token={dataRedux.token}
+          penghuni={penghuni}
+          fungsiparent={showDetailRiwayat}
+        />
+      ),
     },
   ];
 
@@ -92,13 +97,13 @@ const HalamanBayar = () => {
         if (status == 'success') {
           alert('Pembayaran Sukses');
           setshowModalBayar(false);
+          console.log('pembayaran sukses' + penghuni);
+          console.log(penghuni);
           refreshPenghuni();
         } else if (status == 'cancel') {
           console.log('caught cancel filter');
         } else {
           console.log(data);
-          console.log(nominalBayar);
-          console.log(penghuni.id);
         }
       }
     }
@@ -112,30 +117,7 @@ const HalamanBayar = () => {
       useNativeDriver: true,
     }).start();
 
-  const ambilRiwayat = () => {
-    const source = axios.CancelToken.source();
-    if (penghuni !== undefined) {
-      myAxios.getAxios(
-        APIUrl + '/api/getriwayatid/' + penghuni.id,
-        dataRedux.token,
-        source.token,
-        onGet,
-      );
-      function onGet(status, data) {
-        if (status == 'success') {
-          console.log('Get data kost success');
-
-          setdataRiwayat(data.data);
-
-          console.log(data);
-        } else if (status == 'cancel') {
-          console.log('caught cancel filter');
-        } else {
-          console.log(data);
-        }
-      }
-    }
-  };
+  const ambilRiwayat = () => {};
 
   useEffect(() => {
     animation(1, 500);
@@ -164,45 +146,6 @@ const HalamanBayar = () => {
       }
     }
   };
-
-  useEffect(() => {
-    const source = axios.CancelToken.source();
-
-    if (penghuni !== undefined) {
-      myAxios.getAxios(
-        APIUrl + '/api/gettagihan/' + penghuni.id,
-        dataRedux.token,
-        source.token,
-        onGet,
-      );
-      function onGet(status, data) {
-        if (status == 'success') {
-          console.log('Get data kost success');
-          // console.log(data);
-          // console.log(data);
-          // setdataHomescreen({
-          setDataTagihan(data.tagihan);
-          console.log(data);
-          ambilRiwayat();
-          //   ...dataHomescreen,
-          //   penghuni: data.data_penghuni,
-          //   kamar: data.data_kamar,
-          // });
-          // setIsLoading(false);
-        } else if (status == 'cancel') {
-          console.log('caught cancel filter');
-          // setIsLoading(false);
-        } else {
-          console.log(data);
-          // setIsLoading(false);
-        }
-      }
-    }
-    return () => {
-      source.cancel('Component got unmounted');
-      console.log('Tagihan unmounted');
-    };
-  }, [penghuni]);
 
   return (
     <View style={{flex: 1, backgroundColor: myColor.colorTheme}}>
@@ -307,13 +250,6 @@ const HalamanBayar = () => {
                   }}
                   style={{height: 50, width: 50, borderRadius: 25}}
                 />
-                {/* <View
-                style={{
-                  height: 70,
-                  width: 70,
-                  borderRadius: 35,
-                  backgroundColor: myColor.etcbuble,
-                }}></View> */}
               </View>
 
               <View
@@ -414,50 +350,6 @@ const HalamanBayar = () => {
               });
             }}
           />
-          {/* <TouchableWithoutFeedback onPress={() => setselectedTab(0)}>
-            <View style={styles.tabWrapper}>
-              <View
-                style={{
-                  width: 0.35 * screenWidth,
-                  backgroundColor: myColor.bgfb,
-                  marginTop: 5,
-                  alignItems: 'center',
-                  borderRadius: 10,
-                }}>
-                <Text
-                  style={{
-                    color: myColor.fbtx,
-                    fontWeight: 'bold',
-                    fontSize: 14,
-                    marginVertical: 2,
-                  }}>
-                  Tagihan
-                </Text>
-              </View>
-            </View>
-          </TouchableWithoutFeedback> */}
-          {/* <TouchableWithoutFeedback onPress={() => setselectedTab(1)}>
-            <View style={styles.tabWrapper}>
-              <View
-                style={{
-                  width: 0.35 * screenWidth,
-
-                  marginTop: 5,
-                  alignItems: 'center',
-                  borderRadius: 10,
-                }}>
-                <Text
-                  style={{
-                    color: '#a5a5a5',
-                    fontWeight: 'bold',
-                    fontSize: 14,
-                    marginVertical: 2,
-                  }}>
-                  Riwayat
-                </Text>
-              </View>
-            </View>
-          </TouchableWithoutFeedback> */}
         </View>
 
         {/* content */}
@@ -481,32 +373,6 @@ const HalamanBayar = () => {
             return item.page;
           }}
         />
-
-        {/* <View style={{flex: 1, marginTop: 10, alignItems: 'center'}}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <FlatListTransaksi />
-            <FlatListTransaksi />
-            <FlatListTransaksi />
-            <FlatListTransaksi />
-            <FlatListTransaksi />
-            <FlatListTransaksi />
-            <FlatListTransaksi />
-          </ScrollView>
-          <View
-            style={{
-              height: 50,
-              borderRadius: 10,
-              backgroundColor: myColor.myblue,
-              width: screenWidth * 0.7,
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: 5,
-            }}>
-            <Text style={{fontSize: 14, color: '#fff', fontWeight: 'bold'}}>
-              Bayar
-            </Text>
-          </View>
-        </View> */}
       </View>
     </View>
   );

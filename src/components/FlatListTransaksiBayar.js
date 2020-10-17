@@ -53,6 +53,17 @@ const FlatListTransaksiBayar = (props) => {
             }}>
             Rp {props.data.jumlah}
           </Text>
+          <Text
+            numberOfLines={2}
+            style={{
+              textAlign: 'right',
+              fontSize: 10,
+              fontWeight: 'bold',
+              color: 'black',
+              maxWidth: 0.3 * screenWidth,
+            }}>
+            {props.data.hari}-{props.data.bulan}-{props.data.tahun}
+          </Text>
         </View>
       </View>
     </TouchableNativeFeedback>

@@ -1,10 +1,10 @@
+import axios from 'axios';
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View, Dimensions, TextInput} from 'react-native';
+import {Dimensions, StyleSheet, Text, TextInput, View} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {FlatListTransaksi, FlatListModal} from '../../components';
+import {FlatListModal} from '../../components';
 import {myAxios} from '../../function/MyAxios';
 import {APIUrl, myColor} from '../../function/MyVar';
-import axios from 'axios';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 const ModalDaftarPenghuni = (props) => {
@@ -15,8 +15,6 @@ const ModalDaftarPenghuni = (props) => {
   });
   useEffect(() => {
     console.log('fetching...');
-    console.log(filter);
-    console.log(props.token);
     const source = axios.CancelToken.source();
     myAxios.postAxios(
       APIUrl + '/api/tagihanpenghuni',
@@ -35,6 +33,10 @@ const ModalDaftarPenghuni = (props) => {
         console.log(data);
       }
     }
+    return () => {
+      source.cancel('Component got unmounted');
+      console.log('Tagihan unmounted');
+    };
   }, []);
 
   return (

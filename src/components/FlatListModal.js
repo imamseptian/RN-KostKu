@@ -91,6 +91,7 @@ const FlatListModal = (props) => {
                     color: props.data.tagihan > 0 ? myColor.blackText : '#fff',
                   }}>
                   {0 - props.data.tagihan}
+                  {/* {props.data.id} */}
                 </Text>
               </View>
             </View>
