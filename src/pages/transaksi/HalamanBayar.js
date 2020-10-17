@@ -1,32 +1,28 @@
-import React, {useState, useEffect, useRef} from 'react';
+import axios from 'axios';
+import React, {useEffect, useRef, useState} from 'react';
 import {
+  Animated,
+  Dimensions,
+  Image,
+  Modal,
+  StatusBar,
   StyleSheet,
   Text,
-  View,
-  Button,
-  Modal,
-  Dimensions,
-  StatusBar,
-  Image,
-  ScrollView,
-  TextInput,
-  TouchableWithoutFeedback,
   TouchableNativeFeedback,
-  TouchableOpacity,
-  Animated,
-  Alert,
+  View,
 } from 'react-native';
-import {TabBayar, SearchBar} from '../../components/atoms';
-import {FlatListTransaksi, FlatListModal} from '../../components';
-import {TabTransaksi, TabRiwayat} from './';
-import StepIndicator from 'react-native-step-indicator';
-import {myAxios} from '../../function/MyAxios';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {APIUrl, myColor} from '../../function/MyVar';
 import {useSelector} from 'react-redux';
-import axios from 'axios';
+import {TabBayar} from '../../components/atoms';
+import {myAxios} from '../../function/MyAxios';
+import {APIUrl, myColor} from '../../function/MyVar';
+import {
+  ModalBayar,
+  ModalDaftarPenghuni,
+  ModalRiwayat,
+  TabRiwayat,
+  TabTransaksi,
+} from './';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
@@ -34,13 +30,17 @@ const screenHeight = Math.round(Dimensions.get('window').height);
 const HalamanBayar = () => {
   const dataRedux = useSelector((state) => state.AuthReducer);
   const [showModal, setshowModal] = useState(false);
+  const [showModalRiwayat, setshowModalRiwayat] = useState(false);
   const [showModalBayar, setshowModalBayar] = useState(false);
   const [penghuni, setpenghuni] = useState(undefined);
-  const [dataPenghuni, setdataPenghuni] = useState([]);
   const [dataTagihan, setDataTagihan] = useState([]);
   const [currentPage, setcurrentPage] = useState(0);
   const [nominalBayar, setnominalBayar] = useState(0);
-  const [keyword, setkeyword] = useState('');
+  const [dataRiwayat, setdataRiwayat] = useState([]);
+  const [selectedRiwayat, setSelectedRiwayat] = useState({
+    nama: '',
+    jumlah: 11,
+  });
   // const [selectedTab, setselectedTab] = useState(0);
   const mountedAnimated = useRef(new Animated.Value(0)).current;
   const translateY = mountedAnimated.interpolate({
@@ -49,6 +49,12 @@ const HalamanBayar = () => {
   });
   const ref = useRef();
 
+  function showDetailRiwayat(value) {
+    setSelectedRiwayat(value);
+    setshowModalRiwayat(true);
+  }
+
+  // Halaman konten
   const datapage = [
     {
       id: 'page0',
@@ -60,10 +66,14 @@ const HalamanBayar = () => {
         />
       ),
     },
-    {id: 'page1', page: <TabRiwayat />},
+    {
+      id: 'page1',
+      page: <TabRiwayat data={dataRiwayat} fungsiparent={showDetailRiwayat} />,
+    },
   ];
 
   const bayarTagihan = () => {
+    // alert(nominalBayar);
     const source = axios.CancelToken.source();
     if (penghuni !== undefined) {
       myAxios.postAxios(
@@ -82,8 +92,7 @@ const HalamanBayar = () => {
         if (status == 'success') {
           alert('Pembayaran Sukses');
           setshowModalBayar(false);
-          ambilPenghuni();
-          // setdataPenghuni(data.data);
+          refreshPenghuni();
         } else if (status == 'cancel') {
           console.log('caught cancel filter');
         } else {
@@ -102,58 +111,37 @@ const HalamanBayar = () => {
       delay,
       useNativeDriver: true,
     }).start();
-  const [filter, setFilter] = useState({
-    id_kostan: dataRedux.user.kostku,
-    keyword: '',
-  });
 
-  const ambilApi = async (myToken) => {
-    // const source = axios.CancelToken.source();
-    myAxios.postAxios(
-      APIUrl + '/api/tagihanpenghuni',
-      filter,
-      dataRedux.token,
-      myToken,
-      onPost,
-    );
-    function onPost(status, data) {
-      if (status == 'success') {
-        console.log(data.data);
-        setdataPenghuni(data.data);
-      } else if (status == 'cancel') {
-        console.log('caught cancel filter');
-      } else {
-        console.log(data);
+  const ambilRiwayat = () => {
+    const source = axios.CancelToken.source();
+    if (penghuni !== undefined) {
+      myAxios.getAxios(
+        APIUrl + '/api/getriwayatid/' + penghuni.id,
+        dataRedux.token,
+        source.token,
+        onGet,
+      );
+      function onGet(status, data) {
+        if (status == 'success') {
+          console.log('Get data kost success');
+
+          setdataRiwayat(data.data);
+
+          console.log(data);
+        } else if (status == 'cancel') {
+          console.log('caught cancel filter');
+        } else {
+          console.log(data);
+        }
       }
     }
   };
 
   useEffect(() => {
     animation(1, 500);
-    // Animated.parallel([
-    //   Animated.timing(activeIndexAnimation, {
-    //     toValue: 0,
-    //     duration: 300,
-    //     useNativeDriver: true,
-    //   }),
-    //   animation(1, 500),
-    // ]).start();
-    // console.log('a');
   }, []);
 
-  // useEffect(() => {
-  //   // console.log(dataRedux);
-  //   console.log('masuk');
-  //   const source = axios.CancelToken.source();
-  //   ambilApi(source.token);
-
-  //   return () => {
-  //     source.cancel('Component got unmounted');
-  //     console.log('Tagihan unmounted');
-  //   };
-  // }, []);
-
-  const ambilPenghuni = () => {
+  const refreshPenghuni = () => {
     const source = axios.CancelToken.source();
     if (penghuni !== undefined) {
       myAxios.getAxios(
@@ -165,22 +153,13 @@ const HalamanBayar = () => {
       function onGet(status, data) {
         if (status == 'success') {
           console.log('Get data kost success');
-          // console.log(data);
-          // console.log(data);
-          // setdataHomescreen({
+
           setpenghuni(data.data);
           console.log(data);
-          //   ...dataHomescreen,
-          //   penghuni: data.data_penghuni,
-          //   kamar: data.data_kamar,
-          // });
-          // setIsLoading(false);
         } else if (status == 'cancel') {
           console.log('caught cancel filter');
-          // setIsLoading(false);
         } else {
           console.log(data);
-          // setIsLoading(false);
         }
       }
     }
@@ -188,6 +167,7 @@ const HalamanBayar = () => {
 
   useEffect(() => {
     const source = axios.CancelToken.source();
+
     if (penghuni !== undefined) {
       myAxios.getAxios(
         APIUrl + '/api/gettagihan/' + penghuni.id,
@@ -203,6 +183,7 @@ const HalamanBayar = () => {
           // setdataHomescreen({
           setDataTagihan(data.tagihan);
           console.log(data);
+          ambilRiwayat();
           //   ...dataHomescreen,
           //   penghuni: data.data_penghuni,
           //   kamar: data.data_kamar,
@@ -230,70 +211,14 @@ const HalamanBayar = () => {
         visible={showModal}
         transparent={true}
         onRequestClose={() => setshowModal(false)}>
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'rgba(0,0,0,0.5)',
-          }}>
-          <View
-            style={{
-              height: screenHeight * 0.75,
-              paddingHorizontal: 10,
-              paddingVertical: 5,
-              width: screenWidth * 0.88,
-              borderRadius: 10,
-              backgroundColor: 'white',
-              // position: 'absolute',
-              // top: 0.5 * screenHeight - 0.5 * (0.5 * screenHeight),
-              // left: 0.5 * screenWidth - 0.5 * (0.8 * screenWidth),
-              elevation: 5,
-              alignItems: 'center',
-            }}>
-            <Text
-              style={{
-                fontWeight: 'bold',
-                fontSize: 14,
-                color: myColor.blackText,
-                marginBottom: 5,
-              }}>
-              Cari Penghuni Kost
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                backgroundColor: 'white',
-                width: 0.85 * screenWidth,
-                alignItems: 'center',
-                borderRadius: 10,
-                height: 40,
-                borderWidth: 0.5,
-              }}>
-              <FontAwesome
-                name="search"
-                color="#636e72"
-                size={25}
-                style={{marginRight: 10, marginLeft: 10}}
-              />
-              <TextInput style={{flex: 1, marginRight: 15}} />
-            </View>
-            <View>
-              {dataPenghuni.map((item, index) => {
-                return (
-                  <FlatListModal
-                    key={index}
-                    data={item}
-                    onPress={() => {
-                      setpenghuni(item);
-                      setshowModal(false);
-                    }}
-                  />
-                );
-              })}
-            </View>
-          </View>
-        </View>
+        <ModalDaftarPenghuni
+          token={dataRedux.token}
+          id_kostan={dataRedux.user.kostku}
+          itemClick={(item) => {
+            setpenghuni(item);
+            setshowModal(false);
+          }}
+        />
       </Modal>
 
       {/* MODAL BAYAR  */}
@@ -305,132 +230,33 @@ const HalamanBayar = () => {
           setnominalBayar(parseInt(0));
           setshowModalBayar(false);
         }}>
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'rgba(0,0,0,0.5)',
-          }}>
-          <View
-            style={{
-              maxHeight: screenHeight * 0.75,
-              paddingHorizontal: 10,
-              paddingVertical: 5,
-              width: screenWidth * 0.88,
-              borderRadius: 10,
-
-              backgroundColor: 'white',
-              // position: 'absolute',
-              // top: 0.5 * screenHeight - 0.5 * (0.5 * screenHeight),
-              // left: 0.5 * screenWidth - 0.5 * (0.8 * screenWidth),
-              elevation: 5,
-              alignItems: 'center',
-            }}>
-            <Text
-              style={{
-                fontWeight: 'bold',
-                fontSize: 15,
-                color: myColor.blackText,
-              }}>
-              Bayar
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                backgroundColor: 'white',
-                width: 0.85 * screenWidth,
-                alignItems: 'center',
-                borderRadius: 10,
-                height: 40,
-                borderWidth: 0.5,
-              }}>
-              <TextInput
-                keyboardType="number-pad"
-                value={nominalBayar.toString()}
-                placeholder="Masukan nominal bayar"
-                onChangeText={(value) => {
-                  if (value.length == 0) {
-                    setnominalBayar(parseInt(0));
-                  } else {
-                    setnominalBayar(parseInt(value));
-                  }
-                }}
-                style={{flex: 1, marginRight: 15}}
-              />
-            </View>
-            {/* <Button title="BAYAR" onPress={() => bayarTagihan()} /> */}
-            <View>
-              <Text style={styles.textinfo}>
-                *Masukan total nominal pembayaran , sistem akan mengakumulasi
-                secara otomatis.
-              </Text>
-              <Text style={styles.textinfo}>
-                *Misal penghuni yang dipilih memiliki tagihan Rp 1.5 juta untuk
-                tagihan sewa selama 3 bulan, cukup masukan Rp 1.5 juta kedalam
-                kolom diatas dan sistem akan otomatis akan mencatat tagihan
-                selama 3 bulan sudah lunas. Dapat digunakan juga untuk cicil
-                tagihan, misal penghuni punya tagihan senilai 1 juta namun
-                pembayaran yang diterima baru 500 ribu maka sistem akan memotong
-                tagihan sesuai urutan tanggal.
-              </Text>
-              <Text style={styles.textinfo}>
-                *Semua kegiatan pembayaran tagihan dan transaksi akan masuk ke
-                riwayat aktivitas sistem dan pengguna dapat melihatnya.
-              </Text>
-              <Text style={[styles.textinfo, {color: myColor.alert}]}>
-                *Apabila penghuni tidak memiliki tagihan namun pengguna
-                memasukan pembayaran akan dianggap sebagai pelunasan tagihan
-                sewa yang akan datang atau bulan depan (Tindakan ini juga akan
-                masuk ke riwayat aktivitas sistem)
-              </Text>
-            </View>
-
-            <TouchableOpacity
-              disabled={nominalBayar == 0 ? true : false}
-              onPress={() => {
-                Alert.alert(
-                  'Konfirmasi',
-                  'Apakah anda sudah memahami semua informasi dibawah kolom nominal bayar dan sudah yakin dengan nominal yang dimasukan?',
-                  [
-                    {
-                      text: 'Batal',
-                      onPress: () => console.log('ayaya'),
-                      style: 'cancel',
-                    },
-                    {text: 'Ya', onPress: () => bayarTagihan()},
-                  ],
-                  {cancelable: false},
-                );
-              }}>
-              <View
-                style={{
-                  justifyContent: 'center',
-                  width: 100,
-                  height: 50,
-                  borderRadius: 10,
-                  alignItems: 'center',
-                  backgroundColor:
-                    nominalBayar == 0 ? myColor.bgfb : myColor.myblue,
-                }}>
-                <Text
-                  style={{
-                    color: nominalBayar == 0 ? myColor.blackText : '#fff',
-                    fontSize: 14,
-                    fontWeight: 'bold',
-                  }}>
-                  Bayar
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <ModalBayar
+          nominalBayar={nominalBayar}
+          ubahNominal={(e) => setnominalBayar(e)}
+          bayarTagihan={bayarTagihan}
+        />
       </Modal>
       {/* END MODAL BAYAR  */}
+
+      {/* MODAL Detail Riwayat  */}
+      <Modal
+        visible={showModalRiwayat}
+        transparent={true}
+        onRequestClose={() => {
+          setnominalBayar(parseInt(0));
+          setshowModalRiwayat(false);
+        }}>
+        <ModalRiwayat
+          data={selectedRiwayat}
+          closeModal={() => setshowModalRiwayat(false)}
+        />
+      </Modal>
+
+      {/* END OF MODAL DETAIL RIWAYAT  */}
+
       <TouchableNativeFeedback
         onPress={() => {
           const source = axios.CancelToken.source();
-          ambilApi(source.token);
           setshowModal(true);
         }}>
         <View

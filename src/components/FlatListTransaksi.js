@@ -20,10 +20,12 @@ const FlatListTransaksi = (props) => {
           justifyContent: 'center',
           borderRightWidth: 1,
           borderRightColor: myColor.myblue,
-          width: 150,
+          width: 100,
           position: 'relative',
         }}>
-        <Text style={styles.text}>{props.data.judul}</Text>
+        <Text style={styles.text}>
+          {props.data.bulan}, {props.data.tahun}
+        </Text>
         <View
           style={{
             backgroundColor: 'white',
@@ -58,7 +60,11 @@ const FlatListTransaksi = (props) => {
           }}
         />
         <View style={{marginLeft: 5}}>
-          <Text style={styles.text}>Tagihan Kost</Text>
+          <Text
+            numberOfLines={2}
+            style={[styles.text, {maxWidth: 0.7 * screenWidth - 100}]}>
+            {props.data.judul}
+          </Text>
           <Text style={styles.price}>Rp {props.data.jumlah}</Text>
         </View>
       </View>
