@@ -1,26 +1,26 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import {
+  Dimensions,
+  Image,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   TextInput,
+  TouchableNativeFeedback,
   TouchableOpacity,
   View,
-  Image,
-  Dimensions,
-  TouchableNativeFeedback,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import ImagePicker from 'react-native-image-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
-import RegisterSVG from '../asset/image/register2.svg';
-import {myColor, APIUrl} from '../function/MyVar';
-import {Permission, PERMISSION_TYPE} from '../AppPermission';
-import ImagePicker from 'react-native-image-picker';
+import {Permission, PERMISSION_TYPE} from '../../AppPermission';
+import RegisterSVG from '../../asset/image/register2.svg';
+import {APIUrl, myColor} from '../../function/MyVar';
 const screenWidth = Math.round(Dimensions.get('window').width);
 
 const LoginScreen = ({navigation}) => {

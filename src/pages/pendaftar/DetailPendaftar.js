@@ -1,31 +1,26 @@
-import React, {useState, useEffect, useRef} from 'react';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import axios from 'axios';
+import React, {useEffect, useRef, useState} from 'react';
 import {
+  Alert,
+  Animated,
+  Dimensions,
+  Image,
+  LayoutAnimation,
+  Modal,
+  NativeModules,
+  StatusBar,
   StyleSheet,
   Text,
-  View,
-  Animated,
-  Easing,
-  Button,
-  Dimensions,
-  LayoutAnimation,
-  NativeModules,
-  Image,
-  ScrollView,
-  Alert,
-  StatusBar,
   TouchableNativeFeedback,
+  View,
 } from 'react-native';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {DetailInfo, BerkasInfo} from './';
-
-import {myColor, APIUrl} from '../function/MyVar';
-import {Modal} from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
-
-import {GetBackButton} from '../components/atoms';
-import {ButtonConfirmReject} from '../components';
-import axios from 'axios';
 import {useSelector} from 'react-redux';
+import {ButtonConfirmReject} from '../../components';
+import {GetBackButton} from '../../components/atoms';
+import {APIUrl, myColor} from '../../function/MyVar';
+import {BerkasInfo, DetailInfo} from './';
 
 const {width, height} = Dimensions.get('window');
 

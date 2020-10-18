@@ -1,18 +1,17 @@
 import React from 'react';
 import {
-  StyleSheet,
-  Text,
-  View,
   Dimensions,
   Image,
-  StatusBar,
-  TouchableNativeFeedback,
   ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableNativeFeedback,
+  View,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {FlatListDalamKamar} from '../components';
-
-import {myColor} from '../function/MyVar';
+import {FlatListDalamKamar} from '../../components';
+import {myColor} from '../../function/MyVar';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;

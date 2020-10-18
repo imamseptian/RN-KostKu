@@ -1,39 +1,29 @@
-import React, {useState, useEffect} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
+import axios from 'axios';
+import React, {useEffect, useState} from 'react';
 import {
+  ActivityIndicator,
+  Dimensions,
   FlatList,
-  SafeAreaView,
+  Image,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  ScrollView,
-  Button,
-  Alert,
-  Image,
-  ImageBackground,
-  Dimensions,
-  TextInput,
-  ActivityIndicator,
 } from 'react-native';
-
+import {FAB} from 'react-native-paper';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {useSelector} from 'react-redux';
 import {
+  ButtonLoad,
   SearchBar,
   SearchResult,
   TagSearch,
-  ButtonLoad,
-} from '../components/atoms';
-
-import {myColor, APIUrl} from '../function/MyVar';
-import {FAB} from 'react-native-paper';
-import Spinner from 'react-native-loading-spinner-overlay';
-import {useSelector} from 'react-redux';
-import axios from 'axios';
-import {myAxios} from '../function/MyAxios';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import LinearGradient from 'react-native-linear-gradient';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+} from '../../components/atoms';
+import {myAxios} from '../../function/MyAxios';
+import {APIUrl, myColor} from '../../function/MyVar';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);

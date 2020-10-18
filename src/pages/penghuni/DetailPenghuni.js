@@ -11,10 +11,10 @@ import {
   TouchableNativeFeedback,
 } from 'react-native';
 import {SharedElement} from 'react-navigation-shared-element';
-import {PenghuniBerkas, PenghuniInfo, PenghuniTagihan} from './penghuni';
+import {PenghuniBerkas, PenghuniInfo, PenghuniTagihan} from './';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import StepIndicator from 'react-native-step-indicator';
-import {myColor, APIUrl} from '../function/MyVar';
+import {myColor, APIUrl} from '../../function/MyVar';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 

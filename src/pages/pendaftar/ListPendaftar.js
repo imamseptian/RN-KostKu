@@ -12,15 +12,15 @@ import {
   View,
 } from 'react-native';
 import {useSelector} from 'react-redux';
-import {FlatListPendaftar} from '../components';
+import {FlatListPendaftar} from '../../components';
 import {
   ButtonLoad,
   SearchBar,
   SearchResult,
   TagSearch,
-} from '../components/atoms';
-import {myColor, APIUrl} from '../function/MyVar';
-import {myAxios} from '../function/MyAxios';
+} from '../../components/atoms';
+import {myAxios} from '../../function/MyAxios';
+import {APIUrl, myColor} from '../../function/MyVar';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 

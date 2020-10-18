@@ -1,44 +1,26 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
-  StyleSheet,
-  Text,
-  View,
   Dimensions,
   Image,
   ScrollView,
+  StyleSheet,
+  Text,
   TouchableOpacity,
-  TouchableNativeFeedback,
+  View,
 } from 'react-native';
+import {Paragraph} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {Paragraph} from 'react-native-paper';
-import {APIUrl, myColor} from '../function/MyVar';
-import {useFocusEffect, useNavigationState} from '@react-navigation/native';
+
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
-const DetailKelasKamar = ({navigation, route}) => {
-  useEffect(() => {
-    console.log(screenWidth + 'x' + screenHeight);
-  }, []);
-
-  useNavigationState((state) => console.log(state));
-
-  useFocusEffect(
-    React.useCallback(() => {
-      console.log('My Params :', route.params.nama);
-      // setPenghuni(route.params.penghuni);
-      return () => {
-        // source.cancel('Api Canceled');
-        console.log('tutup detail penghuni');
-      };
-    }, []),
-  );
-
+const KelasDetailScreen = () => {
+  console.log(screenWidth);
   return (
     <View style={{flex: 1}}>
-      <View style={{backgroundColor: myColor.colorTheme, flex: 1}}></View>
-      <View style={{backgroundColor: 'white', flex: 4}}></View>
+      <View style={{backgroundColor: '#46ce7c', flex: 1}}></View>
+      <View style={{backgroundColor: 'white', flex: 3}}></View>
       <View
         style={{
           backgroundColor: 'white',
@@ -53,7 +35,8 @@ const DetailKelasKamar = ({navigation, route}) => {
         <View style={{position: 'relative'}}>
           <Image
             source={{
-              uri: APIUrl + '/kostdata/kelas_kamar/foto/' + route.params.foto,
+              uri:
+                'http://dry-forest-53707.herokuapp.com/image_kelas/EzVgiiU5lW.jpeg',
             }}
             style={{
               width: '100%',
@@ -81,35 +64,8 @@ const DetailKelasKamar = ({navigation, route}) => {
               left: 10,
               fontSize: 20,
             }}>
-            {route.params.nama}
+            Kost Putra A
           </Text>
-          <View style={{position: 'absolute', bottom: 5, right: 5}}>
-            <TouchableNativeFeedback
-              onPress={() =>
-                navigation.push('EditKelas', {
-                  kamar: route.params,
-                  harga: String(route.params.harga),
-                  kapasitas: String(route.params.kapasitas),
-                })
-              }>
-              <View
-                style={{
-                  height: 30,
-                  width: 75,
-                  backgroundColor: myColor.addfacility,
-
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: 5,
-                  opacity: 0.9,
-                }}>
-                <Text
-                  style={{color: 'white', fontSize: 12, fontWeight: 'bold'}}>
-                  Edit
-                </Text>
-              </View>
-            </TouchableNativeFeedback>
-          </View>
         </View>
         <View
           style={{
@@ -133,12 +89,14 @@ const DetailKelasKamar = ({navigation, route}) => {
                   fontWeight: 'bold',
                   fontSize: 18,
                 }}>
-                Rp {route.params.harga} / Bulan
+                Rp 500.000 / Bulan
               </Text>
             </View>
 
             <Paragraph style={{textAlign: 'justify', color: '#05375A'}}>
-              {route.params.kapasitas}
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s,
             </Paragraph>
 
             <View
@@ -159,37 +117,31 @@ const DetailKelasKamar = ({navigation, route}) => {
               </Text>
             </View>
 
-            {route.params.fasilitas.map((item, index) => {
-              return (
-                // <Picker.Item key={index} label={item.nama} value={item.id} />
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginTop: 10,
-                    marginLeft: 25,
-                  }}
-                  key={index}>
-                  <Text
-                    style={{
-                      color: '#636e72',
-                      fontWeight: 'bold',
-                      fontSize: 14,
-                    }}>
-                    {index + 1}
-                  </Text>
-                  <Text
-                    style={{
-                      marginLeft: 10,
-                      color: '#636e72',
-                      fontWeight: 'bold',
-                      fontSize: 14,
-                    }}>
-                    {item.item}
-                  </Text>
-                </View>
-              );
-            })}
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 10,
+                marginLeft: 20,
+              }}>
+              <Text
+                style={{
+                  color: '#636e72',
+                  fontWeight: 'bold',
+                  fontSize: 14,
+                }}>
+                1.
+              </Text>
+              <Text
+                style={{
+                  marginLeft: 10,
+                  color: '#636e72',
+                  fontWeight: 'bold',
+                  fontSize: 14,
+                }}>
+                Fasilitas Kamar
+              </Text>
+            </View>
           </ScrollView>
         </View>
         <View
@@ -202,13 +154,13 @@ const DetailKelasKamar = ({navigation, route}) => {
             justifyContent: 'space-between',
             flexDirection: 'row',
           }}>
-          <TouchableNativeFeedback onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => alert('Todo')}>
             <View
               style={{
-                height: 40,
+                height: 50,
                 width: 110,
-                backgroundColor: myColor.applynow,
-                borderRadius: 10,
+                backgroundColor: '#46ce7c',
+                borderRadius: 110 / 4,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
@@ -216,35 +168,28 @@ const DetailKelasKamar = ({navigation, route}) => {
                 Kembali
               </Text>
             </View>
-          </TouchableNativeFeedback>
-
-          <TouchableNativeFeedback
-            onPress={() =>
-              navigation.push('DaftarKamar', {
-                id: route.params.id,
-                kapasitas: route.params.kapasitas,
-              })
-            }>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => alert('Todo')}>
             <View
               style={{
-                height: 40,
+                height: 50,
                 width: 110,
-                backgroundColor: myColor.applynow,
-                borderRadius: 10,
+                backgroundColor: '#46ce7c',
+                borderRadius: 110 / 4,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
               <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>
-                Daftar Kamar
+                Edit
               </Text>
             </View>
-          </TouchableNativeFeedback>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
   );
 };
 
-export default DetailKelasKamar;
+export default KelasDetailScreen;
 
 const styles = StyleSheet.create({});

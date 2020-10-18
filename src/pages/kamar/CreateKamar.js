@@ -1,22 +1,18 @@
+import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import {
+  Dimensions,
+  Image,
+  ScrollView,
   StyleSheet,
   Text,
-  View,
-  Dimensions,
   TextInput,
   TouchableOpacity,
-  Image,
-  KeyboardAvoidingView,
-  ImageBackground,
-  ScrollView,
+  View,
 } from 'react-native';
-import axios from 'axios';
-import {useSelector} from 'react-redux';
-
-import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import {useSelector} from 'react-redux';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
@@ -98,7 +94,7 @@ const CreateKamar = ({navigation, route}) => {
                 borderColor: '#74b9ff',
               }}>
               <Image
-                source={require('../asset/icon/kasur.png')}
+                source={require('../../asset/icon/kasur.png')}
                 style={{width: 50, height: 50}}
               />
             </View>

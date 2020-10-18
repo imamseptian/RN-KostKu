@@ -1,12 +1,12 @@
 import React from 'react';
 import {
+  Dimensions,
+  Image,
+  ScrollView,
   StyleSheet,
   Text,
-  View,
-  ScrollView,
-  Image,
-  Dimensions,
   TouchableNativeFeedback,
+  View,
 } from 'react-native';
 
 const {width, height} = Dimensions.get('window');

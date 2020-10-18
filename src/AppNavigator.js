@@ -1,15 +1,13 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {AuthNavigator, MainNavigator} from './stack';
-import {NavigationContainer} from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {createStackNavigator} from '@react-navigation/stack';
-import {useDispatch} from 'react-redux';
-import {setAuthRedux} from './store';
-import {Splash} from './pages';
 import axios from 'axios';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet} from 'react-native';
+import {useDispatch} from 'react-redux';
 import {fcmService} from './FCMService';
-import {localNotificationService} from './LocalNotificationService';
+import {Splash} from './pages';
+import {AuthNavigator, MainNavigator} from './stack';
+import {setAuthRedux} from './store';
 
 const AppStack = createStackNavigator();
 

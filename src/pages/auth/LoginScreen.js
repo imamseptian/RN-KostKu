@@ -1,24 +1,22 @@
-import React, {useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
+import axios from 'axios';
+import React, {useState} from 'react';
 import {
+  StatusBar,
   StyleSheet,
   Text,
-  View,
-  StatusBar,
   TextInput,
   TouchableOpacity,
-  ScrollView,
+  View,
 } from 'react-native';
-// import LoginSVG from '../asset/image/undraw_Login_v483.svg';
-import LoginSVG from '../asset/image/login2.svg';
 import * as Animatable from 'react-native-animatable';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import AsyncStorage from '@react-native-community/async-storage';
-import {useSelector, useDispatch} from 'react-redux';
-import {setAuthRedux} from '../store';
-import axios from 'axios';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {fcmService} from '../FCMService';
-import {myColor} from '../function/MyVar';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {useDispatch} from 'react-redux';
+import LoginSVG from '../../asset/image/login2.svg';
+import {fcmService} from '../../FCMService';
+import {myColor} from '../../function/MyVar';
+import {setAuthRedux} from '../../store';
 
 const LoginScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -53,14 +51,9 @@ const LoginScreen = ({navigation}) => {
       .then((res) => {
         // let dataUser = res.data.user;
         const dataPengguna = res.data.user;
-        // dataPengguna.token = res.data.access_token;
-        // console.log('**************************');
-        // // console.log(res.data.user);
-        // console.log(dataPengguna);
-        // console.log('**************************');
-        // dataUser.token = res.data.access_token;
+
         dispatch(setAuthRedux(dataPengguna, res.data.access_token));
-        // storeData(dataUser);
+
         console.log('subs saat login :kostku- ', res.data.user.kostku);
         storeData(res.data.access_token, 'kostku-' + res.data.user.kostku);
         subscribeToKost(res.data.access_token);

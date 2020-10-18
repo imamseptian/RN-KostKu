@@ -12,15 +12,15 @@ import {
   View,
 } from 'react-native';
 import {useSelector} from 'react-redux';
-import {FlatListPenghuni} from '../components';
+import {FlatListPenghuni} from '../../components';
 import {
   ButtonLoad,
   SearchBar,
   SearchResult,
   TagSearch,
-} from '../components/atoms';
-import {myAxios} from '../function/MyAxios';
-import {APIUrl, myColor} from '../function/MyVar';
+} from '../../components/atoms';
+import {myAxios} from '../../function/MyAxios';
+import {APIUrl, myColor} from '../../function/MyVar';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 
@@ -87,7 +87,7 @@ const ListPenghuni = ({navigation}) => {
           orderby: 'asc',
         });
         setSelectedTag(1);
-        setPenghuni([]);
+        // setPenghuni([]);
         setbanyakData(0);
         source.cancel('Penghuni Screen got unmounted');
       };
@@ -141,7 +141,8 @@ const ListPenghuni = ({navigation}) => {
       <Item
         item={item}
         onPress={() => {
-          navigation.push('DetailPenghuni', {penghuni: item});
+          // navigation.push('DetailPenghuni', {penghuni: item});
+          navigation.push('DetailPenghuni', {item});
         }}
       />
     );

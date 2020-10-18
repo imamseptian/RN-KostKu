@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View, TextInput} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, TextInput, View} from 'react-native';
 
 const EditKamar = ({navigation, route}) => {
   const [kamar, setKamar] = useState(route.params.kamar);

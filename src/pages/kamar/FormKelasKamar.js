@@ -20,8 +20,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
-import {Permission, PERMISSION_TYPE} from '../AppPermission';
-import {APIUrl, myColor} from '../function/MyVar';
+import {Permission, PERMISSION_TYPE} from '../../AppPermission';
+import {APIUrl, myColor} from '../../function/MyVar';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);

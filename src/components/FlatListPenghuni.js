@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {myColor, APIUrl} from '../function/MyVar';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {SharedElement} from 'react-navigation-shared-element';
 import {useNavigation} from '@react-navigation/native';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
@@ -51,19 +52,20 @@ class FlatListPenghuni extends React.PureComponent {
               {item.hari}-{item.bulan}-{item.tahun}
             </Text>
           </View>
-
-          <Image
-            source={{
-              uri: APIUrl + '/kostdata/pendaftar/foto/' + item.foto_diri,
-            }}
-            style={{
-              width: 70,
-              height: 70,
-              marginVertical: 15,
-              marginLeft: 10,
-              borderRadius: 15,
-            }}
-          />
+          <SharedElement id={`item.${item.id}.icon`}>
+            <Image
+              source={{
+                uri: APIUrl + '/kostdata/pendaftar/foto/' + item.foto_diri,
+              }}
+              style={{
+                width: 70,
+                height: 70,
+                marginVertical: 15,
+                marginLeft: 10,
+                borderRadius: 15,
+              }}
+            />
+          </SharedElement>
 
           <View
             style={{

@@ -8,16 +8,14 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import {FAB} from 'react-native-paper';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
-import {ButtonLoad, SearchBar, SearchResult} from '../components/atoms';
-import {myAxios} from '../function/MyAxios';
-import {APIUrl, myColor} from '../function/MyVar';
-import {FlatListKamar} from '../components';
+import {FlatListKamar} from '../../components';
+import {ButtonLoad, SearchBar, SearchResult} from '../../components/atoms';
+import {myAxios} from '../../function/MyAxios';
+import {APIUrl, myColor} from '../../function/MyVar';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);

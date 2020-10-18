@@ -1,6 +1,6 @@
 import {Picker} from '@react-native-community/picker';
 import axios from 'axios';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
   Alert,
@@ -21,10 +21,10 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
-import {Permission, PERMISSION_TYPE} from '../AppPermission';
-import {fcmService} from '../FCMService';
-import {myColor} from '../function/MyVar';
-import {setUserRedux} from '../store';
+import {Permission, PERMISSION_TYPE} from '../../AppPermission';
+import {fcmService} from '../../FCMService';
+import {myColor} from '../../function/MyVar';
+import {setUserRedux} from '../../store';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
@@ -45,7 +45,41 @@ const KostForm = ({navigation}) => {
     owner: dataRedux.user.id,
     active: true,
   });
-  const API_KEY = '<YOUR_API_KEY_HERE>';
+
+  const refNoTelp = useRef();
+  const refDeskripsi = useRef();
+
+  const hasUnsavedChanges = Boolean(user);
+  React.useEffect(
+    () =>
+      navigation.addListener('beforeRemove', (e) => {
+        if (!hasUnsavedChanges || setIsSubmit) {
+          // If we don't have unsaved changes, then we don't need to do anything
+          return;
+        }
+
+        // Prevent default behavior of leaving the screen
+        e.preventDefault();
+
+        // Prompt the user before leaving the screen
+        Alert.alert(
+          'Yakin ingin meninggalkan halaman ini?',
+          'Data yang sudah anda isi akan hilang jika anda meninggalkan halaman ini',
+          [
+            {text: 'Batal', style: 'cancel', onPress: () => {}},
+            {
+              text: 'Pergi',
+              style: 'destructive',
+              // If the user confirmed, then we dispatch the action we blocked earlier
+              // This will continue the action that had triggered the removal of the screen
+              onPress: () => navigation.dispatch(e.data.action),
+            },
+          ],
+        );
+      }),
+    [navigation, hasUnsavedChanges],
+  );
+
   const ProvURL = `https://dev.farizdotid.com/api/daerahindonesia/provinsi`;
   // const ProvURL = `https://x.rajaapi.com/MeP7c5neqPkLFsmfECbpnjiY69MQPqkEzRDEEsho6flCgp9kNdVa4BBFVG/m/wilayah/provinsi`;
   const [provinsi, setProvinsi] = useState([]);
@@ -198,20 +232,15 @@ const KostForm = ({navigation}) => {
           const dataPengguna = res.data.user;
           console.log('sukses matamu ', res.data);
           let topic = 'kostku-' + res.data.data.id;
-          console.log('Sukses dan Subs to ', topic);
 
           fcmService.subscribeToTopic(topic);
           dispatch(setUserRedux(dataPengguna));
 
-          setIsSubmit(false);
           // console.log(res.data);
           goToHome();
         })
         .catch((error) => {
-          console.log('gagal');
           setIsSubmit(false);
-          console.log(user);
-          console.log(error);
         });
     } else {
       axios
@@ -303,44 +332,33 @@ const KostForm = ({navigation}) => {
           </TouchableNativeFeedback>
 
           <View style={styles.formWrapper}>
-            <View>
-              <View style={styles.fieldForm}>
-                <FontAwesome name="home" size={25} style={{opacity: 0.5}} />
-                <Controller
-                  control={control}
-                  render={({onChange, onBlur, value}) => (
-                    <TextInput
-                      placeholder="Nama Kost"
-                      style={{marginLeft: 5, flex: 1}}
-                      onChangeText={(value) => {
-                        onChange(value);
-                        setForm('nama', value);
-                      }}
-                      value={value}
-                    />
-                  )}
-                  name="nama"
-                  rules={{required: true, minLength: 6, maxLength: 12}}
-                  defaultValue=""
-                />
+            <Controller
+              control={control}
+              render={({onChange, onBlur, value}) => (
+                <View style={styles.fieldForm}>
+                  <FontAwesome name="home" size={25} style={{opacity: 0.5}} />
+                  <TextInput
+                    placeholder="Nama Kost"
+                    style={{marginLeft: 5, flex: 1}}
+                    onChangeText={(value) => {
+                      onChange(value);
+                      setForm('nama', value);
+                    }}
+                    value={value}
+                  />
+                </View>
+              )}
+              name="nama"
+              rules={{required: true}}
+              defaultValue=""
+            />
+
+            {errors.nama && errors.nama.type === 'required' && (
+              <View style={styles.viewError}>
+                <Text style={styles.textError}>Nama Kost Perlu Diisi</Text>
               </View>
-              {errors.nama && errors.nama.type === 'required' && (
-                <View style={styles.viewError}>
-                  <Text style={styles.textError}>Nama Kost Perlu Diisi</Text>
-                </View>
-                //
-              )}
-              {errors.nama && errors.nama.type === 'minLength' && (
-                <View style={styles.viewError}>
-                  <Text style={styles.textError}>Nama Minimal 5 Digit</Text>
-                </View>
-              )}
-              {errors.nama && errors.nama.type === 'maxLength' && (
-                <View style={styles.viewError}>
-                  <Text style={styles.textError}>Nama Maximal 10 Digit</Text>
-                </View>
-              )}
-            </View>
+              //
+            )}
           </View>
 
           <View style={styles.formWrapper}>
@@ -418,72 +436,6 @@ const KostForm = ({navigation}) => {
           <View style={styles.formWrapper}>
             <View>
               <View style={styles.fieldForm}>
-                <Entypo name="address" size={25} style={{opacity: 0.5}} />
-
-                <Controller
-                  control={control}
-                  render={({onChange, onBlur, value}) => (
-                    <TextInput
-                      placeholder="Alamat Kost"
-                      style={{marginLeft: 5, flex: 1}}
-                      onChangeText={(value) => {
-                        onChange(value);
-                        setForm('alamat', value);
-                      }}
-                      value={value}
-                    />
-                  )}
-                  name="alamat"
-                  rules={{required: true}}
-                  defaultValue=""
-                />
-              </View>
-              {errors.alamat && errors.alamat.type === 'required' && (
-                <View style={styles.viewError}>
-                  <Text style={styles.textError}>Alamat Kost Perlu Diisi</Text>
-                </View>
-                //
-              )}
-            </View>
-          </View>
-
-          <View style={styles.formWrapper}>
-            <View>
-              <View style={styles.fieldForm}>
-                <FontAwesome name="phone" size={25} style={{opacity: 0.5}} />
-                <Controller
-                  control={control}
-                  render={({onChange, onBlur, value}) => (
-                    <TextInput
-                      placeholder="No Telepon"
-                      style={{marginLeft: 5, flex: 1}}
-                      onChangeText={(value) => {
-                        onChange(value);
-                        setForm('notelp', value);
-                      }}
-                      value={value}
-                      keyboardType="numeric"
-                    />
-                  )}
-                  name="notelp"
-                  rules={{required: true}}
-                  defaultValue=""
-                />
-              </View>
-              {errors.notelp && errors.notelp.type === 'required' && (
-                <View style={styles.viewError}>
-                  <Text style={styles.textError}>
-                    Nomor Telepon Kost Perlu Diisi
-                  </Text>
-                </View>
-                //
-              )}
-            </View>
-          </View>
-
-          <View style={styles.formWrapper}>
-            <View>
-              <View style={styles.fieldForm}>
                 <MaterialCommunityIcons
                   name="home-city"
                   size={25}
@@ -515,11 +467,87 @@ const KostForm = ({navigation}) => {
 
           <View style={styles.formWrapper}>
             <View>
+              <View style={styles.fieldForm}>
+                <Entypo name="address" size={25} style={{opacity: 0.5}} />
+
+                <Controller
+                  control={control}
+                  render={({onChange, onBlur, value}) => (
+                    <TextInput
+                      placeholder="Alamat Kost"
+                      style={{marginLeft: 5, flex: 1}}
+                      onChangeText={(value) => {
+                        onChange(value);
+                        setForm('alamat', value);
+                      }}
+                      onSubmitEditing={() => {
+                        refNoTelp.current.focus();
+                      }}
+                      blurOnSubmit={false}
+                      value={value}
+                    />
+                  )}
+                  name="alamat"
+                  rules={{required: true}}
+                  defaultValue=""
+                />
+              </View>
+              {errors.alamat && errors.alamat.type === 'required' && (
+                <View style={styles.viewError}>
+                  <Text style={styles.textError}>Alamat Kost Perlu Diisi</Text>
+                </View>
+                //
+              )}
+            </View>
+          </View>
+
+          <View style={styles.formWrapper}>
+            <View>
+              <View style={styles.fieldForm}>
+                <FontAwesome name="phone" size={25} style={{opacity: 0.5}} />
+                <Controller
+                  control={control}
+                  render={({onChange, onBlur, value}) => (
+                    <TextInput
+                      ref={refNoTelp}
+                      placeholder="No Telepon"
+                      style={{marginLeft: 5, flex: 1}}
+                      onChangeText={(value) => {
+                        onChange(value);
+                        setForm('notelp', value);
+                      }}
+                      value={value}
+                      keyboardType="numeric"
+                      onSubmitEditing={() => {
+                        refDeskripsi.current.focus();
+                      }}
+                      blurOnSubmit={false}
+                    />
+                  )}
+                  name="notelp"
+                  rules={{required: true}}
+                  defaultValue=""
+                />
+              </View>
+              {errors.notelp && errors.notelp.type === 'required' && (
+                <View style={styles.viewError}>
+                  <Text style={styles.textError}>
+                    Nomor Telepon Kost Perlu Diisi
+                  </Text>
+                </View>
+                //
+              )}
+            </View>
+          </View>
+
+          <View style={styles.formWrapper}>
+            <View>
               <View style={[styles.fieldForm, {height: 80}]}>
                 <Controller
                   control={control}
                   render={({onChange, onBlur, value}) => (
                     <TextInput
+                      ref={refDeskripsi}
                       placeholder="Deskripsi"
                       style={{
                         marginLeft: 5,
@@ -556,7 +584,7 @@ const KostForm = ({navigation}) => {
                 height: 40,
                 backgroundColor: myColor.myblue,
                 marginHorizontal: 20,
-                borderRadius: 50,
+                borderRadius: 10,
                 marginTop: 10,
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -602,8 +630,8 @@ const styles = StyleSheet.create({
     width: 0.9 * screenWidth,
     flex: 1,
     backgroundColor: 'white',
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     // elevation: 5,
   },
   formWrapper: {
@@ -613,7 +641,7 @@ const styles = StyleSheet.create({
   fieldForm: {
     height: 40,
     borderWidth: 0.5,
-    borderRadius: 20,
+    borderRadius: 10,
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',

@@ -20,9 +20,9 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useSelector} from 'react-redux';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import ImagePicker from 'react-native-image-picker';
-import {Permission, PERMISSION_TYPE} from '../AppPermission';
+import {Permission, PERMISSION_TYPE} from '../../AppPermission';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {APIUrl, myColor} from '../function/MyVar';
+import {APIUrl, myColor} from '../../function/MyVar';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);

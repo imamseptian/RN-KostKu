@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 import {createStackNavigator} from '@react-navigation/stack';
-import {LoginScreen, RegisterScreen} from '../pages';
+import {LoginScreen, RegisterScreen} from '../pages/auth';
 
 const AuthStack = createStackNavigator();
 
