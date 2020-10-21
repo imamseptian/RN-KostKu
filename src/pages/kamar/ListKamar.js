@@ -23,7 +23,7 @@ import {
   TagSearch,
 } from '../../components/atoms';
 import {myAxios} from '../../function/MyAxios';
-import {APIUrl, myColor} from '../../function/MyVar';
+import {APIUrl, myColor, formatRupiah} from '../../function/MyVar';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
@@ -169,7 +169,8 @@ const ListKamar = ({navigation}) => {
       onPress={() => {
         // console.log(APIUrl + '/kostdata/kelas_kamar/foto/' + item.foto);
         // APIUrl + '/kostdata/kelas_kamar/foto/' + item.foto
-        navigation.navigate('DetailKelas', item);
+        // console.log(item);
+        navigation.push('DetailKelas', item);
       }}>
       <View style={[styles.item, style]}>
         <View style={{flexDirection: 'row', height: 115}}>
@@ -215,7 +216,7 @@ const ListKamar = ({navigation}) => {
                 marginTop: 10,
                 color: '#2d3436',
               }}>
-              Rp {item.harga}
+              {formatRupiah(item.harga.toString(), 'Rp.')}
             </Text>
           </View>
         </View>

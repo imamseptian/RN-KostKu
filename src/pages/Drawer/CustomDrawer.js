@@ -123,10 +123,11 @@ const CustomDrawer = (props) => {
                 // props.navigation.navigate('HomeDrawer');
                 props.navigation.closeDrawer();
                 // props.navigation.popToTop();
-                props.navigation.reset({
-                  index: 0,
-                  routes: [{name: 'HomeScreen'}],
-                });
+                props.navigation.push('HomeScreen');
+                // props.navigation.reset({
+                //   index: 0,
+                //   routes: [{name: 'HomeScreen'}],
+                // });
               }}
             />
           </Drawer.Section>
@@ -141,11 +142,30 @@ const CustomDrawer = (props) => {
                 // props.navigation.push('ListKamar');
                 // props.navigation.navigate('KamarScreen');
                 props.navigation.closeDrawer();
+                props.navigation.push('ListKamar');
+                // props.navigation.reset({
+                //   index: 0,
+                //   routes: [{name: 'ListKamar'}],
+                // });
+              }}
+            />
+          </Drawer.Section>
+
+          <Drawer.Section style={styles.drawerSection}>
+            <DrawerItem
+              icon={({color, size}) => (
+                <Icon name="bed" color={color} size={size} />
+              )}
+              label="Keuangan"
+              onPress={() => {
                 // props.navigation.push('ListKamar');
-                props.navigation.reset({
-                  index: 0,
-                  routes: [{name: 'ListKamar'}],
-                });
+                // props.navigation.navigate('KamarScreen');
+                props.navigation.closeDrawer();
+                props.navigation.push('DetailKeuangan');
+                // props.navigation.reset({
+                //   index: 0,
+                //   routes: [{name: 'ListKamar'}],
+                // });
               }}
             />
           </Drawer.Section>
@@ -160,11 +180,11 @@ const CustomDrawer = (props) => {
                 // props.navigation.push('ListKamar');
                 // props.navigation.navigate('KamarScreen');
                 props.navigation.closeDrawer();
-                // props.navigation.push('ListKamar');
-                props.navigation.reset({
-                  index: 0,
-                  routes: [{name: 'HalamanBayar'}],
-                });
+                props.navigation.push('HalamanBayar');
+                // props.navigation.reset({
+                //   index: 0,
+                //   routes: [{name: 'HalamanBayar'}],
+                // });
               }}
             />
           </Drawer.Section>
@@ -181,11 +201,11 @@ const CustomDrawer = (props) => {
                 //   screen: 'ListPenghuni',
                 // });
                 props.navigation.closeDrawer();
-                // props.navigation.push('ListPenghuni');
-                props.navigation.reset({
-                  index: 0,
-                  routes: [{name: 'ListPenghuni'}],
-                });
+                props.navigation.push('ListPenghuni');
+                // props.navigation.reset({
+                //   index: 0,
+                //   routes: [{name: 'ListPenghuni'}],
+                // });
               }}
             />
           </Drawer.Section>
@@ -199,11 +219,11 @@ const CustomDrawer = (props) => {
               onPress={() => {
                 // props.navigation.navigate('PendaftarScreen');
                 props.navigation.closeDrawer();
-                // props.navigation.push('ListPendaftar');
-                props.navigation.reset({
-                  index: 0,
-                  routes: [{name: 'ListPendaftar'}],
-                });
+                props.navigation.push('ListPendaftar');
+                // props.navigation.reset({
+                //   index: 0,
+                //   routes: [{name: 'ListPendaftar'}],
+                // });
               }}
             />
           </Drawer.Section>

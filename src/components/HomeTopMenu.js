@@ -8,12 +8,14 @@ import {
 } from 'react-native';
 import Foundation from 'react-native-vector-icons/Foundation';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {useNavigation} from '@react-navigation/native';
 
-import {myColor} from '../function/MyVar';
+import {myColor, formatRupiah} from '../function/MyVar';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
-const HomeTopMenu = () => {
+const HomeTopMenu = (props) => {
+  const navigation = useNavigation();
   return (
     <View
       style={{
@@ -42,7 +44,9 @@ const HomeTopMenu = () => {
             flexDirection: 'row',
           }}>
           <Text style={styles.textPendapatan}>Pemasukan Bulan ini :</Text>
-          <Text style={styles.textPendapatan}>Rp 500.000 </Text>
+          <Text style={styles.textPendapatan}>
+            {formatRupiah(props.uang.toString(), 'Rp. ')}
+          </Text>
         </View>
         <View
           style={{
@@ -51,7 +55,7 @@ const HomeTopMenu = () => {
             flexDirection: 'row',
             paddingHorizontal: 10,
           }}>
-          <TouchableOpacity onPress={() => alert('todo')}>
+          <TouchableOpacity onPress={() => navigation.push('Profil')}>
             <View style={styles.featureBox}>
               <FontAwesome5
                 name="user-circle"

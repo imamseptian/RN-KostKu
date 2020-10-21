@@ -1,28 +1,28 @@
-import React, {useState, useEffect} from 'react';
-import {
-  StyleSheet,
-  View,
-  ScrollView,
-  Alert,
-  TextInput,
-  Image,
-  StatusBar,
-  Dimensions,
-  TouchableNativeFeedback,
-} from 'react-native';
-import {Text, Title, Avatar} from 'react-native-paper';
-import {useForm, Controller} from 'react-hook-form';
 import axios from 'axios';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {useSelector} from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {Controller, useForm} from 'react-hook-form';
+import {
+  Alert,
+  Dimensions,
+  Image,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  TextInput,
+  TouchableNativeFeedback,
+  View,
+} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import ImagePicker from 'react-native-image-picker';
-import {Permission, PERMISSION_TYPE} from '../../AppPermission';
 import Spinner from 'react-native-loading-spinner-overlay';
+import {Text} from 'react-native-paper';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useSelector} from 'react-redux';
+import {Permission, PERMISSION_TYPE} from '../../AppPermission';
 import {APIUrl, myColor} from '../../function/MyVar';
+import {FormFieldIcon} from '../../components/atoms';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
@@ -36,8 +36,8 @@ const EditKelasKamar = ({navigation, route}) => {
     type: '',
   });
 
-  const [kamar, setKamar] = useState({});
-  const [inputList, setInputList] = useState([]);
+  const [kamar, setKamar] = useState(route.params.kamar);
+  const [inputList, setInputList] = useState(route.params.kamar.fasilitas);
   const [isSubmit, setIsSubmit] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
   const [isChanged, setisChanged] = useState(false);
@@ -51,9 +51,8 @@ const EditKelasKamar = ({navigation, route}) => {
   });
 
   useEffect(() => {
-    console.log(route.params);
-    setKamar(route.params.kamar);
-    setInputList(route.params.kamar.fasilitas);
+    // setKamar(route.params.kamar);
+    // setInputList(route.params.kamar.fasilitas);
 
     return () => {
       console.log('tutup');
@@ -245,8 +244,7 @@ const EditKelasKamar = ({navigation, route}) => {
             position: 'relative',
 
             elevation: 5,
-            borderRadius: 20,
-            paddingTop: 20,
+            borderRadius: 10,
           }}>
           <ScrollView
             ref={(c) => {
@@ -267,13 +265,14 @@ const EditKelasKamar = ({navigation, route}) => {
                 alignItems: 'center',
                 paddingBottom: 20,
                 borderBottomWidth: 0.5,
+                marginTop: 10,
+                marginBottom: 10,
               }}>
               <TouchableOpacity
                 disabled={isPressed}
                 onPress={() => pickImage()}>
                 {dataFoto.isUploaded != true ? (
                   <Image
-                    style={{borderRadius: 10}}
                     source={{
                       uri:
                         APIUrl +
@@ -283,7 +282,7 @@ const EditKelasKamar = ({navigation, route}) => {
                     style={{
                       height: (2 / 3) * 0.83 * screenWidth,
                       width: 0.83 * screenWidth,
-                      borderRadius: 20,
+                      borderRadius: 10,
                     }}
                     resizeMode="cover"
                   />
@@ -323,37 +322,22 @@ const EditKelasKamar = ({navigation, route}) => {
             </View>
 
             <View style={styles.formWrapper}>
-              <View style={{marginBottom: 15}}>
+              <View style={styles.fieldWrapper}>
                 <Controller
                   control={control}
                   render={({onChange, onBlur, value}) => (
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        flex: 1,
-                        alignItems: 'center',
-                      }}>
-                      <View
-                        style={{
-                          width: 30,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}>
-                        <Fontisto name="room" color="#05375A" size={25} />
-                      </View>
-                      <TextInput
-                        placeholder="Nama Kamar"
-                        onChangeText={(v) => {
-                          onChange(v);
-                          setForm('nama', v);
-                        }}
-                        value={value}
-                        style={{borderBottomWidth: 1, flex: 1, marginLeft: 10}}
-                      />
-                    </View>
+                    <FormFieldIcon
+                      icon="door-closed"
+                      placeholder="Nama Kamar"
+                      onChangeText={(v) => {
+                        onChange(v);
+                        setForm('nama', v);
+                      }}
+                      value={value}
+                    />
                   )}
                   name="nama"
-                  rules={{required: true, minLength: 4, maxLength: 20}}
+                  rules={{required: true}}
                   defaultValue=""
                 />
                 {errors.nama && errors.nama.type === 'required' && (
@@ -362,50 +346,22 @@ const EditKelasKamar = ({navigation, route}) => {
                   </View>
                   //
                 )}
-                {errors.nama && errors.nama.type === 'minLength' && (
-                  <View style={styles.viewError}>
-                    <Text style={styles.textError}>Nama Minimal 5 Digit</Text>
-                  </View>
-                )}
-                {errors.nama && errors.nama.type === 'maxLength' && (
-                  <View style={styles.viewError}>
-                    <Text style={styles.textError}>Nama Maximal 10 Digit</Text>
-                  </View>
-                )}
               </View>
-              <View style={{marginBottom: 15}}>
+
+              <View style={styles.fieldWrapper}>
                 <Controller
                   control={control}
                   render={({onChange, onBlur, value}) => (
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        flex: 1,
-                        alignItems: 'center',
-                      }}>
-                      <View
-                        style={{
-                          width: 30,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}>
-                        <FontAwesome5
-                          name="money-bill-wave"
-                          color="#05375A"
-                          size={25}
-                        />
-                      </View>
-                      <TextInput
-                        placeholder="Harga Sewa / Bulan"
-                        style={{borderBottomWidth: 1, flex: 1, marginLeft: 10}}
-                        onChangeText={(value) => {
-                          onChange(value);
-                          setForm('harga', parseInt(value));
-                        }}
-                        value={value}
-                        keyboardType="number-pad"
-                      />
-                    </View>
+                    <FormFieldIcon
+                      icon="money-bill-alt"
+                      placeholder="Harga Kamar"
+                      keyboardType="numeric"
+                      onChangeText={(v) => {
+                        onChange(v);
+                        setForm('harga', parseInt(v));
+                      }}
+                      value={value}
+                    />
                   )}
                   name="harga"
                   rules={{required: true}}
@@ -420,53 +376,33 @@ const EditKelasKamar = ({navigation, route}) => {
                 )}
               </View>
 
-              <View style={{marginBottom: 15}}>
+              <View style={styles.fieldWrapper}>
                 <Controller
                   control={control}
                   render={({onChange, onBlur, value}) => (
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        flex: 1,
-                        alignItems: 'center',
-                      }}>
-                      <View
-                        style={{
-                          width: 30,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}>
-                        <FontAwesome5
-                          name="money-bill-wave"
-                          color="#05375A"
-                          size={25}
-                        />
-                      </View>
-                      <TextInput
-                        placeholder="Kapasitas"
-                        style={{borderBottomWidth: 1, flex: 1, marginLeft: 10}}
-                        onChangeText={(value) => {
-                          onChange(value);
-                          setForm('kapasitas', parseInt(value));
-                        }}
-                        value={value}
-                        keyboardType="number-pad"
-                      />
-                    </View>
+                    <FormFieldIcon
+                      icon="users"
+                      placeholder="Kapasitas kamar"
+                      keyboardType="number-pad"
+                      onChangeText={(value) => {
+                        onChange(value);
+                        setForm('kapasitas', parseInt(value));
+                      }}
+                      value={value}
+                    />
                   )}
                   name="kapasitas"
                   rules={{required: true}}
                   defaultValue=""
                 />
 
-                {errors.kapasitas && errors.kapasitas.type === 'required' && (
+                {errors.harga && errors.harga.type === 'required' && (
                   <View style={styles.viewError}>
                     <Text style={styles.textError}>Kapasitas Perlu Diisi</Text>
                   </View>
                   //
                 )}
               </View>
-
               <View
                 style={{
                   flexDirection: 'row',
@@ -511,7 +447,7 @@ const EditKelasKamar = ({navigation, route}) => {
                       flexDirection: 'row',
                       flex: 1,
                       alignItems: 'center',
-                      marginLeft: 30,
+                      marginBottom: 10,
                     }}
                     key={i}>
                     <View
@@ -522,115 +458,94 @@ const EditKelasKamar = ({navigation, route}) => {
                       }}>
                       <Text>{i + 1}</Text>
                     </View>
-                    <TextInput
-                      placeholder={'Fasilitas ' + String(i + 1)}
-                      onChangeText={(e) => {
-                        cekFasilitas();
-                        handleInputChange(e, i, 'item');
-                        setisChanged(true);
-                      }}
-                      onEndEditing={() => {
-                        if (kamar.fasilitas[i].item == '') {
-                          setInvalidFasilitas(true);
-                        }
-                      }}
-                      value={x.item}
-                      style={{borderBottomWidth: 1, flex: 1, marginLeft: 10}}
-                    />
+
+                    <View
+                      style={{
+                        height: 40,
+                        borderWidth: 0.5,
+                        borderRadius: 10,
+                        flex: 1,
+
+                        paddingHorizontal: 5,
+                      }}>
+                      <TextInput
+                        placeholder={'Fasilitas ' + String(i + 1)}
+                        onChangeText={(e) => {
+                          cekFasilitas();
+                          handleInputChange(e, i, 'item');
+                          setisChanged(true);
+                        }}
+                        style={{
+                          marginLeft: 10,
+                          flex: 1,
+                        }}
+                        onEndEditing={() => {
+                          if (kamar.fasilitas[i].item == '') {
+                            setInvalidFasilitas(true);
+                          }
+                        }}
+                        value={x.item}
+                      />
+                    </View>
                     {inputList.length !== 1 && (
-                      <TouchableOpacity onPress={() => handleRemoveClick(i)}>
+                      <TouchableNativeFeedback
+                        onPress={() => handleRemoveClick(i)}>
                         <View
                           style={{
-                            marginLeft: 10,
-                            height: 70,
+                            marginLeft: 5,
+                            height: 40,
                             width: 30,
                             alignItems: 'center',
                             justifyContent: 'center',
                           }}>
-                          {/* <Button title="x" onPress={() => handleRemoveClick(i)} /> */}
                           <MaterialIcons
                             name="cancel"
                             color={myColor.alert}
                             size={25}
                           />
                         </View>
-                      </TouchableOpacity>
+                      </TouchableNativeFeedback>
                     )}
                   </View>
                 );
               })}
 
-              {/* <Button title="Add Fasilitas" onPress={() => handleAddClick()} /> */}
-              <TouchableOpacity
-                style={{marginTop: 10, marginBottom: 10, marginLeft: 60}}
-                onPress={() => handleAddClick()}>
+              <View style={{marginBottom: 10, marginLeft: 30}}>
+                <TouchableNativeFeedback onPress={() => handleAddClick()}>
+                  <View
+                    style={{
+                      height: 40,
+                      backgroundColor: myColor.addfacility,
+                      borderRadius: 10,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text style={{color: 'white', fontWeight: 'bold'}}>
+                      Tambah Fasilitas
+                    </Text>
+                  </View>
+                </TouchableNativeFeedback>
+              </View>
+              <TouchableNativeFeedback
+                onPress={handleSubmit(onSubmit, onError)}>
                 <View
                   style={{
-                    height: 30,
-                    backgroundColor: myColor.addfacility,
                     borderRadius: 10,
-                    justifyContent: 'center',
+                    height: 40,
+                    width: 0.7 * screenWidth,
+                    backgroundColor: myColor.myblue,
+                    alignSelf: 'center',
                     alignItems: 'center',
+                    justifyContent: 'center',
                   }}>
-                  <Text style={{color: 'white', fontWeight: 'bold'}}>
-                    Tambah Fasilitas
+                  <Text
+                    style={{fontSize: 14, fontWeight: 'bold', color: '#fff'}}>
+                    Submit
                   </Text>
                 </View>
-              </TouchableOpacity>
-
-              {/* <TouchableOpacity
-                onPress={handleSubmit(onSubmit, onError)}
-                disabled={isSubmit}
-                style={{marginBottom: 10}}>
-                <View
-                  style={{
-                    height: 50,
-                    backgroundColor: '#46ce7c',
-                    borderRadius: 300 / 4,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={{color: 'white', fontWeight: 'bold'}}>
-                    Tambahkan Kamar
-                  </Text>
-                </View>
-              </TouchableOpacity> */}
-
-              {/* <Button title="Pick Image" onPress={() => pickImage()} />
-          {dataFoto && (
-            <Image
-              source={{uri: dataFoto.uri}}
-              style={{width: 200, height: 200}}
-            />
-          )}
-          <Text style={{marginBottom: 10}}>{JSON.stringify(kamar)}</Text>
-          <Text style={{marginBottom: 10}}>{JSON.stringify(dataFoto)}</Text> */}
+              </TouchableNativeFeedback>
             </View>
           </ScrollView>
-          <View style={{position: 'absolute', bottom: -20, left: 100}}>
-            <TouchableNativeFeedback onPress={handleSubmit(onSubmit, onError)}>
-              <View
-                style={{
-                  backgroundColor: myColor.applynow,
-                  height: 40,
-                  paddingHorizontal: 10,
-
-                  borderRadius: 10,
-                  elevation: 5,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontSize: 14,
-                    fontWeight: 'bold',
-                  }}>
-                  Tambahkan Kelas
-                </Text>
-              </View>
-            </TouchableNativeFeedback>
-          </View>
         </View>
       </View>
     </View>
@@ -646,7 +561,7 @@ const styles = StyleSheet.create({
   },
   formWrapper: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 0.05 * screenWidth,
   },
   textInput: {
     fontSize: 14,
@@ -658,5 +573,6 @@ const styles = StyleSheet.create({
   viewError: {
     marginLeft: 40,
   },
-  textError: {color: '#d63031', fontSize: 12, fontWeight: 'bold'},
+  textError: {color: myColor.alert, fontSize: 12, fontWeight: 'bold'},
+  fieldWrapper: {marginBottom: 15},
 });

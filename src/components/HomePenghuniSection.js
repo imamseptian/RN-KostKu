@@ -19,58 +19,58 @@ const screenHeight = Math.round(Dimensions.get('window').height);
 const HomePenghuniSection = (props) => {
   const navigation = useNavigation();
 
-  let content;
+  // let content;
 
-  if (props.data.length < 1) {
-    content = (
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Text
-          style={{
-            color: myColor.darkText,
-            fontWeight: 'bold',
-            fontSize: 18,
-            paddingVertical: 15,
-          }}>
-          Penghuni kost masih kosong
-        </Text>
-      </View>
-    );
-  } else {
-    content = (
-      <ScrollView
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        style={{paddingLeft: 0.05 * screenWidth}}>
-        {props.data.map((item, index) => {
-          return (
-            <View key={index}>
-              <CircleAvatar
-                data={item}
-                onPress={() => {
-                  // navigation.navigate('PenghuniScreen', {
-                  //   screen: 'DetailPenghuni',
-                  //   params: {
-                  //     penghuni: item,
-                  //   },
-                  // });
-                  console.log(
-                    APIUrl + '/kostdata/pendaftar/foto/' + item.foto_diri,
-                  );
-                  // navigation.push('DetailPenghuni', {penghuni: item});
-                  console.log(item);
-                  navigation.push('DetailPenghuni', {item});
-                }}
-              />
-            </View>
-          );
-        })}
-      </ScrollView>
-    );
-  }
+  // if (props.data.length < 1) {
+  //   content = (
+  //     <View
+  //       style={{
+  //         alignItems: 'center',
+  //         justifyContent: 'center',
+  //       }}>
+  //       <Text
+  //         style={{
+  //           color: myColor.darkText,
+  //           fontWeight: 'bold',
+  //           fontSize: 18,
+  //           paddingVertical: 15,
+  //         }}>
+  //         Penghuni kost masih kosong
+  //       </Text>
+  //     </View>
+  //   );
+  // } else {
+  //   content = (
+  //     <ScrollView
+  //       horizontal={true}
+  //       showsHorizontalScrollIndicator={false}
+  //       style={{paddingLeft: 0.05 * screenWidth}}>
+  //       {props.data.map((item, index) => {
+  //         return (
+  //           <View key={index}>
+  //             <CircleAvatar
+  //               data={item}
+  //               onPress={() => {
+  //                 // navigation.navigate('PenghuniScreen', {
+  //                 //   screen: 'DetailPenghuni',
+  //                 //   params: {
+  //                 //     penghuni: item,
+  //                 //   },
+  //                 // });
+  //                 console.log(
+  //                   APIUrl + '/kostdata/pendaftar/foto/' + item.foto_diri,
+  //                 );
+  //                 // navigation.push('DetailPenghuni', {penghuni: item});
+  //                 console.log(item);
+  //                 navigation.push('DetailPenghuni', {item});
+  //               }}
+  //             />
+  //           </View>
+  //         );
+  //       })}
+  //     </ScrollView>
+  //   );
+  // }
 
   return (
     <View>
@@ -88,12 +88,67 @@ const HomePenghuniSection = (props) => {
       <View
         style={{
           justifyContent: 'center',
+          position: 'relative',
         }}>
-        {props.status ? (
+        <ActivityIndicator
+          animating={props.status}
+          size="large"
+          color={myColor.myblue}
+          style={styles.loading}
+        />
+        {props.data.length < 1 ? (
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{
+                color: myColor.darkText,
+                fontWeight: 'bold',
+                fontSize: 18,
+                paddingVertical: 15,
+              }}>
+              Penghuni kost masih kosong
+            </Text>
+          </View>
+        ) : (
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={{paddingLeft: 0.05 * screenWidth}}>
+            {props.data.map((item, index) => {
+              return (
+                <View key={index}>
+                  <CircleAvatar
+                    data={item}
+                    onPress={() => {
+                      // navigation.navigate('PenghuniScreen', {
+                      //   screen: 'DetailPenghuni',
+                      //   params: {
+                      //     penghuni: item,
+                      //   },
+                      // });
+                      console.log(
+                        APIUrl + '/kostdata/pendaftar/foto/' + item.foto_diri,
+                      );
+                      // navigation.push('DetailPenghuni', {penghuni: item});
+                      console.log(item);
+                      navigation.push('DetailPenghuni', {item});
+                    }}
+                  />
+                </View>
+              );
+            })}
+          </ScrollView>
+        )}
+
+        {/* {props.status ? (
           <ActivityIndicator size="large" color={myColor.colorTheme} />
         ) : (
           content
-        )}
+        )} */}
+        {/* {content} */}
       </View>
     </View>
   );
@@ -130,5 +185,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 15,
     marginTop: 10,
+  },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

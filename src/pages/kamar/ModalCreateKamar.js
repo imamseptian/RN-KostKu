@@ -1,36 +1,30 @@
-import axios from 'axios';
-import React, {useEffect, useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Dimensions,
-  Image,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableNativeFeedback,
+  View,
   TextInput,
   TouchableOpacity,
-  StatusBar,
-  View,
 } from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import {useSelector} from 'react-redux';
+import axios from 'axios';
 import {myColor, APIUrl} from '../../function/MyVar';
+import {myAxios} from '../../function/MyAxios';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
-
-const CreateKamar = ({navigation, route}) => {
+const ModalCreateKamar = (props) => {
   const [kamar, setKamar] = useState({
     nama: '',
-    kelas: route.params.id,
-    kapasitas: route.params.kapasitas,
+    kelas: props.id,
+    kapasitas: props.kapasitas,
     active: true,
     qty: 1,
   });
   // const [listKamar, setListKamar] = useState([]);
   const [banyak, setBanyak] = useState(1);
-  const dataRedux = useSelector((state) => state.AuthReducer);
-  const myToken = dataRedux.token;
 
   useEffect(() => {
     setKamar({...kamar, qty: banyak});
@@ -39,69 +33,85 @@ const CreateKamar = ({navigation, route}) => {
   const setForm = (inputType, value) => {
     setKamar({...kamar, [inputType]: value});
   };
+  useEffect(() => {
+    return () => {
+      setKamar({...kamar, qty: 1, nama: ''});
+    };
+  }, []);
 
   const addData = () => {
-    console.log('add Data');
-
-    // axios
-    //   .post(`https://dry-forest-53707.herokuapp.com/api/kamar`, kamar, config)
-    //   .then((res) => {
-    //     //   console.log(res);
-    //     console.log(res.data);
-    //     navigation.push('DaftarKamar', {id: route.params.id});
-    //   });
-
-    axios
-      .post(`https://dry-forest-53707.herokuapp.com/api/kamar`, kamar, {
-        headers: {
-          Authorization: `Bearer ${myToken}`,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        console.log('kamar', kamar);
-        navigation.pop(1);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    const source = axios.CancelToken.source();
+    myAxios.postAxios(
+      APIUrl + '/api/kamar',
+      kamar,
+      props.token,
+      source.token,
+      onPost,
+    );
+    function onPost(status, data) {
+      if (status == 'success') {
+        alert('Tambah Kamar Sukses');
+        props.refresh(source.token);
+        props.tutup();
+        // refreshPenghuni();
+      } else if (status == 'cancel') {
+        console.log('caught cancel filter');
+      } else {
+        console.log(data);
+      }
+    }
   };
 
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: myColor.colorTheme,
-        justifyContent: 'center',
         alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)',
       }}>
-      <StatusBar translucent backgroundColor="transparent" />
       <View
         style={{
-          minHeight: 0.5 * screenHeight,
-          width: 0.8 * screenWidth,
+          paddingHorizontal: 10,
+          paddingBottom: 20,
+          width: screenWidth * 0.88,
+          borderRadius: 10,
           backgroundColor: 'white',
           elevation: 5,
-          borderRadius: 10,
           alignItems: 'center',
-          paddingTop: 10,
         }}>
-        <Text
-          style={{fontSize: 18, fontWeight: 'bold', color: myColor.blackText}}>
-          Tambah Kamar
-        </Text>
+        <View
+          style={{
+            borderBottomWidth: 1,
+            paddingVertical: 10,
+            borderColor: myColor.darkText,
+            width: screenWidth * 0.88,
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 10,
+          }}>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              color: myColor.blackText,
+              fontSize: 15,
+            }}>
+            Tambah Kamar
+          </Text>
+        </View>
 
         <View
           style={{
-            marginTop: 15,
-            height: 50,
+            height: 40,
             borderWidth: 0.5,
-            borderRadius: 10,
-            width: 0.7 * screenWidth,
+            borderRadius: 5,
+            width: 0.6 * screenWidth,
             paddingHorizontal: 10,
+            marginBottom: 10,
           }}>
           <TextInput
             placeholder="Masukan Nama Kamar"
+            value={kamar.nama}
             onChangeText={(value) => {
               setForm('nama', value);
             }}
@@ -109,7 +119,11 @@ const CreateKamar = ({navigation, route}) => {
         </View>
 
         <View
-          style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginBottom: 15,
+          }}>
           <TouchableOpacity
             onPress={() => {
               if (banyak > 1) {
@@ -143,6 +157,7 @@ const CreateKamar = ({navigation, route}) => {
             <TextInput
               value={banyak.toString()}
               keyboardType="numeric"
+              value={kamar.qty.toString()}
               onChangeText={(e) => {
                 if (parseInt(e) < 1) {
                   setBanyak(parseInt(0));
@@ -173,58 +188,67 @@ const CreateKamar = ({navigation, route}) => {
             </View>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={() => {
-            if (kamar.nama != '') {
-              addData();
-            } else {
-              alert('Pastikan Nama Kamar Sudah Diisi');
-            }
-          }}>
+
+        <TouchableNativeFeedback onPress={() => addData()}>
           <View
             style={{
-              width: 100,
-              height: 40,
-              borderRadius: 10,
+              height: 35,
+              width: 0.7 * screenWidth,
+              borderRadius: 5,
               backgroundColor: myColor.myblue,
-              marginTop: 20,
-              justifyContent: 'center',
               alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: 10,
             }}>
-            <Text style={{color: '#fff', fontSize: 14, fontWeight: 'bold'}}>
-              Tambah
+            <Text style={{fontSize: 14, fontWeight: 'bold', color: '#fff'}}>
+              Tambahkan
             </Text>
           </View>
-        </TouchableOpacity>
+        </TouchableNativeFeedback>
+        <TouchableNativeFeedback onPress={props.tutup}>
+          <View
+            style={{
+              height: 35,
+              width: 0.7 * screenWidth,
+              borderRadius: 5,
+              backgroundColor: myColor.bgfb,
+              borderWidth: 0.5,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{fontSize: 14, fontWeight: 'bold', color: myColor.fbtx}}>
+              Tutup
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
       </View>
     </View>
   );
 };
 
-export default CreateKamar;
+export default ModalCreateKamar;
 
 const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
+  subtitle: {
+    width: 0.25 * screenWidth,
+    paddingRight: 5,
+    fontSize: 12,
+    color: myColor.blackText,
+    fontWeight: 'bold',
   },
-  containerUp: {
-    flex: 1,
-    backgroundColor: '#fcc78e',
+  konten: {
+    width: 0.53 * screenWidth,
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: myColor.darkText,
   },
-  containerBot: {
-    flex: 4,
-  },
-  relModal: {
-    position: 'absolute',
+  fieldWrapper: {
+    flexDirection: 'row',
     width: 0.8 * screenWidth,
-    right: 0.1 * screenWidth,
-    top: 0.1 * screenHeight,
-    height: 400,
-    borderRadius: 20,
-    backgroundColor: 'white',
-    elevation: 5,
-  },
-  image: {
-    flex: 1,
+    minHeight: 50,
+    borderBottomWidth: 0.5,
+    alignItems: 'center',
+    paddingVertical: 5,
   },
 });

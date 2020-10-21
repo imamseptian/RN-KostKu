@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Modal,
 } from 'react-native';
 import {FAB} from 'react-native-paper';
 import {useSelector} from 'react-redux';
@@ -16,11 +17,13 @@ import {FlatListKamar} from '../../components';
 import {ButtonLoad, SearchBar, SearchResult} from '../../components/atoms';
 import {myAxios} from '../../function/MyAxios';
 import {APIUrl, myColor} from '../../function/MyVar';
+import {ModalCreateKamar} from './';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
 const DaftarKamar = ({navigation, route}) => {
+  const [showModal, setShowModal] = useState(false);
   const dataRedux = useSelector((state) => state.AuthReducer);
   const [daftarKamar, setDaftarKamar] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
@@ -155,6 +158,20 @@ const DaftarKamar = ({navigation, route}) => {
   return (
     <View style={styles.wrapper}>
       <StatusBar translucent backgroundColor="transparent" />
+
+      {/* Modal Create Kamar  */}
+      <Modal
+        visible={showModal}
+        transparent={true}
+        onRequestClose={() => setShowModal(false)}>
+        <ModalCreateKamar
+          id={route.params.id}
+          kapasitas={route.params.kapasitas}
+          tutup={() => setShowModal(false)}
+          token={dataRedux.token}
+          refresh={ambilApi}
+        />
+      </Modal>
       <View
         style={{
           backgroundColor: myColor.colorTheme,
@@ -210,12 +227,14 @@ const DaftarKamar = ({navigation, route}) => {
         small
         icon="plus"
         color="white"
-        onPress={() =>
-          navigation.push('CreateKamar', {
-            id: route.params.id,
-            kapasitas: route.params.kapasitas,
-          })
-        }
+        onPress={() => {
+          // navigation.push('CreateKamar', {
+          //   id: route.params.id,
+          //   kapasitas: route.params.kapasitas,
+          // })
+
+          setShowModal(true);
+        }}
       />
       <ActivityIndicator
         animating={isLoading}

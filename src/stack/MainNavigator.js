@@ -3,6 +3,7 @@ import React, {useEffect} from 'react';
 import {Easing, StyleSheet} from 'react-native';
 // import FirstTimeNavigator from './FirstTimeNavigator';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import {CardStyleInterpolators} from '@react-navigation/stack';
 import {fcmService} from '../FCMService';
 import {localNotificationService} from '../LocalNotificationService';
 import CustomDrawer from '../pages/Drawer/CustomDrawer';
@@ -18,7 +19,9 @@ import {
   ListKamar,
 } from '../pages/kamar';
 import {DetailPendaftar, ListPendaftar} from '../pages/pendaftar';
+import {DetailKeuangan} from '../pages/pengeluaran';
 import {DetailPenghuni, ListPenghuni} from '../pages/penghuni';
+import {Profile, EditProfil, EditKost} from '../pages/user';
 import {HalamanBayar} from '../pages/transaksi';
 import FirstTimeNavigator from './FirstTimeNavigator';
 
@@ -34,53 +37,165 @@ const DrawerScreen = () => (
   </Drawer.Navigator>
 );
 
-const MainStackScreen = () => (
-  <MainStack.Navigator headerMode={false}>
-    <MainStack.Screen name="HomeScreen" component={HomeScreen} />
+const MainStackScreen = ({navigation, route}) => {
+  useEffect(() => {
+    if (route.state !== undefined) {
+      // console.log(route.state);
+      if (
+        route.state.routes[route.state.routes.length - 1].name ==
+        'DetailPenghuni'
+      ) {
+        navigation.setOptions({gestureEnabled: false});
+      } else {
+        navigation.setOptions({gestureEnabled: true});
+      }
+      // console.log(route.state.routes[route.state.routes.length - 1]);
+    }
+    // route.state !== undefined
+    //   ? route.state.name == 'DetailPenghuni'
+    //     ? navigation.setOptions({gestureEnabled: false})
+    //     : navigation.setOptions({gestureEnabled: true})
+    //   : null;
+  }, [navigation, route]);
 
-    <MainStack.Screen name="ListPenghuni" component={ListPenghuni} />
-
-    <MainStack.Screen
-      name="DetailPenghuni"
-      component={DetailPenghuni}
-      options={() => ({
-        gestureEnabled: false,
-        transitionSpec: {
-          open: {
-            animation: 'timing',
-            config: {duration: 500, easing: Easing.inOut(Easing.ease)},
-          },
-          close: {
-            animation: 'spring',
-            config: {duration: 500, easing: Easing.inOut(Easing.linear)},
-          },
-        },
-        cardStyleInterpolator: ({current: {progress}}) => {
-          return {
-            cardStyle: {
-              opacity: progress,
+  return (
+    <MainStack.Navigator headerMode={false}>
+      <MainStack.Screen
+        name="HomeScreen"
+        component={HomeScreen}
+        options={() => ({
+          gestureEnabled: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          transitionSpec: {
+            open: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
             },
-          };
-        },
-      })}
-    />
+            close: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+          },
+        })}
+      />
 
-    <MainStack.Screen name="ListPendaftar" component={ListPendaftar} />
-    <MainStack.Screen name="DetailPendaftar" component={DetailPendaftar} />
+      <MainStack.Screen
+        name="ListPenghuni"
+        component={ListPenghuni}
+        options={() => ({
+          gestureEnabled: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          transitionSpec: {
+            open: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+            close: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+          },
+        })}
+      />
 
-    <MainStack.Screen name="ListKamar" component={ListKamar} />
-    <MainStack.Screen name="CreateKelas" component={FormKelasKamar} />
-    <MainStack.Screen name="DetailKelas" component={DetailKelasKamar} />
-    <MainStack.Screen name="CreateKamar" component={CreateKamar} />
-    <MainStack.Screen name="EditKelas" component={EditKelasKamar} />
-    <MainStack.Screen name="DaftarKamar" component={DaftarKamar} />
-    <MainStack.Screen name="FormKelasKamar" component={FormKelasKamar} />
-    <MainStack.Screen name="DetailKamar" component={DetailKamar} />
-    <MainStack.Screen name="EditKamar" component={EditKamar} />
+      <MainStack.Screen
+        name="DetailPenghuni"
+        component={DetailPenghuni}
+        options={() => ({
+          gestureEnabled: false,
+          transitionSpec: {
+            open: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.inOut(Easing.ease)},
+            },
+            close: {
+              animation: 'spring',
+              config: {duration: 500, easing: Easing.inOut(Easing.linear)},
+            },
+          },
+          cardStyleInterpolator: ({current: {progress}}) => {
+            return {
+              cardStyle: {
+                opacity: progress,
+              },
+            };
+          },
+        })}
+      />
 
-    <MainStack.Screen name="HalamanBayar" component={HalamanBayar} />
-  </MainStack.Navigator>
-);
+      <MainStack.Screen
+        name="ListPendaftar"
+        component={ListPendaftar}
+        options={() => ({
+          gestureEnabled: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          transitionSpec: {
+            open: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+            close: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+          },
+        })}
+      />
+      <MainStack.Screen name="DetailPendaftar" component={DetailPendaftar} />
+
+      <MainStack.Screen
+        name="ListKamar"
+        component={ListKamar}
+        options={() => ({
+          gestureEnabled: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          transitionSpec: {
+            open: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+            close: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+          },
+        })}
+      />
+      <MainStack.Screen name="CreateKelas" component={FormKelasKamar} />
+      <MainStack.Screen name="DetailKelas" component={DetailKelasKamar} />
+      <MainStack.Screen name="CreateKamar" component={CreateKamar} />
+      <MainStack.Screen name="EditKelas" component={EditKelasKamar} />
+      <MainStack.Screen name="DaftarKamar" component={DaftarKamar} />
+      <MainStack.Screen name="FormKelasKamar" component={FormKelasKamar} />
+      <MainStack.Screen name="DetailKamar" component={DetailKamar} />
+      <MainStack.Screen name="EditKamar" component={EditKamar} />
+
+      <MainStack.Screen
+        name="HalamanBayar"
+        component={HalamanBayar}
+        options={() => ({
+          gestureEnabled: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          transitionSpec: {
+            open: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+            close: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+          },
+        })}
+      />
+
+      <MainStack.Screen name="Profil" component={Profile} />
+      <MainStack.Screen name="EditProfil" component={EditProfil} />
+      <MainStack.Screen name="EditKost" component={EditKost} />
+      <MainStack.Screen name="DetailKeuangan" component={DetailKeuangan} />
+    </MainStack.Navigator>
+  );
+};
 
 const MainNavigator = ({navigation}) => {
   useEffect(() => {

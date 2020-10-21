@@ -19,6 +19,13 @@ const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
 const DetailPenghuni = ({navigation, route}) => {
+  // useEffect(() => {
+  //   route.state !== undefined
+  //     ? route.state.index > 0
+  //       ? navigation.setOptions({gestureEnabled: false})
+  //       : navigation.setOptions({gestureEnabled: true})
+  //     : null;
+  // }, [navigation, route]);
   const [showImg, setshowImg] = useState(false);
   const [imageIndex, setimageIndex] = useState(0);
   const {item} = route.params;
@@ -201,6 +208,10 @@ DetailPenghuni.sharedElements = (route, otherRoute, showing) => {
   // return DATA_ICON.map((item) => `item.${item.id}.icon`);
 
   return [`item.${item.id}.icon`];
+};
+
+DetailPenghuni.navigationOptions = {
+  drawerLockMode: 'locked-open',
 };
 
 export default DetailPenghuni;

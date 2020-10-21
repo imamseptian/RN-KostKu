@@ -117,7 +117,6 @@ const HalamanBayar = () => {
       useNativeDriver: true,
     }).start();
 
-  const ambilRiwayat = () => {};
 
   useEffect(() => {
     animation(1, 500);

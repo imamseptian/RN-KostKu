@@ -16,11 +16,10 @@ import ImagePicker from 'react-native-image-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {Text} from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
 import {Permission, PERMISSION_TYPE} from '../../AppPermission';
+import {FormFieldIcon} from '../../components/atoms';
 import {APIUrl, myColor} from '../../function/MyVar';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
@@ -164,12 +163,13 @@ const FormKelasKamar = ({navigation}) => {
       })
       .then((res) => {
         setIsSubmit(false);
+        // console.log(kamar);
         navigation.pop(1);
       })
       .catch((error) => {
         setIsSubmit(false);
         console.log(error);
-        console.log(kamar);
+        // console.log(kamar);
       });
   };
 
@@ -218,117 +218,99 @@ const FormKelasKamar = ({navigation}) => {
             position: 'relative',
 
             elevation: 5,
-            borderRadius: 20,
-            paddingTop: 20,
+            borderRadius: 10,
           }}>
           <Spinner
             visible={isSubmit}
             textContent={'Tunggu Sebentar'}
             textStyle={{color: '#FFF'}}
           />
-
           {/* UPLOAD IMAGE SECTION */}
-          <View
-            style={{
-              alignItems: 'center',
-              borderBottomColor: myColor.darkText,
-              borderBottomWidth: 0.5,
-              paddingBottom: 10,
-            }}>
-            <TouchableNativeFeedback
-              disabled={isPressed}
-              onPress={() => pickImage()}>
-              {dataFoto.isUploaded != true ? (
-                <View
-                  style={{
-                    width: 0.83 * screenWidth,
-                    height: (2 / 3) * 0.83 * screenWidth,
-                    backgroundColor: '#636e72',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 20,
-                  }}>
-                  <FontAwesome name="upload" color="#fff" size={75} />
-                </View>
-              ) : (
-                <Image
-                  source={{
-                    uri: dataFoto.uri,
-                  }}
-                  style={{
-                    height: (2 / 3) * 0.83 * screenWidth,
-                    width: 0.83 * screenWidth,
-                    borderRadius: 20,
-                  }}
-                  resizeMode="cover"
-                />
-              )}
-            </TouchableNativeFeedback>
-
-            <View style={{marginTop: 10, margin: 3}}>
-              <TouchableNativeFeedback
-                disabled={isPressed}
-                onPress={() => pickImage()}>
-                <View
-                  style={{
-                    height: 30,
-                    width: 150,
-                    backgroundColor: myColor.addfacility,
-                    borderRadius: 10,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    elevation: 5,
-                  }}>
-                  <Text style={{color: 'white', fontWeight: 'bold'}}>
-                    Upload Gambar
-                  </Text>
-                </View>
-              </TouchableNativeFeedback>
-            </View>
-          </View>
-
           <ScrollView
             ref={(c) => {
               scroll = c;
             }}
             contentContainerStyle={{paddingBottom: 25}}
             showsVerticalScrollIndicator={false}>
+            <View
+              style={{
+                alignItems: 'center',
+                borderBottomColor: myColor.darkText,
+                borderBottomWidth: 0.5,
+                paddingBottom: 10,
+                marginBottom: 10,
+              }}>
+              <TouchableNativeFeedback
+                disabled={isPressed}
+                onPress={() => pickImage()}>
+                {dataFoto.isUploaded != true ? (
+                  <View
+                    style={{
+                      width: 0.83 * screenWidth,
+                      height: (2 / 3) * 0.83 * screenWidth,
+                      backgroundColor: '#636e72',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 10,
+                      marginTop: 15,
+                    }}>
+                    <FontAwesome name="upload" color="#fff" size={50} />
+                  </View>
+                ) : (
+                  <Image
+                    source={{
+                      uri: dataFoto.uri,
+                    }}
+                    style={{
+                      height: (2 / 3) * 0.83 * screenWidth,
+                      width: 0.83 * screenWidth,
+                      borderRadius: 10,
+                      marginTop: 15,
+                    }}
+                    resizeMode="cover"
+                  />
+                )}
+              </TouchableNativeFeedback>
+
+              <View style={{marginTop: 10, margin: 3}}>
+                <TouchableNativeFeedback
+                  disabled={isPressed}
+                  onPress={() => pickImage()}>
+                  <View
+                    style={{
+                      height: 30,
+                      width: 150,
+                      backgroundColor: myColor.addfacility,
+                      borderRadius: 10,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      elevation: 5,
+                    }}>
+                    <Text style={{color: 'white', fontWeight: 'bold'}}>
+                      Upload Gambar
+                    </Text>
+                  </View>
+                </TouchableNativeFeedback>
+              </View>
+            </View>
+
             <View style={styles.formWrapper}>
-              <View style={{marginBottom: 15}}>
+              <View style={styles.fieldWrapper}>
                 <Controller
                   control={control}
                   render={({onChange, onBlur, value}) => (
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        flex: 1,
-                        alignItems: 'center',
-                      }}>
-                      <View
-                        style={{
-                          width: 30,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}>
-                        <Fontisto name="room" color="#05375A" size={25} />
-                      </View>
-                      <TextInput
-                        placeholder="Nama Kamar"
-                        onChangeText={(v) => {
-                          onChange(v);
-                          setForm('nama', v);
-                        }}
-                        value={value}
-                        style={{
-                          borderBottomWidth: 1,
-                          flex: 1,
-                          marginLeft: 10,
-                        }}
-                      />
-                    </View>
+                    <FormFieldIcon
+                      icon="door-closed"
+                      placeholder="Nama Kamar"
+                      onChangeText={(v) => {
+                        onChange(v);
+                        setForm('nama', v);
+                      }}
+                      value={value}
+                    />
                   )}
                   name="nama"
-                  rules={{required: true, minLength: 6, maxLength: 12}}
+                  rules={{required: true}}
                   defaultValue=""
                 />
                 {errors.nama && errors.nama.type === 'required' && (
@@ -337,54 +319,23 @@ const FormKelasKamar = ({navigation}) => {
                   </View>
                   //
                 )}
-                {errors.nama && errors.nama.type === 'minLength' && (
-                  <View style={styles.viewError}>
-                    <Text style={styles.textError}>Nama Minimal 5 Digit</Text>
-                  </View>
-                )}
-                {errors.nama && errors.nama.type === 'maxLength' && (
-                  <View style={styles.viewError}>
-                    <Text style={styles.textError}>Nama Maximal 10 Digit</Text>
-                  </View>
-                )}
               </View>
-              <View style={{marginBottom: 15}}>
+
+              <View style={styles.fieldWrapper}>
                 <Controller
                   control={control}
                   render={({onChange, onBlur, value}) => (
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        flex: 1,
-                        alignItems: 'center',
-                      }}>
-                      <View
-                        style={{
-                          width: 30,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}>
-                        <FontAwesome5
-                          name="money-bill-wave"
-                          color="#05375A"
-                          size={25}
-                        />
-                      </View>
-                      <TextInput
-                        placeholder="Harga Sewa / Bulan"
-                        style={{
-                          borderBottomWidth: 1,
-                          flex: 1,
-                          marginLeft: 10,
-                        }}
-                        onChangeText={(value) => {
-                          onChange(value);
-                          setForm('harga', parseInt(value));
-                        }}
-                        value={value}
-                        keyboardType="number-pad"
-                      />
-                    </View>
+                    <FormFieldIcon
+                      icon="money-bill-alt"
+                      placeholder="Harga Kamar"
+                      keyboardType="numeric"
+                      onChangeText={(v) => {
+                        onChange(v);
+                        setForm('harga', parseInt(v));
+                        console.log(value);
+                      }}
+                      value={value}
+                    />
                   )}
                   name="harga"
                   rules={{required: true}}
@@ -399,43 +350,20 @@ const FormKelasKamar = ({navigation}) => {
                 )}
               </View>
 
-              <View style={{marginBottom: 15}}>
+              <View style={styles.fieldWrapper}>
                 <Controller
                   control={control}
                   render={({onChange, onBlur, value}) => (
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        flex: 1,
-                        alignItems: 'center',
-                      }}>
-                      <View
-                        style={{
-                          width: 30,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}>
-                        <FontAwesome5
-                          name="money-bill-wave"
-                          color="#05375A"
-                          size={25}
-                        />
-                      </View>
-                      <TextInput
-                        placeholder="Kapasitas"
-                        style={{
-                          borderBottomWidth: 1,
-                          flex: 1,
-                          marginLeft: 10,
-                        }}
-                        onChangeText={(value) => {
-                          onChange(value);
-                          setForm('kapasitas', parseInt(value));
-                        }}
-                        value={value}
-                        keyboardType="number-pad"
-                      />
-                    </View>
+                    <FormFieldIcon
+                      icon="users"
+                      placeholder="Kapasitas kamar"
+                      keyboardType="number-pad"
+                      onChangeText={(value) => {
+                        onChange(value);
+                        setForm('kapasitas', parseInt(value));
+                      }}
+                      value={value}
+                    />
                   )}
                   name="kapasitas"
                   rules={{required: true}}
@@ -444,7 +372,7 @@ const FormKelasKamar = ({navigation}) => {
 
                 {errors.harga && errors.harga.type === 'required' && (
                   <View style={styles.viewError}>
-                    <Text style={styles.textError}>Harga Perlu Diisi</Text>
+                    <Text style={styles.textError}>Kapasitas Perlu Diisi</Text>
                   </View>
                   //
                 )}
@@ -494,7 +422,7 @@ const FormKelasKamar = ({navigation}) => {
                       flexDirection: 'row',
                       flex: 1,
                       alignItems: 'center',
-                      marginLeft: 30,
+                      marginBottom: 10,
                     }}
                     key={i}>
                     <View
@@ -505,32 +433,45 @@ const FormKelasKamar = ({navigation}) => {
                       }}>
                       <Text>{i + 1}</Text>
                     </View>
-                    <TextInput
-                      placeholder={'Fasilitas ' + String(i + 1)}
-                      onChangeText={(e) => {
-                        cekFasilitas();
-                        handleInputChange(e, i, 'item');
-                      }}
-                      onEndEditing={() => {
-                        if (kamar.fasilitas[i].item == '') {
-                          setInvalidFasilitas(true);
-                        }
-                      }}
-                      value={x.item}
-                      style={{borderBottomWidth: 1, flex: 1, marginLeft: 10}}
-                    />
+
+                    <View
+                      style={{
+                        height: 40,
+                        borderWidth: 0.5,
+                        borderRadius: 10,
+                        flex: 1,
+
+                        paddingHorizontal: 5,
+                      }}>
+                      <TextInput
+                        placeholder={'Fasilitas ' + String(i + 1)}
+                        onChangeText={(e) => {
+                          cekFasilitas();
+                          handleInputChange(e, i, 'item');
+                        }}
+                        style={{
+                          marginLeft: 10,
+                          flex: 1,
+                        }}
+                        onEndEditing={() => {
+                          if (kamar.fasilitas[i].item == '') {
+                            setInvalidFasilitas(true);
+                          }
+                        }}
+                        value={x.item}
+                      />
+                    </View>
                     {inputList.length !== 1 && (
                       <TouchableNativeFeedback
                         onPress={() => handleRemoveClick(i)}>
                         <View
                           style={{
-                            marginLeft: 10,
-                            height: 70,
+                            marginLeft: 5,
+                            height: 40,
                             width: 30,
                             alignItems: 'center',
                             justifyContent: 'center',
                           }}>
-                          {/* <Button title="x" onPress={() => handleRemoveClick(i)} /> */}
                           <MaterialIcons
                             name="cancel"
                             color={myColor.alert}
@@ -543,12 +484,11 @@ const FormKelasKamar = ({navigation}) => {
                 );
               })}
 
-              {/* <Button title="Add Fasilitas" onPress={() => handleAddClick()} /> */}
-              <View style={{marginTop: 10, marginBottom: 10, marginLeft: 60}}>
+              <View style={{marginBottom: 10, marginLeft: 30}}>
                 <TouchableNativeFeedback onPress={() => handleAddClick()}>
                   <View
                     style={{
-                      height: 30,
+                      height: 40,
                       backgroundColor: myColor.addfacility,
                       borderRadius: 10,
                       justifyContent: 'center',
@@ -560,59 +500,28 @@ const FormKelasKamar = ({navigation}) => {
                   </View>
                 </TouchableNativeFeedback>
               </View>
-
-              {/* <TouchableNativeFeedback
+              <TouchableNativeFeedback
                 onPress={handleSubmit(onSubmit, onError)}
-                disabled={isSubmit}
-                style={{marginBottom: 10}}>
+                // onPress={() => console.log(kamar)}
+              >
                 <View
                   style={{
-                    height: 50,
-                    backgroundColor: '#46ce7c',
-                    borderRadius: 300 / 4,
-                    justifyContent: 'center',
+                    borderRadius: 10,
+                    height: 40,
+                    width: 0.7 * screenWidth,
+                    backgroundColor: myColor.myblue,
+                    alignSelf: 'center',
                     alignItems: 'center',
+                    justifyContent: 'center',
                   }}>
-                  <Text style={{color: 'white', fontWeight: 'bold'}}>
-                    Tambahkan Kamar
+                  <Text
+                    style={{fontSize: 14, fontWeight: 'bold', color: '#fff'}}>
+                    Submit
                   </Text>
                 </View>
-              </TouchableNativeFeedback> */}
-              {/* <Button title="Pick Image" onPress={() => pickImage()} />
-          {dataFoto && (
-            <Image
-              source={{uri: dataFoto.uri}}
-              style={{width: 200, height: 200}}
-            />
-          )}
-          <Text style={{marginBottom: 10}}>{JSON.stringify(kamar)}</Text>
-          <Text style={{marginBottom: 10}}>{JSON.stringify(dataFoto)}</Text> */}
+              </TouchableNativeFeedback>
             </View>
           </ScrollView>
-          <View style={{position: 'absolute', bottom: -20, left: 100}}>
-            <TouchableNativeFeedback onPress={handleSubmit(onSubmit, onError)}>
-              <View
-                style={{
-                  backgroundColor: myColor.applynow,
-                  height: 40,
-                  paddingHorizontal: 10,
-
-                  borderRadius: 10,
-                  elevation: 5,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontSize: 14,
-                    fontWeight: 'bold',
-                  }}>
-                  Tambahkan Kelas
-                </Text>
-              </View>
-            </TouchableNativeFeedback>
-          </View>
         </View>
       </View>
     </View>
@@ -628,7 +537,7 @@ const styles = StyleSheet.create({
   },
   formWrapper: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 0.05 * screenWidth,
   },
   textInput: {
     fontSize: 14,
@@ -640,5 +549,6 @@ const styles = StyleSheet.create({
   viewError: {
     marginLeft: 40,
   },
-  textError: {color: '#d63031', fontSize: 12, fontWeight: 'bold'},
+  textError: {color: myColor.alert, fontSize: 12, fontWeight: 'bold'},
+  fieldWrapper: {marginBottom: 15},
 });

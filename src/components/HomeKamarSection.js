@@ -13,6 +13,7 @@ import {
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {APIUrl, myColor} from '../function/MyVar';
+import {BlackImage} from './atoms';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
@@ -36,108 +37,17 @@ const HomeKamarSection = (props) => {
     return prefix == undefined ? rupiah : rupiah ? 'Rp. ' + rupiah : '';
   }
 
-  let content;
+  // let content;
 
-  if (props.data.length < 1) {
-    content = (
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Text
-          style={{
-            color: myColor.darkText,
-            fontWeight: 'bold',
-            fontSize: 18,
-            paddingVertical: 15,
-          }}>
-          Kamar kost masih kosong
-        </Text>
-      </View>
-    );
-  } else {
-    content = (
-      <ScrollView
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        style={{paddingLeft: 0.05 * screenWidth}}>
-        {props.data.map((item, index) => {
-          return (
-            <TouchableNativeFeedback
-              key={index}
-              onPress={() =>
-                navigation.navigate('MainScreen', {
-                  screen: 'KamarScreen',
-                  params: {
-                    screen: 'DetailKelas',
-                    params: item,
-                  },
-                })
-              }>
-              <View style={styles.kamarCard}>
-                <Image
-                  source={{
-                    // uri: APIUrl + '/image_kelas/' + item.foto,
-                    uri: APIUrl + '/kostdata/kelas_kamar/foto/' + item.foto,
-                  }}
-                  style={{height: 180, width: '100%', borderRadius: 10}}
-                />
-                <View
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: 'black',
-                    position: 'absolute',
-                    opacity: 0.3,
-                    borderRadius: 10,
-                  }}></View>
-                <View style={styles.kamarContent}>
-                  <Text style={styles.titleKamar}>{item.nama}</Text>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      marginTop: 5,
-                    }}>
-                    <Ionicons name="pricetags" color="#ffffff" size={15} />
-                    <Text
-                      style={{
-                        color: '#fff',
-                        fontSize: 12,
-                        fontWeight: 'bold',
-                        marginLeft: 3,
-                      }}>
-                      {/* Rp {item.harga}/Bulan */}
-                      {formatRupiah(item.harga.toString(), 'Rp.')}
-                    </Text>
-                  </View>
+  // if (props.data.length < 1) {
+  //   content = (
 
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      marginTop: 5,
-                    }}>
-                    <FontAwesome5 name="door-open" color="#ffffff" size={15} />
-                    <Text
-                      style={{
-                        color: '#fff',
-                        fontSize: 12,
-                        fontWeight: 'bold',
-                        marginLeft: 3,
-                      }}>
-                      {item.banyak} Kamar
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableNativeFeedback>
-          );
-        })}
-      </ScrollView>
-    );
-  }
+  //   );
+  // } else {
+  //   content = (
+
+  //   );
+  // }
 
   return (
     <View style={{marginTop: 20}}>
@@ -155,11 +65,123 @@ const HomeKamarSection = (props) => {
         style={{
           justifyContent: 'center',
         }}>
-        {props.status ? (
+        <ActivityIndicator
+          animating={props.status}
+          size="large"
+          color={myColor.myblue}
+          style={styles.loading}
+        />
+        {props.data.length < 1 ? (
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{
+                color: myColor.darkText,
+                fontWeight: 'bold',
+                fontSize: 18,
+                paddingVertical: 15,
+              }}>
+              Kamar kost masih kosong
+            </Text>
+          </View>
+        ) : (
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={{paddingLeft: 0.05 * screenWidth}}>
+            {props.data.map((item, index) => {
+              return (
+                <TouchableNativeFeedback
+                  key={index}
+                  onPress={
+                    () =>
+                      console.log(
+                        APIUrl + '/kostdata/kelas_kamar/foto/' + item.foto,
+                      )
+                    // navigation.navigate('MainScreen', {
+                    //   screen: 'KamarScreen',
+                    //   params: {
+                    //     screen: 'DetailKelas',
+                    //     params: item,
+                    //   },
+                    // })
+                  }>
+                  <View style={styles.kamarCard}>
+                    {/* <Image
+                      source={{
+                        // uri: APIUrl + '/image_kelas/' + item.foto,
+                        uri: APIUrl + '/kostdata/kelas_kamar/foto/' + item.foto,
+                      }}
+                      style={{height: 180, width: '100%', borderRadius: 10}}
+                    />
+                    <View
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'black',
+                        position: 'absolute',
+                        opacity: 0.4,
+                        borderRadius: 10,
+                      }}></View> */}
+                    <BlackImage urlImg={item.foto} />
+                    <View style={styles.kamarContent}>
+                      <Text style={styles.titleKamar}>{item.nama}</Text>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          marginTop: 5,
+                        }}>
+                        <Ionicons name="pricetags" color="#ffffff" size={15} />
+                        <Text
+                          style={{
+                            color: '#fff',
+                            fontSize: 12,
+                            fontWeight: 'bold',
+                            marginLeft: 3,
+                          }}>
+                          {/* Rp {item.harga}/Bulan */}
+                          {formatRupiah(item.harga.toString(), 'Rp.')}
+                        </Text>
+                      </View>
+
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          marginTop: 5,
+                        }}>
+                        <FontAwesome5
+                          name="door-open"
+                          color="#ffffff"
+                          size={15}
+                        />
+                        <Text
+                          style={{
+                            color: '#fff',
+                            fontSize: 12,
+                            fontWeight: 'bold',
+                            marginLeft: 3,
+                          }}>
+                          {item.banyak} Kamar
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableNativeFeedback>
+              );
+            })}
+          </ScrollView>
+        )}
+
+        {/* {props.status ? (
           <ActivityIndicator size="large" color={myColor.colorTheme} />
         ) : (
           content
-        )}
+        )} */}
       </View>
     </View>
   );
@@ -195,5 +217,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     left: 5,
+  },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

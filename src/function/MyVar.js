@@ -1,3 +1,5 @@
+import {Dimensions} from 'react-native';
+
 const APIUrl = 'https://dry-forest-53707.herokuapp.com';
 
 // const myColor = {
@@ -9,6 +11,8 @@ const APIUrl = 'https://dry-forest-53707.herokuapp.com';
 //   color2: '#ff7477',
 //   fab: '#88dbd8',
 // };
+const screenWidth = Math.round(Dimensions.get('window').width);
+const screenHeight = Math.round(Dimensions.get('window').height);
 
 const myColor = {
   // colorTheme: '#8340ee',
@@ -36,7 +40,26 @@ const myColor = {
   etcbuble: '#55efc4',
   bgfb: '#f5f5f5',
   fbtx: '#161616',
-  fbtx1:'#a5a5a5'
+  fbtx1: '#a5a5a5',
+  grayprofile: '#F2F5FA',
+  graytextprof: '#8E9EA8',
+};
+
+const formatRupiah = (angka, prefix) => {
+  let number_string = angka.replace(/[^,\d]/g, '').toString(),
+    split = number_string.split(','),
+    sisa = split[0].length % 3,
+    rupiah = split[0].substr(0, sisa),
+    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+  // tambahkan titik jika yang di input sudah menjadi angka ribuan
+  if (ribuan) {
+    separator = sisa ? '.' : '';
+    rupiah += separator + ribuan.join('.');
+  }
+
+  rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+  return prefix == undefined ? rupiah : rupiah ? 'Rp. ' + rupiah : '';
 };
 
 // const colorTheme = '#ffaa91';
@@ -46,4 +69,4 @@ const myColor = {
 // // Button danger
 // const color2 = '#ff7477';
 
-export {APIUrl, myColor};
+export {APIUrl, myColor, formatRupiah, screenWidth, screenHeight};

@@ -178,6 +178,7 @@ const DetailPendaftar = ({navigation, route}) => {
       })
       .catch((error) => {
         console.log(error);
+        console.log(pendaftar);
         console.log('kantal');
       });
   };

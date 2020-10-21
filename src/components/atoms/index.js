@@ -6,6 +6,9 @@ import GetBackButton from './GetBackButton';
 import HomeClipper from './HomeClipper';
 import CircleAvatar from './CircleAvatar';
 import TabBayar from './TabBayar';
+import BlackImage from './BlackImage';
+import FormFieldIcon from './FormFieldIcon';
+import ProfileClipper from './ProfileClipper';
 
 export {
   TagSearch,
@@ -16,4 +19,7 @@ export {
   HomeClipper,
   CircleAvatar,
   TabBayar,
+  BlackImage,
+  FormFieldIcon,
+  ProfileClipper,
 };

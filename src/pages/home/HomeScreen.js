@@ -30,6 +30,7 @@ const HomeScreen = ({navigation, route}) => {
   const [dataHomescreen, setdataHomescreen] = useState({
     penghuni: [],
     kamar: [],
+    uang: 0,
   });
 
   // Fungsi on app mount
@@ -74,33 +75,36 @@ const HomeScreen = ({navigation, route}) => {
       const source = axios.CancelToken.source();
       if (dataRedux.user.kostku != 0) {
         console.log(dataHomescreen.penghuni.length);
-        setTimeout(() => {
-          setIsLoading(true);
-          myAxios.getAxios(
-            APIUrl + '/api/homescreen/' + dataRedux.user.kostku,
-            dataRedux.token,
-            source.token,
-            onGet,
-          );
-          function onGet(status, data) {
-            if (status == 'success') {
-              console.log('Get data kost success');
-              // console.log(data);
-              setdataHomescreen({
-                ...dataHomescreen,
-                penghuni: data.data_penghuni,
-                kamar: data.data_kamar,
-              });
-              setIsLoading(false);
-            } else if (status == 'cancel') {
-              console.log('caught cancel filter');
-              setIsLoading(false);
-            } else {
-              console.log(data);
-              setIsLoading(false);
-            }
+        setIsLoading(true);
+        myAxios.getAxios(
+          APIUrl + '/api/homescreen/' + dataRedux.user.kostku,
+          dataRedux.token,
+          source.token,
+          onGet,
+        );
+        function onGet(status, data) {
+          if (status == 'success') {
+            console.log('Get data kost success');
+            // console.log(data);
+            setdataHomescreen({
+              ...dataHomescreen,
+              penghuni: data.data_penghuni,
+              kamar: data.data_kamar,
+              uang: data.uang,
+            });
+            setIsLoading(false);
+          } else if (status == 'cancel') {
+            console.log('caught cancel filter');
+            setIsLoading(false);
+          } else {
+            console.log(data);
+            setIsLoading(false);
           }
-        }, 1500);
+        }
+
+        // setTimeout(() => {
+
+        // }, 1500);
       }
 
       return () => {
@@ -129,7 +133,7 @@ const HomeScreen = ({navigation, route}) => {
           height: 0.5 * screenWidth,
         }}>
         <HomeTitleDrawer bukaDrawer={() => navigation.toggleDrawer()} />
-        <HomeTopMenu />
+        <HomeTopMenu uang={dataHomescreen.uang} />
       </View>
       <View
         style={{

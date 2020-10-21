@@ -11,6 +11,8 @@ import FlatListTagihan from './FlatListTagihan';
 import FlatListTransaksi from './FlatListTransaksi';
 import FlatListModal from './FlatListModal';
 import FlatListTransaksiBayar from './FlatListTransaksiBayar';
+import BoxProfile from './BoxProfile';
+import BoxInfoKost from './BoxInfoKost';
 
 export {
   FlatListPendaftar,
@@ -26,4 +28,6 @@ export {
   FlatListTransaksi,
   FlatListModal,
   FlatListTransaksiBayar,
+  BoxProfile,
+  BoxInfoKost,
 };

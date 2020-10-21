@@ -7,6 +7,7 @@ import DaftarKamar from './DaftarKamar';
 import DetailKamar from './DetailKamar';
 import EditKamar from './EditKamar';
 import KelasDetailScreen from './KelasDetailScreen';
+import ModalCreateKamar from './ModalCreateKamar';
 
 export {
   ListKamar,
@@ -18,4 +19,5 @@ export {
   DetailKamar,
   EditKamar,
   KelasDetailScreen,
+  ModalCreateKamar,
 };

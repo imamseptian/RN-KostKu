@@ -5,10 +5,12 @@ import {createSharedElementStackNavigator} from 'react-navigation-shared-element
 import {Provider} from 'react-redux';
 import AppNavigator from './AppNavigator';
 import {store} from './store';
+import {DetailKeuangan} from './pages/pengeluaran';
 
 export default function App() {
   return (
     <Provider store={store}>
+      {/* <DetailKeuangan /> */}
       <NavigationContainer>
         <AppNavigator />
       </NavigationContainer>

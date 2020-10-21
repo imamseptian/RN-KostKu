@@ -1,4 +1,4 @@
-import {useFocusEffect, useNavigationState} from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {
   Dimensions,
@@ -17,22 +17,16 @@ const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
 const DetailKelasKamar = ({navigation, route}) => {
-  useEffect(() => {
-    console.log(screenWidth + 'x' + screenHeight);
-  }, []);
-
-  useNavigationState((state) => console.log(state));
-
-  useFocusEffect(
-    React.useCallback(() => {
-      console.log('My Params :', route.params.nama);
-      // setPenghuni(route.params.penghuni);
-      return () => {
-        // source.cancel('Api Canceled');
-        console.log('tutup detail penghuni');
-      };
-    }, []),
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     console.log('My Params :', route.params.nama);
+  //     // setPenghuni(route.params.penghuni);
+  //     return () => {
+  //       // source.cancel('Api Canceled');
+  //       console.log('tutup detail penghuni');
+  //     };
+  //   }, []),
+  // );
 
   return (
     <View style={{flex: 1}}>
