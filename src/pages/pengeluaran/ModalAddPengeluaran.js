@@ -11,7 +11,13 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import {myAxios} from '../../function/MyAxios';
-import {APIUrl, myColor, screenWidth, screenHeight} from '../../function/MyVar';
+import {
+  APIUrl,
+  myColor,
+  screenWidth,
+  screenHeight,
+  startingYear,
+} from '../../function/MyVar';
 
 const ModalAddPengeluaran = (props) => {
   const [pengeluaran, setpengeluaran] = useState({
@@ -43,6 +49,25 @@ const ModalAddPengeluaran = (props) => {
       }
     }
   };
+
+  // const sekarang = () => {
+  //   let myhours = new Date().getHours();
+  //   console.log(myhours);
+  //   let month = new Date().getMonth() + 1; //To get the Current Month
+  //   console.log(month);
+  //   let year = new Date().getFullYear(); //To get the Current Year
+  //   console.log(year);
+
+  //   let dataTahun = [];
+  //   let tahun = 2020;
+  //   while (tahun <= startingYear) {
+  //     let oneyear = {tahun: tahun};
+  //     dataTahun.push(oneyear);
+  //     tahun = tahun + 1;
+  //   }
+
+  //   console.log(dataTahun);
+  // };
 
   return (
     <View
@@ -149,7 +174,10 @@ const ModalAddPengeluaran = (props) => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={props.tutupmodal}>
+          <TouchableOpacity
+            onPress={props.tutupmodal}
+            // onPress={sekarang}
+          >
             <View
               style={{
                 width: 0.7 * screenWidth,

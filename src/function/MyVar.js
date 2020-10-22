@@ -43,6 +43,7 @@ const myColor = {
   fbtx1: '#a5a5a5',
   grayprofile: '#F2F5FA',
   graytextprof: '#8E9EA8',
+  divider: '#bfc6cf',
 };
 
 const formatRupiah = (angka, prefix) => {
@@ -62,6 +63,36 @@ const formatRupiah = (angka, prefix) => {
   return prefix == undefined ? rupiah : rupiah ? 'Rp. ' + rupiah : '';
 };
 
+const startingYear = 2020;
+
+const dataBulan = [
+  {id: 1, nama: 'Januari'},
+  {id: 2, nama: 'Februari'},
+  {id: 3, nama: 'Maret'},
+  {id: 4, nama: 'April'},
+  {id: 5, nama: 'Mei'},
+  {id: 6, nama: 'Juni'},
+  {id: 7, nama: 'Juli'},
+  {id: 8, nama: 'Agustus'},
+  {id: 9, nama: 'September'},
+  {id: 10, nama: 'Oktober'},
+  {id: 11, nama: 'November'},
+  {id: 12, nama: 'Desember'},
+];
+
+const dataTahun = () => {
+  let year = new Date().getFullYear(); //To get the Current Year
+  let myTahun = [];
+  let tahun = 2016;
+  while (tahun <= startingYear) {
+    let oneyear = {id: tahun};
+    myTahun.push(oneyear);
+    tahun = tahun + 1;
+  }
+
+  return myTahun;
+};
+
 // const colorTheme = '#ffaa91';
 
 // // Button primary
@@ -69,4 +100,13 @@ const formatRupiah = (angka, prefix) => {
 // // Button danger
 // const color2 = '#ff7477';
 
-export {APIUrl, myColor, formatRupiah, screenWidth, screenHeight};
+export {
+  APIUrl,
+  myColor,
+  formatRupiah,
+  screenWidth,
+  screenHeight,
+  startingYear,
+  dataBulan,
+  dataTahun,
+};

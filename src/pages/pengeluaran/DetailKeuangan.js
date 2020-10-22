@@ -31,7 +31,9 @@ const DetailKeuangan = ({navigation, route}) => {
     },
     {
       id: 'page1',
-      page: <TabPemasukan />,
+      page: (
+        <TabPemasukan token={dataRedux.token} id_kost={dataRedux.user.kostku} />
+      ),
     },
   ];
 

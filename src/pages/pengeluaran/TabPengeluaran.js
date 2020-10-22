@@ -1,6 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, View, ScrollView, Modal} from 'react-native';
-import {myColor, screenHeight, screenWidth, APIUrl} from '../../function/MyVar';
+import {
+  myColor,
+  screenHeight,
+  screenWidth,
+  APIUrl,
+  startingYear,
+  dataBulan,
+  dataTahun,
+} from '../../function/MyVar';
 import {FAB} from 'react-native-paper';
 import {ModalAddPengeluaran} from './';
 import {Picker} from '@react-native-community/picker';
@@ -9,37 +17,43 @@ import axios from 'axios';
 const TabPengeluaran = (props) => {
   const [showModal, setshowModal] = useState(false);
   const [dataPengeluaran, setdataPengeluaran] = useState([]);
+  const [myTahun, setmyTahun] = useState(dataTahun());
+  const [selectedBulan, setselectedBulan] = useState(new Date().getMonth() + 1);
+  const [selectedTahun, setselectedTahun] = useState(new Date().getFullYear());
 
   const ambilpengeluaran = () => {
     const source = axios.CancelToken.source();
-    myAxios.getAxios(
-      APIUrl + '/api/getpengeluaran/' + props.id_kost,
+    myAxios.postAxios(
+      APIUrl + '/api/filterdatakeuangan',
+      {
+        id_kost: props.id_kost,
+        bulan: selectedBulan.toString(),
+        tahun: selectedTahun.toString(),
+        jenis: 2,
+      },
       props.token,
       source.token,
-      onGet,
+      onPost,
     );
-    function onGet(status, data) {
+    function onPost(status, data) {
       if (status == 'success') {
-        // console.log('Get data riwayat success :' + props.penghuni.nama);
-
         setdataPengeluaran(data.data);
-        // setisLoading(false);
-        // console.log(data);
       } else if (status == 'cancel') {
         console.log('caught cancel filter');
       } else {
         console.log(data);
-        // setisLoading(false);
+        console.log(pengeluaran);
       }
     }
   };
 
   useEffect(() => {
+    console.log('triggered');
     ambilpengeluaran();
     return () => {
       console.log('aaa');
     };
-  }, []);
+  }, [selectedBulan, selectedTahun]);
 
   return (
     <View style={{flex: 1, width: screenWidth}}>
@@ -69,20 +83,20 @@ const TabPengeluaran = (props) => {
             backgroundColor: 'white',
             borderRadius: 10,
           }}>
-          <Picker style={{height: 30}}>
-            <Picker.Item label="Bulan" />
-            <Picker.Item key={'1'} label="Januari" value={1} />
-            <Picker.Item key={'2'} label="Februari" value={2} />
-            <Picker.Item key={'3'} label="Maret" value={3} />
-            <Picker.Item key={'4'} label="April" value={4} />
-            <Picker.Item key={'5'} label="Mei" value={5} />
-            <Picker.Item key={'6'} label="Juni" value={6} />
-            <Picker.Item key={'7'} label="Juli" value={7} />
-            <Picker.Item key={'8'} label="Agustus" value={8} />
-            <Picker.Item key={'9'} label="September" value={9} />
-            <Picker.Item key={'10'} label="Oktober" value={10} />
-            <Picker.Item key={'11'} label="November" value={11} />
-            <Picker.Item key={'12'} label="Desember" value={12} />
+          <Picker
+            selectedValue={selectedBulan}
+            style={{height: 30}}
+            onValueChange={(itemValue, itemIndex) => {
+              if (itemValue != null) {
+                setselectedBulan(itemValue);
+              }
+            }}>
+            <Picker.Item label="Pilih Provinsi" />
+            {dataBulan.map((item, index) => {
+              return (
+                <Picker.Item key={index} label={item.nama} value={item.id} />
+              );
+            })}
           </Picker>
         </View>
         <View
@@ -94,11 +108,24 @@ const TabPengeluaran = (props) => {
             backgroundColor: 'white',
             borderRadius: 10,
           }}>
-          <Picker style={{height: 30}}>
-            <Picker.Item label="Tahun" />
-            <Picker.Item key={'2020'} label="2020" value={2020} />
-            <Picker.Item key={'2021'} label="2021" value={2021} />
-            <Picker.Item key={'2022'} label="2022" value={2022} />
+          <Picker
+            selectedValue={selectedTahun}
+            style={{height: 30}}
+            onValueChange={(itemValue, itemIndex) => {
+              if (itemValue != null) {
+                setselectedTahun(itemValue);
+              }
+            }}>
+            <Picker.Item label="Pilih Provinsi" />
+            {myTahun.map((item, index) => {
+              return (
+                <Picker.Item
+                  key={index}
+                  label={item.id.toString()}
+                  value={item.id}
+                />
+              );
+            })}
           </Picker>
         </View>
       </View>
