@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: 0.9 * screenWidth,
     alignItems: 'center',
-    borderRadius: 25,
+    borderRadius: 10,
     height: 40,
   },
   searchTextInput: {

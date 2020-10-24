@@ -17,6 +17,7 @@ import {
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
@@ -154,7 +155,11 @@ const CustomDrawer = (props) => {
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({color, size}) => (
-                <Icon name="bed" color={color} size={size} />
+                <FontAwesome5
+                  name="money-bill-wave"
+                  color={color}
+                  size={size}
+                />
               )}
               label="Keuangan"
               onPress={() => {
@@ -173,7 +178,7 @@ const CustomDrawer = (props) => {
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({color, size}) => (
-                <Icon name="bed" color={color} size={size} />
+                <Ionicons name="newspaper" color={color} size={size} />
               )}
               label="Halaman Bayar"
               onPress={() => {

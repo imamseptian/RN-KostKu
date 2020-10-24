@@ -90,12 +90,6 @@ const HomePenghuniSection = (props) => {
           justifyContent: 'center',
           position: 'relative',
         }}>
-        <ActivityIndicator
-          animating={props.status}
-          size="large"
-          color={myColor.myblue}
-          style={styles.loading}
-        />
         {props.data.length < 1 ? (
           <View
             style={{
@@ -149,6 +143,12 @@ const HomePenghuniSection = (props) => {
           content
         )} */}
         {/* {content} */}
+        <ActivityIndicator
+          animating={props.status}
+          size="large"
+          color={myColor.myblue}
+          style={styles.loading}
+        />
       </View>
     </View>
   );

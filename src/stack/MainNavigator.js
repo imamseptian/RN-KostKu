@@ -162,10 +162,44 @@ const MainStackScreen = ({navigation, route}) => {
         })}
       />
       <MainStack.Screen name="CreateKelas" component={FormKelasKamar} />
-      <MainStack.Screen name="DetailKelas" component={DetailKelasKamar} />
+      <MainStack.Screen
+        name="DetailKelas"
+        component={DetailKelasKamar}
+        options={() => ({
+          gestureEnabled: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          transitionSpec: {
+            open: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+            close: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+          },
+        })}
+      />
       <MainStack.Screen name="CreateKamar" component={CreateKamar} />
       <MainStack.Screen name="EditKelas" component={EditKelasKamar} />
-      <MainStack.Screen name="DaftarKamar" component={DaftarKamar} />
+      <MainStack.Screen
+        name="DaftarKamar"
+        component={DaftarKamar}
+        options={() => ({
+          gestureEnabled: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          transitionSpec: {
+            open: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+            close: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+          },
+        })}
+      />
       <MainStack.Screen name="FormKelasKamar" component={FormKelasKamar} />
       <MainStack.Screen name="DetailKamar" component={DetailKamar} />
       <MainStack.Screen name="EditKamar" component={EditKamar} />

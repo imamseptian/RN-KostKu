@@ -6,10 +6,12 @@ import {Provider} from 'react-redux';
 import AppNavigator from './AppNavigator';
 import {store} from './store';
 import {DetailKeuangan, ListPemasukan} from './pages/pengeluaran';
+import {Shimmer, CobaView} from './pages/shimmer';
 
 export default function App() {
   return (
     <Provider store={store}>
+      {/* <Shimmer /> */}
       {/* <ListPemasukan /> */}
       <NavigationContainer>
         <AppNavigator />

@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {ItemKelas} from './component';
 import {FAB} from 'react-native-paper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useSelector} from 'react-redux';
@@ -95,8 +96,6 @@ const ListKamar = ({navigation}) => {
           orderby: 'asc',
         });
         setSelectedTag(1);
-        setKamar([]);
-        setbanyakData(0);
         source.cancel('Component got unmounted');
         // console.log('unmounted');
       };
@@ -164,108 +163,9 @@ const ListKamar = ({navigation}) => {
       });
   };
 
-  const Item = ({item, onPress, style}) => (
-    <TouchableOpacity
-      onPress={() => {
-        // console.log(APIUrl + '/kostdata/kelas_kamar/foto/' + item.foto);
-        // APIUrl + '/kostdata/kelas_kamar/foto/' + item.foto
-        // console.log(item);
-        navigation.push('DetailKelas', item);
-      }}>
-      <View style={[styles.item, style]}>
-        <View style={{flexDirection: 'row', height: 115}}>
-          <View style={{}}>
-            <Image
-              style={{borderRadius: 10}}
-              source={{
-                uri: APIUrl + '/kostdata/kelas_kamar/foto/' + item.foto,
-              }}
-              height={150}
-              width={115}
-            />
-          </View>
-          <View
-            style={{
-              marginLeft: 20,
-              marginRight: 10,
-              flex: 1,
-            }}>
-            <Text
-              style={{
-                fontWeight: 'bold',
-                fontSize: 16,
-                marginTop: 20,
-                color: '#2d3436',
-              }}>
-              {item.nama}
-            </Text>
+  // const Item = ({item, onPress, style}) => (
 
-            <Text
-              style={{
-                fontWeight: 'bold',
-                fontSize: 12,
-                marginTop: 10,
-                color: '#2d3436',
-              }}>
-              Harga Sewa / Bulan :
-            </Text>
-            <Text
-              style={{
-                fontWeight: 'bold',
-                fontSize: 12,
-                marginTop: 10,
-                color: '#2d3436',
-              }}>
-              {formatRupiah(item.harga.toString(), 'Rp.')}
-            </Text>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            position: 'absolute',
-            bottom: 2,
-            right: 2,
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <View style={{width: 20}}>
-              <FontAwesome5 name="door-closed" color="#05375A" size={15} />
-            </View>
-            <Text
-              style={{
-                fontSize: 12,
-                fontWeight: 'bold',
-                marginLeft: 3,
-              }}>
-              {item.banyak}{' '}
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginLeft: 20,
-            }}>
-            <View style={{width: 20}}>
-              <FontAwesome5 name="user-alt" color="#05375A" size={15} />
-            </View>
-            <Text
-              style={{
-                fontSize: 12,
-                fontWeight: 'bold',
-              }}>
-              10{' '}
-            </Text>
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
+  // );
 
   const renderItem = ({item, index, separator}) => {
     return (
@@ -353,6 +253,26 @@ const ListKamar = ({navigation}) => {
             }
           }}
         />
+        {/* <FlatList
+          ref={(c) => {
+            scroll = c;
+          }}
+          style={{marginTop: 10}}
+          data={kamar}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          extraData={selectedId}
+          ListFooterComponent={
+            page < maxLimit && !isLoading ? (
+              <ButtonLoad
+                onPress={() => {
+                  setPage((prevState) => prevState + 1);
+                }}
+              />
+            ) : null
+          }
+        /> */}
         <FlatList
           ref={(c) => {
             scroll = c;
@@ -361,7 +281,6 @@ const ListKamar = ({navigation}) => {
           data={kamar}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
-          extraData={selectedId}
           showsVerticalScrollIndicator={false}
           ListFooterComponent={
             page < maxLimit && !isLoading ? (
@@ -372,6 +291,14 @@ const ListKamar = ({navigation}) => {
               />
             ) : null
           }
+          renderItem={({item, index, separator}) => {
+            return (
+              <ItemKelas
+                data={item}
+                onPress={() => navigation.push('DetailKelas', {item})}
+              />
+            );
+          }}
         />
       </View>
 

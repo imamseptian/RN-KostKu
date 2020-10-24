@@ -14,6 +14,11 @@ const APIUrl = 'https://dry-forest-53707.herokuapp.com';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
+const defaultAsset = {
+  kelas_kamar:
+    'https://www.harapanrakyat.com/wp-content/uploads/2020/04/Desain-Kamar-Tidur-Nyaman-Hangat-696x464.jpg',
+};
+
 const myColor = {
   // colorTheme: '#8340ee',
   colorTheme: '#00B6FA',
@@ -109,4 +114,5 @@ export {
   startingYear,
   dataBulan,
   dataTahun,
+  defaultAsset,
 };
