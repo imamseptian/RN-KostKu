@@ -1,6 +1,7 @@
 import {useFocusEffect} from '@react-navigation/native';
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
+import {SharedElement} from 'react-navigation-shared-element';
 import {
   ActivityIndicator,
   Dimensions,
@@ -130,8 +131,6 @@ const DaftarKamar = ({navigation, route}) => {
   );
 
   const renderItem = ({item, index, separator}) => {
-    const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
-
     return (
       <Item
         item={item}
@@ -236,6 +235,19 @@ const DaftarKamar = ({navigation, route}) => {
           setShowModal(true);
         }}
       />
+      <SharedElement id={`item.${route.params.id}.foto_kamar`}>
+        <View
+          style={{
+            position: 'absolute',
+            left: 0,
+            bottom: 0,
+            width: 10,
+            height: 10,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'white',
+          }}></View>
+      </SharedElement>
       <ActivityIndicator
         animating={isLoading}
         size="large"
@@ -254,6 +266,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     flex: 1,
+    backgroundColor: 'white',
   },
   containerTop: {
     flex: 1,

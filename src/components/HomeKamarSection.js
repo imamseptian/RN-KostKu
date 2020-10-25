@@ -14,6 +14,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {APIUrl, myColor} from '../function/MyVar';
 import {BlackImage} from './atoms';
+import {SharedElement} from 'react-navigation-shared-element';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
@@ -98,9 +99,10 @@ const HomeKamarSection = (props) => {
                   key={index}
                   onPress={
                     () =>
-                      console.log(
-                        APIUrl + '/kostdata/kelas_kamar/foto/' + item.foto,
-                      )
+                      // console.log(
+                      //   APIUrl + '/kostdata/kelas_kamar/foto/' + item.foto,
+                      // )
+                      navigation.navigate('DetailKelas', {item})
                     // navigation.navigate('MainScreen', {
                     //   screen: 'KamarScreen',
                     //   params: {
@@ -126,7 +128,9 @@ const HomeKamarSection = (props) => {
                         opacity: 0.4,
                         borderRadius: 10,
                       }}></View> */}
-                    <BlackImage urlImg={item.foto} />
+                    <SharedElement id={`item.${item.id}.foto_kamar`}>
+                      <BlackImage urlImg={item.foto} />
+                    </SharedElement>
                     <View style={styles.kamarContent}>
                       <Text style={styles.titleKamar}>{item.nama}</Text>
                       <View

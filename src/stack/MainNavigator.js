@@ -165,6 +165,12 @@ const MainStackScreen = ({navigation, route}) => {
       <MainStack.Screen
         name="DetailKelas"
         component={DetailKelasKamar}
+        sharedElementsConfig={(route, otherRoute, showing) => {
+          const {item} = route.params;
+          console.log(otherRoute.name);
+          // console.log(item);
+          return [`item.${item.id}.foto_kamar`];
+        }}
         options={() => ({
           gestureEnabled: false,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -185,6 +191,14 @@ const MainStackScreen = ({navigation, route}) => {
       <MainStack.Screen
         name="DaftarKamar"
         component={DaftarKamar}
+        sharedElementsConfig={(route, otherRoute, showing) => {
+          console.log('----DAFTARKAMAR----');
+          const {id} = route.params;
+          console.log(id);
+          // showing(false);
+          showing.valueOf(false);
+          return [`item.${id}.foto_kamar`];
+        }}
         options={() => ({
           gestureEnabled: false,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,

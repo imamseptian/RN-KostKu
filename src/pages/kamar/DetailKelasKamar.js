@@ -192,13 +192,6 @@ const DetailKelasKamar = ({navigation, route}) => {
   );
 };
 
-DetailKelasKamar.sharedElements = (route, otherRoute, showing) => {
-  const {item} = route.params;
-  // return DATA_ICON.map((item) => `item.${item.id}.icon`);
-
-  return [`item.${item.id}.foto_kamar`];
-};
-
 export default DetailKelasKamar;
 
 const styles = StyleSheet.create({});
