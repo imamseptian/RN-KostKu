@@ -91,8 +91,7 @@ const ListPendaftar = ({navigation, route}) => {
           orderby: 'asc',
         });
         setSelectedTag(1);
-        setPendaftar([]);
-        setbanyakData(0);
+
         source.cancel('Component got unmounted');
       };
     }, []),
@@ -142,7 +141,8 @@ const ListPendaftar = ({navigation, route}) => {
       <Item
         item={item}
         onPress={() => {
-          navigation.push('DetailPendaftar', {pendaftar: item});
+          // navigation.push('DetailPendaftar', {pendaftar: item});
+          navigation.push('DetailPendaftar', {item});
         }}
       />
     );

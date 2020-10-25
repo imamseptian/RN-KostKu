@@ -13,6 +13,7 @@ import {
 import {myColor, APIUrl} from '../function/MyVar';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
+import {SharedElement} from 'react-navigation-shared-element';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
@@ -64,19 +65,20 @@ class FlatListPendaftar extends React.PureComponent {
               }}
             />
           )}
-
-          <Image
-            source={{
-              uri: APIUrl + '/kostdata/pendaftar/foto/' + item.foto_diri,
-            }}
-            style={{
-              width: 70,
-              height: 70,
-              marginVertical: 15,
-              marginLeft: 10,
-              borderRadius: 15,
-            }}
-          />
+          <SharedElement id={`item.${item.id}.foto_pendaftar`}>
+            <Image
+              source={{
+                uri: APIUrl + '/kostdata/pendaftar/foto/' + item.foto_diri,
+              }}
+              style={{
+                width: 70,
+                height: 70,
+                marginVertical: 15,
+                marginLeft: 10,
+                borderRadius: 15,
+              }}
+            />
+          </SharedElement>
 
           <View
             style={{

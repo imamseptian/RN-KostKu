@@ -241,6 +241,26 @@ const PendaftarStackScreen = ({navigation, route}) => {
       <PendaftarStack.Screen
         name="DetailPendaftar"
         component={DetailPendaftar}
+        options={() => ({
+          gestureEnabled: false,
+          transitionSpec: {
+            open: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.inOut(Easing.ease)},
+            },
+            close: {
+              animation: 'spring',
+              config: {duration: 500, easing: Easing.inOut(Easing.linear)},
+            },
+          },
+          cardStyleInterpolator: ({current: {progress}}) => {
+            return {
+              cardStyle: {
+                opacity: progress,
+              },
+            };
+          },
+        })}
       />
     </PendaftarStack.Navigator>
   );
