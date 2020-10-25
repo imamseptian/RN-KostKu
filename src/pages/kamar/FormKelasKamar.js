@@ -164,7 +164,8 @@ const FormKelasKamar = ({navigation}) => {
       .then((res) => {
         setIsSubmit(false);
         // console.log(kamar);
-        navigation.pop(1);
+        // navigation.pop(1);
+        navigation.popToTop();
       })
       .catch((error) => {
         setIsSubmit(false);

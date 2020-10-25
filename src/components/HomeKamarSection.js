@@ -102,7 +102,13 @@ const HomeKamarSection = (props) => {
                       // console.log(
                       //   APIUrl + '/kostdata/kelas_kamar/foto/' + item.foto,
                       // )
-                      navigation.navigate('DetailKelas', {item})
+                      // navigation.navigate('DetailKelas', {item})
+                      navigation.navigate('KamarStackScreen', {
+                        screen: 'DetailKelas',
+                        params: {
+                          item,
+                        },
+                      })
                     // navigation.navigate('MainScreen', {
                     //   screen: 'KamarScreen',
                     //   params: {

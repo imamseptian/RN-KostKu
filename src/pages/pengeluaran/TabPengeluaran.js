@@ -24,7 +24,7 @@ const TabPengeluaran = (props) => {
   const ambilpengeluaran = () => {
     const source = axios.CancelToken.source();
     myAxios.postAxios(
-      APIUrl + '/api/filterdatakeuangan',
+      APIUrl + '/api/filterpengeluaran',
       {
         id_kost: props.id_kost,
         bulan: selectedBulan.toString(),
@@ -172,7 +172,7 @@ const TabPengeluaran = (props) => {
                       color: myColor.fbtx,
                       textAlign: 'right',
                     }}>
-                    12-Oktober-2020
+                    {item.hari}-{item.bulan}-{item.tahun}
                   </Text>
                 </View>
               </View>

@@ -121,10 +121,13 @@ const CustomDrawer = (props) => {
               )}
               label="Home"
               onPress={() => {
-                // props.navigation.navigate('HomeDrawer');
-                props.navigation.closeDrawer();
+                props.navigation.navigate('HomeStackScreen');
+                props.navigation.navigate('HomeStackScreen', {
+                  screen: 'HomeScreen',
+                });
+                // props.navigation.closeDrawer();
                 // props.navigation.popToTop();
-                props.navigation.push('HomeScreen');
+                // props.navigation.push('HomeScreen');
                 // props.navigation.reset({
                 //   index: 0,
                 //   routes: [{name: 'HomeScreen'}],
@@ -141,9 +144,11 @@ const CustomDrawer = (props) => {
               label="List Kamar"
               onPress={() => {
                 // props.navigation.push('ListKamar');
-                // props.navigation.navigate('KamarScreen');
-                props.navigation.closeDrawer();
-                props.navigation.push('ListKamar');
+                props.navigation.navigate('KamarStackScreen', {
+                  screen: 'ListKamar',
+                });
+                // props.navigation.closeDrawer();
+                // props.navigation.push('ListKamar');
                 // props.navigation.reset({
                 //   index: 0,
                 //   routes: [{name: 'ListKamar'}],
@@ -164,9 +169,17 @@ const CustomDrawer = (props) => {
               label="Keuangan"
               onPress={() => {
                 // props.navigation.push('ListKamar');
-                // props.navigation.navigate('KamarScreen');
-                props.navigation.closeDrawer();
-                props.navigation.push('DetailKeuangan');
+                // props.navigation.navigate('KeuanganStackScreen', {
+                //   screen: 'DetailKeuangan',
+                // });
+                props.navigation.navigate('KeuanganStackScreen', {
+                  screen: 'DetailKeuangan',
+                  params: {
+                    page: 0,
+                  },
+                });
+                // props.navigation.closeDrawer();
+                // props.navigation.push('DetailKeuangan');
                 // props.navigation.reset({
                 //   index: 0,
                 //   routes: [{name: 'ListKamar'}],
@@ -183,9 +196,11 @@ const CustomDrawer = (props) => {
               label="Halaman Bayar"
               onPress={() => {
                 // props.navigation.push('ListKamar');
-                // props.navigation.navigate('KamarScreen');
-                props.navigation.closeDrawer();
-                props.navigation.push('HalamanBayar');
+                props.navigation.navigate('PembayaranStackScreen', {
+                  screen: 'HalamanBayar',
+                });
+                // props.navigation.closeDrawer();
+                // props.navigation.push('HalamanBayar');
                 // props.navigation.reset({
                 //   index: 0,
                 //   routes: [{name: 'HalamanBayar'}],
@@ -202,11 +217,11 @@ const CustomDrawer = (props) => {
               label="Penghuni"
               onPress={() => {
                 // props.navigation.push('ListKamar');
-                // props.navigation.navigate('PenghuniScreen', {
-                //   screen: 'ListPenghuni',
-                // });
-                props.navigation.closeDrawer();
-                props.navigation.push('ListPenghuni');
+                props.navigation.navigate('PenghuniStackScreen', {
+                  screen: 'ListPenghuni',
+                });
+                // props.navigation.closeDrawer();
+                // props.navigation.push('ListPenghuni');
                 // props.navigation.reset({
                 //   index: 0,
                 //   routes: [{name: 'ListPenghuni'}],
@@ -223,8 +238,12 @@ const CustomDrawer = (props) => {
               label="Pendaftar"
               onPress={() => {
                 // props.navigation.navigate('PendaftarScreen');
-                props.navigation.closeDrawer();
-                props.navigation.push('ListPendaftar');
+                props.navigation.navigate('PendaftarStackScreen', {
+                  screen: 'ListPendaftar',
+                });
+
+                // props.navigation.closeDrawer();
+                // props.navigation.push('ListPendaftar');
                 // props.navigation.reset({
                 //   index: 0,
                 //   routes: [{name: 'ListPendaftar'}],

@@ -1,4 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import {
   StyleSheet,
   Text,
@@ -14,10 +15,12 @@ import {TabPemasukan, TabPengeluaran} from './';
 import {useSelector} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 const DetailKeuangan = ({navigation, route}) => {
+  const isFocused = useIsFocused();
   const dataRedux = useSelector((state) => state.AuthReducer);
   const mountedAnimated = useRef(new Animated.Value(0)).current;
 
   const [currentPage, setcurrentPage] = useState(0);
+  let page = route.params.page;
   const ref = useRef();
   const datapage = [
     {
@@ -36,6 +39,41 @@ const DetailKeuangan = ({navigation, route}) => {
       ),
     },
   ];
+
+  useEffect(() => {
+    ref.current.scrollToIndex({
+      index: currentPage,
+      animated: true,
+    });
+    // const wait = new Promise((resolve) => setTimeout(resolve, 500));
+    // wait.then(() => {
+    //   ref.current.scrollToIndex({
+    //     index: currentPage,
+    //     animated: true,
+    //   });
+    // });
+  }, [currentPage]);
+  // useFocusEffect(() => {
+  //   console.log('#######');
+  //   console.log(route.params.page);
+  //   console.log('#######');
+  //   const wait = new Promise((resolve) => setTimeout(resolve, 100));
+  //   wait.then(() => {
+  //     setcurrentPage(route.params.page);
+  //   });
+  //   // ambilApi(source.token);
+  //   return () => {
+  //     console.log('unmounted detail keuangan');
+  //     // console.log('unmounted');
+  //   };
+  //   // console.log('ayaya');
+  // }, []);
+  useEffect(() => {
+    const wait = new Promise((resolve) => setTimeout(resolve, 100));
+    wait.then(() => {
+      setcurrentPage(route.params.page);
+    });
+  }, [isFocused]);
 
   const animation = (toValue, delay) =>
     Animated.timing(mountedAnimated, {
@@ -98,10 +136,10 @@ const DetailKeuangan = ({navigation, route}) => {
           <TouchableOpacity
             onPress={() => {
               setcurrentPage(0);
-              ref.current.scrollToIndex({
-                index: 0,
-                animated: true,
-              });
+              // ref.current.scrollToIndex({
+              //   index: 0,
+              //   animated: true,
+              // });
             }}>
             <View
               style={{
@@ -127,10 +165,10 @@ const DetailKeuangan = ({navigation, route}) => {
           <TouchableOpacity
             onPress={() => {
               setcurrentPage(1);
-              ref.current.scrollToIndex({
-                index: 1,
-                animated: true,
-              });
+              // ref.current.scrollToIndex({
+              //   index: 1,
+              //   animated: true,
+              // });
             }}>
             <View
               style={{

@@ -180,7 +180,8 @@ const EditKelasKamar = ({navigation, route}) => {
       .then((res) => {
         setIsSubmit(false);
         console.log(res.data);
-        navigation.pop(2);
+        // navigation.pop(2);
+        navigation.popToTop();
         // navigation.goBack(2);
       })
       .catch((error) => {

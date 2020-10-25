@@ -16,6 +16,7 @@ import {
   HomeTitleDrawer,
   HomeTopMenu,
 } from '../../components';
+import {TransaksiSection} from './component';
 import {HomeClipper} from '../../components/atoms';
 import {myAxios} from '../../function/MyAxios';
 import {APIUrl, myColor} from '../../function/MyVar';
@@ -30,6 +31,7 @@ const HomeScreen = ({navigation, route}) => {
   const [dataHomescreen, setdataHomescreen] = useState({
     penghuni: [],
     kamar: [],
+    transaksi: [],
     uang: 0,
   });
 
@@ -90,6 +92,7 @@ const HomeScreen = ({navigation, route}) => {
               ...dataHomescreen,
               penghuni: data.data_penghuni,
               kamar: data.data_kamar,
+              transaksi: data.transaksi,
               uang: data.uang,
             });
             setIsLoading(false);
@@ -137,37 +140,23 @@ const HomeScreen = ({navigation, route}) => {
       </View>
       <View
         style={{
-          marginTop: 10,
           flex: 1,
         }}>
-        {/* PENGHUNI SECTION */}
-        <HomePenghuniSection
-          status={isLoading}
-          data={dataHomescreen.penghuni}
-        />
-        {/* Kamar Section */}
-        <HomeKamarSection status={isLoading} data={dataHomescreen.kamar} />
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* PENGHUNI SECTION */}
+          <HomePenghuniSection
+            status={isLoading}
+            data={dataHomescreen.penghuni}
+          />
+          {/* Kamar Section */}
+          <HomeKamarSection status={isLoading} data={dataHomescreen.kamar} />
 
-        {/* TRANSAKSI SECTION */}
-
-        <View style={{marginTop: 20}}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingHorizontal: 0.05 * screenWidth,
-            }}>
-            <Text style={styles.sectionTitle}>Transaksi Terakhir</Text>
-            <Text style={styles.seeAll}>Lihat Semua</Text>
-          </View>
-          <View style={{marginTop: 10}}>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              style={{paddingLeft: 0.05 * screenWidth}}></ScrollView>
-          </View>
-        </View>
+          {/* TRANSAKSI SECTION */}
+          <TransaksiSection
+            status={isLoading}
+            data={dataHomescreen.transaksi}
+          />
+        </ScrollView>
       </View>
     </View>
   );

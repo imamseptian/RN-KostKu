@@ -117,18 +117,18 @@ const HomePenghuniSection = (props) => {
                   <CircleAvatar
                     data={item}
                     onPress={() => {
-                      // navigation.navigate('PenghuniScreen', {
-                      //   screen: 'DetailPenghuni',
-                      //   params: {
-                      //     penghuni: item,
-                      //   },
-                      // });
-                      console.log(
-                        APIUrl + '/kostdata/pendaftar/foto/' + item.foto_diri,
-                      );
+                      navigation.navigate('PenghuniStackScreen', {
+                        screen: 'DetailPenghuni',
+                        params: {
+                          item,
+                        },
+                      });
+                      // console.log(
+                      //   APIUrl + '/kostdata/pendaftar/foto/' + item.foto_diri,
+                      // );
                       // navigation.push('DetailPenghuni', {penghuni: item});
-                      console.log(item);
-                      navigation.push('DetailPenghuni', {item});
+                      // console.log(item);
+                      // navigation.push('DetailPenghuni', {item});
                     }}
                   />
                 </View>

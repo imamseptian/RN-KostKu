@@ -28,39 +28,36 @@ import FirstTimeNavigator from './FirstTimeNavigator';
 const BundleStack = createSharedElementStackNavigator();
 
 const MainStack = createSharedElementStackNavigator();
+const HomeStack = createSharedElementStackNavigator();
+const KamarStack = createSharedElementStackNavigator();
+const PendaftarStack = createSharedElementStackNavigator();
+const PenghuniStack = createSharedElementStackNavigator();
+const KeuanganStack = createSharedElementStackNavigator();
+const PembayaranStack = createSharedElementStackNavigator();
 
 const Drawer = createDrawerNavigator();
 
 const DrawerScreen = () => (
   <Drawer.Navigator drawerContent={(props) => <CustomDrawer {...props} />}>
-    <Drawer.Screen name="MainStack" component={MainStackScreen} />
+    <Drawer.Screen name="HomeStackScreen" component={HomeStackScreen} />
+    <Drawer.Screen name="KamarStackScreen" component={KamarStackScreen} />
+    <Drawer.Screen
+      name="PendaftarStackScreen"
+      component={PendaftarStackScreen}
+    />
+    <Drawer.Screen name="PenghuniStackScreen" component={PenghuniStackScreen} />
+    <Drawer.Screen name="KeuanganStackScreen" component={KeuanganStackScreen} />
+    <Drawer.Screen
+      name="PembayaranStackScreen"
+      component={PembayaranStackScreen}
+    />
   </Drawer.Navigator>
 );
 
-const MainStackScreen = ({navigation, route}) => {
-  useEffect(() => {
-    if (route.state !== undefined) {
-      // console.log(route.state);
-      if (
-        route.state.routes[route.state.routes.length - 1].name ==
-        'DetailPenghuni'
-      ) {
-        navigation.setOptions({gestureEnabled: false});
-      } else {
-        navigation.setOptions({gestureEnabled: true});
-      }
-      // console.log(route.state.routes[route.state.routes.length - 1]);
-    }
-    // route.state !== undefined
-    //   ? route.state.name == 'DetailPenghuni'
-    //     ? navigation.setOptions({gestureEnabled: false})
-    //     : navigation.setOptions({gestureEnabled: true})
-    //   : null;
-  }, [navigation, route]);
-
+const HomeStackScreen = ({navigation, route}) => {
   return (
-    <MainStack.Navigator headerMode={false}>
-      <MainStack.Screen
+    <HomeStack.Navigator headerMode={false}>
+      <HomeStack.Screen
         name="HomeScreen"
         component={HomeScreen}
         options={() => ({
@@ -78,72 +75,21 @@ const MainStackScreen = ({navigation, route}) => {
           },
         })}
       />
-
-      <MainStack.Screen
-        name="ListPenghuni"
-        component={ListPenghuni}
-        options={() => ({
-          gestureEnabled: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          transitionSpec: {
-            open: {
-              animation: 'timing',
-              config: {duration: 500, easing: Easing.linear},
-            },
-            close: {
-              animation: 'timing',
-              config: {duration: 500, easing: Easing.linear},
-            },
-          },
-        })}
+      <HomeStack.Screen name="Profil" component={Profile} />
+      <HomeStack.Screen name="EditProfil" component={EditProfil} />
+      <HomeStack.Screen name="EditKost" component={EditKost} />
+      <PendaftarStack.Screen
+        name="DetailPendaftar"
+        component={DetailPendaftar}
       />
+    </HomeStack.Navigator>
+  );
+};
 
-      <MainStack.Screen
-        name="DetailPenghuni"
-        component={DetailPenghuni}
-        options={() => ({
-          gestureEnabled: false,
-          transitionSpec: {
-            open: {
-              animation: 'timing',
-              config: {duration: 500, easing: Easing.inOut(Easing.ease)},
-            },
-            close: {
-              animation: 'spring',
-              config: {duration: 500, easing: Easing.inOut(Easing.linear)},
-            },
-          },
-          cardStyleInterpolator: ({current: {progress}}) => {
-            return {
-              cardStyle: {
-                opacity: progress,
-              },
-            };
-          },
-        })}
-      />
-
-      <MainStack.Screen
-        name="ListPendaftar"
-        component={ListPendaftar}
-        options={() => ({
-          gestureEnabled: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          transitionSpec: {
-            open: {
-              animation: 'timing',
-              config: {duration: 500, easing: Easing.linear},
-            },
-            close: {
-              animation: 'timing',
-              config: {duration: 500, easing: Easing.linear},
-            },
-          },
-        })}
-      />
-      <MainStack.Screen name="DetailPendaftar" component={DetailPendaftar} />
-
-      <MainStack.Screen
+const KamarStackScreen = ({navigation, route}) => {
+  return (
+    <KamarStack.Navigator headerMode={false}>
+      <KamarStack.Screen
         name="ListKamar"
         component={ListKamar}
         options={() => ({
@@ -161,8 +107,8 @@ const MainStackScreen = ({navigation, route}) => {
           },
         })}
       />
-      <MainStack.Screen name="CreateKelas" component={FormKelasKamar} />
-      <MainStack.Screen
+      <KamarStack.Screen name="CreateKelas" component={FormKelasKamar} />
+      <KamarStack.Screen
         name="DetailKelas"
         component={DetailKelasKamar}
         sharedElementsConfig={(route, otherRoute, showing) => {
@@ -186,9 +132,9 @@ const MainStackScreen = ({navigation, route}) => {
           },
         })}
       />
-      <MainStack.Screen name="CreateKamar" component={CreateKamar} />
-      <MainStack.Screen name="EditKelas" component={EditKelasKamar} />
-      <MainStack.Screen
+      <KamarStack.Screen name="CreateKamar" component={CreateKamar} />
+      <KamarStack.Screen name="EditKelas" component={EditKelasKamar} />
+      <KamarStack.Screen
         name="DaftarKamar"
         component={DaftarKamar}
         sharedElementsConfig={(route, otherRoute, showing) => {
@@ -214,11 +160,104 @@ const MainStackScreen = ({navigation, route}) => {
           },
         })}
       />
-      <MainStack.Screen name="FormKelasKamar" component={FormKelasKamar} />
-      <MainStack.Screen name="DetailKamar" component={DetailKamar} />
-      <MainStack.Screen name="EditKamar" component={EditKamar} />
+      <KamarStack.Screen name="FormKelasKamar" component={FormKelasKamar} />
+      <KamarStack.Screen name="DetailKamar" component={DetailKamar} />
+      <KamarStack.Screen name="EditKamar" component={EditKamar} />
+    </KamarStack.Navigator>
+  );
+};
 
-      <MainStack.Screen
+const PenghuniStackScreen = ({navigation, route}) => {
+  return (
+    <PenghuniStack.Navigator headerMode={false}>
+      <PenghuniStack.Screen
+        name="ListPenghuni"
+        component={ListPenghuni}
+        options={() => ({
+          gestureEnabled: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          transitionSpec: {
+            open: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+            close: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+          },
+        })}
+      />
+
+      <PenghuniStack.Screen
+        name="DetailPenghuni"
+        component={DetailPenghuni}
+        options={() => ({
+          gestureEnabled: false,
+          transitionSpec: {
+            open: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.inOut(Easing.ease)},
+            },
+            close: {
+              animation: 'spring',
+              config: {duration: 500, easing: Easing.inOut(Easing.linear)},
+            },
+          },
+          cardStyleInterpolator: ({current: {progress}}) => {
+            return {
+              cardStyle: {
+                opacity: progress,
+              },
+            };
+          },
+        })}
+      />
+    </PenghuniStack.Navigator>
+  );
+};
+
+const PendaftarStackScreen = ({navigation, route}) => {
+  return (
+    <PendaftarStack.Navigator headerMode={false}>
+      <PendaftarStack.Screen
+        name="ListPendaftar"
+        component={ListPendaftar}
+        options={() => ({
+          gestureEnabled: false,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          transitionSpec: {
+            open: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+            close: {
+              animation: 'timing',
+              config: {duration: 500, easing: Easing.linear},
+            },
+          },
+        })}
+      />
+      <PendaftarStack.Screen
+        name="DetailPendaftar"
+        component={DetailPendaftar}
+      />
+    </PendaftarStack.Navigator>
+  );
+};
+
+const KeuanganStackScreen = ({navigation, route}) => {
+  return (
+    <KeuanganStack.Navigator headerMode={false}>
+      <KeuanganStack.Screen name="DetailKeuangan" component={DetailKeuangan} />
+    </KeuanganStack.Navigator>
+  );
+};
+
+const PembayaranStackScreen = ({navigation, route}) => {
+  return (
+    <PembayaranStack.Navigator headerMode={false}>
+      <PembayaranStack.Screen
         name="HalamanBayar"
         component={HalamanBayar}
         options={() => ({
@@ -236,13 +275,32 @@ const MainStackScreen = ({navigation, route}) => {
           },
         })}
       />
-
-      <MainStack.Screen name="Profil" component={Profile} />
-      <MainStack.Screen name="EditProfil" component={EditProfil} />
-      <MainStack.Screen name="EditKost" component={EditKost} />
-      <MainStack.Screen name="DetailKeuangan" component={DetailKeuangan} />
-    </MainStack.Navigator>
+    </PembayaranStack.Navigator>
   );
+};
+
+const MainStackScreen = ({navigation, route}) => {
+  useEffect(() => {
+    if (route.state !== undefined) {
+      // console.log(route.state);
+      if (
+        route.state.routes[route.state.routes.length - 1].name ==
+        'DetailPenghuni'
+      ) {
+        navigation.setOptions({gestureEnabled: false});
+      } else {
+        navigation.setOptions({gestureEnabled: true});
+      }
+      // console.log(route.state.routes[route.state.routes.length - 1]);
+    }
+    // route.state !== undefined
+    //   ? route.state.name == 'DetailPenghuni'
+    //     ? navigation.setOptions({gestureEnabled: false})
+    //     : navigation.setOptions({gestureEnabled: true})
+    //   : null;
+  }, [navigation, route]);
+
+  return <MainStack.Navigator headerMode={false}></MainStack.Navigator>;
 };
 
 const MainNavigator = ({navigation}) => {
