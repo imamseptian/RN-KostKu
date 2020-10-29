@@ -191,6 +191,20 @@ const CustomDrawer = (props) => {
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({color, size}) => (
+                <FontAwesome5 name="print" color={color} size={size} />
+              )}
+              label="Cetak Laporan"
+              onPress={() => {
+                props.navigation.navigate('KeuanganStackScreen', {
+                  screen: 'Laporan',
+                });
+              }}
+            />
+          </Drawer.Section>
+
+          <Drawer.Section style={styles.drawerSection}>
+            <DrawerItem
+              icon={({color, size}) => (
                 <Ionicons name="newspaper" color={color} size={size} />
               )}
               label="Halaman Bayar"
@@ -301,7 +315,7 @@ const styles = StyleSheet.create({
     marginRight: 3,
   },
   drawerSection: {
-    marginTop: 15,
+    marginTop: 5,
   },
   bottomDrawerSection: {
     marginBottom: 15,

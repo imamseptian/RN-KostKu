@@ -110,7 +110,7 @@ const DetailKeuangan = ({navigation, route}) => {
           Pemasukan dan Pengeluaran Kost
         </Text>
         <TouchableOpacity
-          onPress={() => alert('aa')}
+          onPress={() => navigation.toggleDrawer()}
           style={{position: 'absolute', left: 5, bottom: 10}}>
           <MaterialIcons name="menu" color="#ffffff" size={25} />
         </TouchableOpacity>

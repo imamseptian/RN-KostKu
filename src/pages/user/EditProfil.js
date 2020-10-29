@@ -15,6 +15,7 @@ import {ModalEditProfil} from './';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import Octicons from 'react-native-vector-icons/Octicons';
+import {HeaderPage} from '../../components';
 const EditProfil = ({navigation, route}) => {
   const dataRedux = useSelector((state) => state.AuthReducer);
   const [user, setuser] = useState({
@@ -46,7 +47,8 @@ const EditProfil = ({navigation, route}) => {
           tutup={() => setshowModal(false)}
         />
       </Modal>
-      <View
+      <HeaderPage title="Edit Profil" />
+      {/* <View
         style={{
           height: StatusBar.currentHeight + 50,
           backgroundColor: 'white',
@@ -68,7 +70,7 @@ const EditProfil = ({navigation, route}) => {
           }}>
           Edit Profil
         </Text>
-      </View>
+      </View> */}
 
       <View
         style={{

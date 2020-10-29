@@ -18,6 +18,7 @@ import {
   FormKelasKamar,
   ListKamar,
 } from '../pages/kamar';
+import {PageDL} from '../pages/download';
 import {DetailPendaftar, ListPendaftar} from '../pages/pendaftar';
 import {DetailKeuangan} from '../pages/pengeluaran';
 import {DetailPenghuni, ListPenghuni} from '../pages/penghuni';
@@ -268,8 +269,9 @@ const PendaftarStackScreen = ({navigation, route}) => {
 
 const KeuanganStackScreen = ({navigation, route}) => {
   return (
-    <KeuanganStack.Navigator headerMode={false}>
+    <KeuanganStack.Navigator headerMode={true}>
       <KeuanganStack.Screen name="DetailKeuangan" component={DetailKeuangan} />
+      <KeuanganStack.Screen name="Laporan" component={PageDL} />
     </KeuanganStack.Navigator>
   );
 };
