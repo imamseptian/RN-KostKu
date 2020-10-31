@@ -18,10 +18,10 @@ const FormFieldIcon = ({icon, ...rest}) => {
         alignItems: 'center',
         paddingHorizontal: 5,
       }}>
-      <FontAwesome5 name={icon} color="#05375A" size={25} />
+      <FontAwesome5 name={icon} color={myColor.fbtx} size={15} />
       <TextInput
         placeholder="Nama Kamar"
-        style={{marginLeft: 10, flex: 1}}
+        style={{marginLeft: 5, flex: 1}}
         {...rest}
       />
     </View>

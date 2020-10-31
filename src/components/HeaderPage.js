@@ -16,8 +16,9 @@ const HeaderPage = (props) => {
     <View
       style={{
         height: StatusBar.currentHeight + 50,
-        backgroundColor: 'white',
+        backgroundColor: '#f6f6f6',
         borderBottomWidth: 1,
+        borderBottomColor: myColor.divider,
         paddingTop: StatusBar.currentHeight,
         alignItems: 'center',
         paddingHorizontal: 10,

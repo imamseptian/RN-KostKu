@@ -123,7 +123,11 @@ const HomeScreen = ({navigation, route}) => {
         flex: 1,
         // alignItems: 'center',
       }}>
-      <StatusBar translucent backgroundColor="transparent" />
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
 
       <HomeClipper />
 

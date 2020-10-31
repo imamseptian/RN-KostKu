@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -15,11 +15,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useDispatch} from 'react-redux';
 import LoginSVG from '../../asset/image/login2.svg';
 import {fcmService} from '../../FCMService';
-import {myColor} from '../../function/MyVar';
+import {myColor, APIUrl, screenHeight, screenWidth} from '../../function/MyVar';
 import {setAuthRedux} from '../../store';
 
 const LoginScreen = ({navigation}) => {
   const dispatch = useDispatch();
+  const [showPassword, setshowPassword] = useState(false);
+
+  const refPassword = useRef();
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState({
     email: '',
@@ -47,20 +50,29 @@ const LoginScreen = ({navigation}) => {
     setIsLoading(true);
     console.log('SUbmit Login');
     axios
-      .post(`https://dry-forest-53707.herokuapp.com/api/auth/login`, user)
+      .post(`${APIUrl}/api/auth/login`, user)
       .then((res) => {
         // let dataUser = res.data.user;
-        const dataPengguna = res.data.user;
 
-        dispatch(setAuthRedux(dataPengguna, res.data.access_token));
+        if (res.data.success) {
+          const dataPengguna = res.data.user;
+          // console.log(res.data);
+          dispatch(setAuthRedux(dataPengguna, res.data.access_token));
 
-        console.log('subs saat login :kostku- ', res.data.user.kostku);
-        storeData(res.data.access_token, 'kostku-' + res.data.user.kostku);
-        subscribeToKost(res.data.access_token);
+          console.log('subs saat login :kostku- ', res.data.user.kostku);
+          storeData(res.data.access_token, 'kostku-' + res.data.user.kostku);
+          subscribeToKost(res.data.access_token);
+        } else {
+          alert('Maaf Email atau Password Salah');
+          setIsLoading(false);
+        }
+        // console.log(res.data.success);
 
         // navigation.push('ListKamar');
+        setIsLoading(false);
       })
       .catch((error) => {
+        console.log('ada error');
         setIsLoading(false);
         console.log(error.response);
       });
@@ -71,7 +83,7 @@ const LoginScreen = ({navigation}) => {
 
     try {
       axios
-        .get('https://dry-forest-53707.herokuapp.com/api/user', {
+        .get(APIUrl + '/api/user', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -110,7 +122,11 @@ const LoginScreen = ({navigation}) => {
 
   return (
     <View style={styles.wrapper}>
-      <StatusBar translucent backgroundColor="transparent" />
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       <Spinner
         visible={isLoading}
         textContent={'Loading...'}
@@ -127,39 +143,52 @@ const LoginScreen = ({navigation}) => {
         <Text style={styles.text1}>Selamat Datang</Text>
         <Text style={styles.text2}>Silahkan Login dengan Akun Anda</Text>
         <View style={styles.wrapperField}>
-          <View style={{position: 'relative', flex: 1}}>
-            <TextInput
-              placeholder="Email"
-              style={styles.textInput}
-              onChangeText={(value) => setForm('email', value)}
-            />
-            <FontAwesome
-              name="user-o"
-              color="#05375A"
-              size={25}
-              style={styles.iconField}
-            />
-          </View>
+          <FontAwesome
+            name="user-o"
+            color={myColor.fbtx}
+            size={25}
+            style={{marginRight: 5}}
+          />
+          <TextInput
+            placeholder="Email"
+            style={styles.textInput}
+            onChangeText={(value) => setForm('email', value)}
+            onSubmitEditing={() => {
+              refPassword.current.focus();
+            }}
+            blurOnSubmit={false}
+          />
         </View>
         <View style={styles.wrapperField}>
-          <View style={{position: 'relative', flex: 1}}>
-            <TextInput
-              placeholder="Password"
-              secureTextEntry={true}
-              style={styles.textInput}
-              onChangeText={(value) => setForm('password', value)}
-            />
+          <FontAwesome
+            name="lock"
+            color={myColor.fbtx}
+            size={25}
+            style={{marginRight: 5}}
+          />
+          <TextInput
+            ref={refPassword}
+            placeholder="Password"
+            secureTextEntry={true}
+            secureTextEntry={!showPassword}
+            style={styles.textInput}
+            onChangeText={(value) => setForm('password', value)}
+          />
+          <TouchableOpacity
+            style={{marginLeft: 5}}
+            onPress={() => setshowPassword(!showPassword)}>
             <FontAwesome
-              name="lock"
-              color="#05375A"
+              name={showPassword ? 'eye-slash' : 'eye'}
+              color={myColor.fbtx}
               size={25}
-              style={styles.iconField}
             />
-          </View>
+          </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={() => submitLogin()}>
           <View style={styles.btLogin}>
-            <Text style={{color: 'white'}}>Login</Text>
+            <Text style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>
+              Login
+            </Text>
           </View>
         </TouchableOpacity>
         <Text style={{textAlign: 'center', marginTop: 10}}>Atau</Text>
@@ -205,27 +234,25 @@ const styles = StyleSheet.create({
   wrapperField: {
     flexDirection: 'row',
     marginTop: 20,
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    width: screenWidth * 0.9,
+    borderRadius: 10,
+    borderWidth: 0.5,
+    height: 40,
   },
   textInput: {
-    borderWidth: 1,
     borderColor: '#E8E8E8',
-    borderRadius: 25,
-    height: 40,
     fontSize: 13,
-    paddingLeft: 45,
-    paddingRight: 20,
+    flex: 1,
   },
-  iconField: {
-    position: 'absolute',
-    top: 7,
-    left: 12,
-  },
+  iconField: {},
   btLogin: {
     backgroundColor: myColor.myblue,
     marginTop: 20,
     alignItems: 'center',
     padding: 10,
-    borderRadius: 20,
+    borderRadius: 10,
   },
   textDaftar: {
     textAlign: 'center',
