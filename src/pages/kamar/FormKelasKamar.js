@@ -321,7 +321,7 @@ const FormKelasKamar = ({navigation}) => {
               defaultValue=""
             />
 
-            {errors.harga && errors.harga.type === 'required' && (
+            {errors.kapasitas && errors.kapasitas.type === 'required' && (
               <View style={styles.viewError}>
                 <Text style={styles.textError}>Kapasitas Perlu Diisi</Text>
               </View>
@@ -378,7 +378,14 @@ const FormKelasKamar = ({navigation}) => {
                     justifyContent: 'center',
                     width: 30,
                   }}>
-                  <Text>{i + 1}</Text>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      fontWeight: 'bold',
+                      color: myColor.fbtx,
+                    }}>
+                    {i + 1}
+                  </Text>
                 </View>
 
                 <View
@@ -430,7 +437,7 @@ const FormKelasKamar = ({navigation}) => {
             );
           })}
 
-          <View style={{marginBottom: 10, marginLeft: 30}}>
+          <View style={{marginBottom: 20, marginLeft: 30}}>
             <TouchableNativeFeedback onPress={() => handleAddClick()}>
               <View
                 style={{
@@ -454,7 +461,7 @@ const FormKelasKamar = ({navigation}) => {
               style={{
                 borderRadius: 10,
                 height: 40,
-                width: 0.7 * screenWidth,
+                width: 0.9 * screenWidth,
                 backgroundColor: myColor.myblue,
                 alignSelf: 'center',
                 alignItems: 'center',
@@ -491,7 +498,7 @@ const styles = StyleSheet.create({
     height: 50,
   },
   viewError: {
-    marginLeft: 40,
+    marginLeft: 30,
   },
   textError: {color: myColor.alert, fontSize: 12, fontWeight: 'bold'},
   fieldWrapper: {marginBottom: 15},

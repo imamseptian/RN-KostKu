@@ -272,340 +272,339 @@ const KostForm = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <StatusBar translucent backgroundColor="transparent" />
+    <View style={styles.flyView}>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        ref={(c) => {
+          scroll = c;
+        }}
+        contentContainerStyle={{paddingBottom: 20}}>
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 20,
+            fontWeight: 'bold',
+            marginBottom: 10,
+          }}>
+          Formulir Kost
+        </Text>
 
-      <View style={styles.flyView}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          ref={(c) => {
-            scroll = c;
-          }}
-          contentContainerStyle={{paddingBottom: 20}}>
-          <Text
-            style={{
-              textAlign: 'center',
-              fontSize: 20,
-              fontWeight: 'bold',
-              marginBottom: 10,
-            }}>
-            Formulir Kost
-          </Text>
+        <TouchableNativeFeedback onPress={() => pickImage()}>
+          {!dataFoto.isUploaded ? (
+            <View
+              style={{
+                width: 0.8 * screenWidth,
+                maxWidth: 300,
+                height: (2 / 3) * 0.8 * screenWidth,
+                maxHeight: 200,
+                borderRadius: 10,
+                backgroundColor: myColor.darkText,
+                marginHorizontal: 0.1 * screenWidth,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text style={{color: '#fff', fontSize: 14, fontWeight: 'bold'}}>
+                Tekan disini untuk upload Foto Kost
+              </Text>
+              <Text style={{color: '#fff', fontSize: 14, fontWeight: 'bold'}}>
+                *Opsional
+              </Text>
+            </View>
+          ) : (
+            <Image
+              source={{
+                uri: dataFoto.uri,
+              }}
+              style={{
+                width: 0.8 * screenWidth,
+                maxWidth: 300,
+                height: (2 / 3) * 0.8 * screenWidth,
+                maxHeight: 200,
+                borderRadius: 10,
+                marginHorizontal: 0.1 * screenWidth,
+              }}
+              resizeMode="cover"
+            />
+          )}
+        </TouchableNativeFeedback>
 
-          <TouchableNativeFeedback onPress={() => pickImage()}>
-            {!dataFoto.isUploaded ? (
-              <View
-                style={{
-                  width: 0.8 * screenWidth,
-                  maxWidth: 300,
-                  height: (2 / 3) * 0.8 * screenWidth,
-                  maxHeight: 200,
-                  borderRadius: 10,
-                  backgroundColor: myColor.darkText,
-                  marginLeft: 0.05 * screenWidth,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Text style={{color: '#fff', fontSize: 14, fontWeight: 'bold'}}>
-                  Tekan disini untuk upload Foto Kost
-                </Text>
-                <Text style={{color: '#fff', fontSize: 14, fontWeight: 'bold'}}>
-                  *Opsional
-                </Text>
+        <View style={styles.formWrapper}>
+          <Controller
+            control={control}
+            render={({onChange, onBlur, value}) => (
+              <View style={styles.fieldForm}>
+                <FontAwesome name="home" size={25} style={{opacity: 0.5}} />
+                <TextInput
+                  placeholder="Nama Kost"
+                  style={{marginLeft: 5, flex: 1}}
+                  onChangeText={(value) => {
+                    onChange(value);
+                    setForm('nama', value);
+                  }}
+                  value={value}
+                />
               </View>
-            ) : (
-              <Image
-                source={{
-                  uri: dataFoto.uri,
-                }}
-                style={{
-                  width: 0.8 * screenWidth,
-                  maxWidth: 300,
-                  height: (2 / 3) * 0.8 * screenWidth,
-                  maxHeight: 200,
-                  borderRadius: 10,
-                  marginLeft: 0.05 * screenWidth,
-                }}
-                resizeMode="cover"
-              />
             )}
-          </TouchableNativeFeedback>
+            name="nama"
+            rules={{required: true}}
+            defaultValue=""
+          />
 
-          <View style={styles.formWrapper}>
-            <Controller
-              control={control}
-              render={({onChange, onBlur, value}) => (
-                <View style={styles.fieldForm}>
-                  <FontAwesome name="home" size={25} style={{opacity: 0.5}} />
+          {errors.nama && errors.nama.type === 'required' && (
+            <View style={styles.viewError}>
+              <Text style={styles.textError}>Nama Kost Perlu Diisi</Text>
+            </View>
+            //
+          )}
+        </View>
+
+        <View style={styles.formWrapper}>
+          <View>
+            <View style={styles.fieldForm}>
+              <FontAwesome5 name="city" size={25} style={{opacity: 0.5}} />
+              <Picker
+                selectedValue={user.provinsi}
+                style={{height: 40, flex: 1}}
+                onValueChange={(itemValue, itemIndex) => {
+                  if (itemValue != null) {
+                    setinvalidProv(false);
+                    setForm('provinsi', itemValue);
+                    console.log(URLkota);
+                  }
+                }}>
+                <Picker.Item label="Pilih Provinsi" />
+                {provinsi.map((item, index) => {
+                  return (
+                    <Picker.Item
+                      key={index}
+                      label={item.nama}
+                      value={item.id}
+                    />
+                  );
+                })}
+              </Picker>
+            </View>
+            {invalidProv && (
+              <View style={styles.viewError}>
+                <Text style={styles.textError}>Provinsi Perlu Dipilih</Text>
+              </View>
+            )}
+          </View>
+        </View>
+
+        <View style={styles.formWrapper}>
+          <View>
+            <View style={styles.fieldForm}>
+              <MaterialCommunityIcons
+                name="home-city"
+                size={25}
+                style={{opacity: 0.5}}
+              />
+              <Picker
+                selectedValue={user.kota}
+                style={{height: 50, flex: 1, fontSize: 3}}
+                textStyle={{fontSize: 12}}
+                onValueChange={(itemValue, itemIndex) => {
+                  if (itemValue != null) {
+                    setinvalidKota(false);
+                    setForm('kota', itemValue);
+                  }
+                }}>
+                <Picker.Item label="Pilih Kota" />
+                {kota.map((item, index) => {
+                  return (
+                    <Picker.Item
+                      key={index}
+                      label={item.nama}
+                      value={item.id}
+                    />
+                  );
+                })}
+              </Picker>
+            </View>
+            {invalidKota && (
+              <View style={styles.viewError}>
+                <Text style={styles.textError}>Kota Perlu Dipilih</Text>
+              </View>
+            )}
+          </View>
+        </View>
+
+        <View style={styles.formWrapper}>
+          <View>
+            <View style={styles.fieldForm}>
+              <MaterialCommunityIcons
+                name="home-city"
+                size={25}
+                style={{opacity: 0.5}}
+              />
+              <Picker
+                selectedValue={user.jenis}
+                style={{height: 50, flex: 1, fontSize: 3}}
+                textStyle={{fontSize: 12}}
+                onValueChange={(itemValue, itemIndex) => {
+                  if (itemValue != null) {
+                    setinvalidKota(false);
+                    setForm('jenis', itemValue);
+                  }
+                }}>
+                <Picker.Item label="Pilih Jenis" />
+                <Picker.Item key={'1'} label="Kost Campuran" value={1} />
+                <Picker.Item key={'2'} label="Kost Pria" value={2} />
+                <Picker.Item key={'3'} label="Kost Wanita" value={3} />
+              </Picker>
+            </View>
+            {invalidJenis && (
+              <View style={styles.viewError}>
+                <Text style={styles.textError}>Jenis Kost Perlu Dipilih</Text>
+              </View>
+            )}
+          </View>
+        </View>
+
+        <View style={styles.formWrapper}>
+          <View>
+            <View style={styles.fieldForm}>
+              <Entypo name="address" size={25} style={{opacity: 0.5}} />
+
+              <Controller
+                control={control}
+                render={({onChange, onBlur, value}) => (
                   <TextInput
-                    placeholder="Nama Kost"
+                    placeholder="Alamat Kost"
                     style={{marginLeft: 5, flex: 1}}
                     onChangeText={(value) => {
                       onChange(value);
-                      setForm('nama', value);
+                      setForm('alamat', value);
                     }}
+                    onSubmitEditing={() => {
+                      refNoTelp.current.focus();
+                    }}
+                    blurOnSubmit={false}
                     value={value}
                   />
-                </View>
-              )}
-              name="nama"
-              rules={{required: true}}
-              defaultValue=""
-            />
-
-            {errors.nama && errors.nama.type === 'required' && (
+                )}
+                name="alamat"
+                rules={{required: true}}
+                defaultValue=""
+              />
+            </View>
+            {errors.alamat && errors.alamat.type === 'required' && (
               <View style={styles.viewError}>
-                <Text style={styles.textError}>Nama Kost Perlu Diisi</Text>
+                <Text style={styles.textError}>Alamat Kost Perlu Diisi</Text>
               </View>
               //
             )}
           </View>
+        </View>
 
-          <View style={styles.formWrapper}>
-            <View>
-              <View style={styles.fieldForm}>
-                <FontAwesome5 name="city" size={25} style={{opacity: 0.5}} />
-                <Picker
-                  selectedValue={user.provinsi}
-                  style={{height: 40, flex: 1}}
-                  onValueChange={(itemValue, itemIndex) => {
-                    if (itemValue != null) {
-                      setinvalidProv(false);
-                      setForm('provinsi', itemValue);
-                      console.log(URLkota);
-                    }
-                  }}>
-                  <Picker.Item label="Pilih Provinsi" />
-                  {provinsi.map((item, index) => {
-                    return (
-                      <Picker.Item
-                        key={index}
-                        label={item.nama}
-                        value={item.id}
-                      />
-                    );
-                  })}
-                </Picker>
+        <View style={styles.formWrapper}>
+          <View>
+            <View style={styles.fieldForm}>
+              <FontAwesome name="phone" size={25} style={{opacity: 0.5}} />
+              <Controller
+                control={control}
+                render={({onChange, onBlur, value}) => (
+                  <TextInput
+                    ref={refNoTelp}
+                    placeholder="No Telepon"
+                    style={{marginLeft: 5, flex: 1}}
+                    onChangeText={(value) => {
+                      onChange(value);
+                      setForm('notelp', value);
+                    }}
+                    value={value}
+                    keyboardType="numeric"
+                    onSubmitEditing={() => {
+                      refDeskripsi.current.focus();
+                    }}
+                    blurOnSubmit={false}
+                  />
+                )}
+                name="notelp"
+                rules={{required: true}}
+                defaultValue=""
+              />
+            </View>
+            {errors.notelp && errors.notelp.type === 'required' && (
+              <View style={styles.viewError}>
+                <Text style={styles.textError}>
+                  Nomor Telepon Kost Perlu Diisi
+                </Text>
               </View>
-              {invalidProv && (
-                <View style={styles.viewError}>
-                  <Text style={styles.textError}>Provinsi Perlu Dipilih</Text>
-                </View>
-              )}
-            </View>
+              //
+            )}
           </View>
+        </View>
 
-          <View style={styles.formWrapper}>
-            <View>
-              <View style={styles.fieldForm}>
-                <MaterialCommunityIcons
-                  name="home-city"
-                  size={25}
-                  style={{opacity: 0.5}}
-                />
-                <Picker
-                  selectedValue={user.kota}
-                  style={{height: 50, flex: 1, fontSize: 3}}
-                  textStyle={{fontSize: 12}}
-                  onValueChange={(itemValue, itemIndex) => {
-                    if (itemValue != null) {
-                      setinvalidKota(false);
-                      setForm('kota', itemValue);
-                    }
-                  }}>
-                  <Picker.Item label="Pilih Kota" />
-                  {kota.map((item, index) => {
-                    return (
-                      <Picker.Item
-                        key={index}
-                        label={item.nama}
-                        value={item.id}
-                      />
-                    );
-                  })}
-                </Picker>
+        <View style={styles.formWrapper}>
+          <View>
+            <View style={[styles.fieldForm, {height: 80}]}>
+              <Controller
+                control={control}
+                render={({onChange, onBlur, value}) => (
+                  <TextInput
+                    ref={refDeskripsi}
+                    placeholder="Deskripsi"
+                    style={{
+                      marginLeft: 5,
+                    }}
+                    placeholder="Deskripsi Tambahan"
+                    multiline={true}
+                    onChangeText={(value) => {
+                      onChange(value);
+                      setForm('desc', value);
+                    }}
+                    value={value}
+                  />
+                )}
+                name="desc"
+                rules={{required: true}}
+                defaultValue=""
+              />
+            </View>
+            {errors.desc && errors.desc.type === 'required' && (
+              <View style={styles.viewError}>
+                <Text style={styles.textError}>Deskripsi Kost Perlu Diisi</Text>
               </View>
-              {invalidKota && (
-                <View style={styles.viewError}>
-                  <Text style={styles.textError}>Kota Perlu Dipilih</Text>
-                </View>
-              )}
-            </View>
+              //
+            )}
           </View>
-
-          <View style={styles.formWrapper}>
-            <View>
-              <View style={styles.fieldForm}>
-                <MaterialCommunityIcons
-                  name="home-city"
-                  size={25}
-                  style={{opacity: 0.5}}
-                />
-                <Picker
-                  selectedValue={user.jenis}
-                  style={{height: 50, flex: 1, fontSize: 3}}
-                  textStyle={{fontSize: 12}}
-                  onValueChange={(itemValue, itemIndex) => {
-                    if (itemValue != null) {
-                      setinvalidKota(false);
-                      setForm('jenis', itemValue);
-                    }
-                  }}>
-                  <Picker.Item label="Pilih Jenis" />
-                  <Picker.Item key={'1'} label="Kost Campuran" value={1} />
-                  <Picker.Item key={'2'} label="Kost Pria" value={2} />
-                  <Picker.Item key={'3'} label="Kost Wanita" value={3} />
-                </Picker>
-              </View>
-              {invalidJenis && (
-                <View style={styles.viewError}>
-                  <Text style={styles.textError}>Jenis Kost Perlu Dipilih</Text>
-                </View>
-              )}
-            </View>
+        </View>
+        <TouchableOpacity
+          onPress={handleSubmit(onSubmit, onError)}
+          disabled={isSubmit}>
+          <View
+            style={{
+              height: 40,
+              backgroundColor: myColor.myblue,
+              marginHorizontal: 20,
+              borderRadius: 10,
+              marginTop: 10,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>
+              Submit
+            </Text>
           </View>
+        </TouchableOpacity>
+      </ScrollView>
 
-          <View style={styles.formWrapper}>
-            <View>
-              <View style={styles.fieldForm}>
-                <Entypo name="address" size={25} style={{opacity: 0.5}} />
+      {/* <View style={{flex: 1}}></View> */}
 
-                <Controller
-                  control={control}
-                  render={({onChange, onBlur, value}) => (
-                    <TextInput
-                      placeholder="Alamat Kost"
-                      style={{marginLeft: 5, flex: 1}}
-                      onChangeText={(value) => {
-                        onChange(value);
-                        setForm('alamat', value);
-                      }}
-                      onSubmitEditing={() => {
-                        refNoTelp.current.focus();
-                      }}
-                      blurOnSubmit={false}
-                      value={value}
-                    />
-                  )}
-                  name="alamat"
-                  rules={{required: true}}
-                  defaultValue=""
-                />
-              </View>
-              {errors.alamat && errors.alamat.type === 'required' && (
-                <View style={styles.viewError}>
-                  <Text style={styles.textError}>Alamat Kost Perlu Diisi</Text>
-                </View>
-                //
-              )}
-            </View>
-          </View>
-
-          <View style={styles.formWrapper}>
-            <View>
-              <View style={styles.fieldForm}>
-                <FontAwesome name="phone" size={25} style={{opacity: 0.5}} />
-                <Controller
-                  control={control}
-                  render={({onChange, onBlur, value}) => (
-                    <TextInput
-                      ref={refNoTelp}
-                      placeholder="No Telepon"
-                      style={{marginLeft: 5, flex: 1}}
-                      onChangeText={(value) => {
-                        onChange(value);
-                        setForm('notelp', value);
-                      }}
-                      value={value}
-                      keyboardType="numeric"
-                      onSubmitEditing={() => {
-                        refDeskripsi.current.focus();
-                      }}
-                      blurOnSubmit={false}
-                    />
-                  )}
-                  name="notelp"
-                  rules={{required: true}}
-                  defaultValue=""
-                />
-              </View>
-              {errors.notelp && errors.notelp.type === 'required' && (
-                <View style={styles.viewError}>
-                  <Text style={styles.textError}>
-                    Nomor Telepon Kost Perlu Diisi
-                  </Text>
-                </View>
-                //
-              )}
-            </View>
-          </View>
-
-          <View style={styles.formWrapper}>
-            <View>
-              <View style={[styles.fieldForm, {height: 80}]}>
-                <Controller
-                  control={control}
-                  render={({onChange, onBlur, value}) => (
-                    <TextInput
-                      ref={refDeskripsi}
-                      placeholder="Deskripsi"
-                      style={{
-                        marginLeft: 5,
-                      }}
-                      placeholder="Deskripsi Tambahan"
-                      multiline={true}
-                      onChangeText={(value) => {
-                        onChange(value);
-                        setForm('desc', value);
-                      }}
-                      value={value}
-                    />
-                  )}
-                  name="desc"
-                  rules={{required: true}}
-                  defaultValue=""
-                />
-              </View>
-              {errors.desc && errors.desc.type === 'required' && (
-                <View style={styles.viewError}>
-                  <Text style={styles.textError}>
-                    Deskripsi Kost Perlu Diisi
-                  </Text>
-                </View>
-                //
-              )}
-            </View>
-          </View>
-          <TouchableOpacity
-            onPress={handleSubmit(onSubmit, onError)}
-            disabled={isSubmit}>
-            <View
-              style={{
-                height: 40,
-                backgroundColor: myColor.myblue,
-                marginHorizontal: 20,
-                borderRadius: 10,
-                marginTop: 10,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>
-                Submit
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </ScrollView>
-
-        {/* <View style={{flex: 1}}></View> */}
-
-        {/* <View
+      {/* <View
           style={{
             height: 0.5 * screenHeight,
             backgroundColor: 'red',
           }}>
           
         </View> */}
-      </View>
     </View>
   );
 };
@@ -627,7 +626,7 @@ const styles = StyleSheet.create({
     flex: 5,
   },
   flyView: {
-    width: 0.9 * screenWidth,
+    paddingTop: StatusBar.currentHeight,
     flex: 1,
     backgroundColor: 'white',
     borderTopLeftRadius: 10,
@@ -636,7 +635,7 @@ const styles = StyleSheet.create({
   },
   formWrapper: {
     marginTop: 15,
-    marginHorizontal: 20,
+    marginHorizontal: 0.05 * screenWidth,
   },
   fieldForm: {
     height: 40,

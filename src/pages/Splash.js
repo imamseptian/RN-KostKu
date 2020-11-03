@@ -8,7 +8,11 @@ import {myColor} from '../function/MyVar';
 const Splash = () => {
   return (
     <View style={styles.container}>
-      <StatusBar translucent backgroundColor="transparent" />
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       <Animatable.View style={{flex: 1}} animation="fadeIn">
         <View
           style={{

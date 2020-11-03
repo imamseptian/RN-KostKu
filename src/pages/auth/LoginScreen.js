@@ -238,7 +238,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     width: screenWidth * 0.9,
     borderRadius: 10,
-    borderWidth: 0.5,
+    borderWidth: 1,
+    borderColor: myColor.divider,
     height: 40,
   },
   textInput: {

@@ -197,7 +197,11 @@ const LoginScreen = ({navigation}) => {
 
   return (
     <View style={styles.wrapper}>
-      <StatusBar translucent backgroundColor="transparent" />
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       <Spinner
         visible={isLoading}
         textContent={'Loading...'}
@@ -519,11 +523,11 @@ const styles = StyleSheet.create({
   },
   fontSVG: {fontSize: 26, color: 'white'},
   animForm: {
-    maxHeight: 0.75 * screenHeight,
+    maxHeight: 0.65 * screenHeight,
     backgroundColor: '#fff',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    paddingTop: 10,
+    paddingTop: 5,
     paddingBottom: 10,
     alignItems: 'center',
   },
@@ -532,7 +536,7 @@ const styles = StyleSheet.create({
   wrapperField: {
     flexDirection: 'row',
     borderWidth: 1,
-    borderColor: '#E8E8E8',
+    borderColor: myColor.divider,
     borderRadius: 10,
     height: 40,
     alignItems: 'center',
@@ -548,7 +552,7 @@ const styles = StyleSheet.create({
   },
   fieldNama: {
     borderWidth: 1,
-    borderColor: '#E8E8E8',
+    borderColor: myColor.divider,
     borderRadius: 10,
     height: 40,
     width: 0.43 * screenWidth,

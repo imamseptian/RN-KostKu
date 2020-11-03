@@ -33,7 +33,11 @@ const FormAwal = ({navigation}) => {
 
   return (
     <View style={{flex: 1}}>
-      <StatusBar translucent backgroundColor="transparent" />
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       <Animated.View style={{flex: 1, opacity: mountedAnimated}}>
         <View style={{marginLeft: 10, marginTop: StatusBar.currentHeight}}>
           <Text
