@@ -1,9 +1,8 @@
 import axios from 'axios';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
   Alert,
-  Dimensions,
   Image,
   ScrollView,
   StatusBar,
@@ -19,20 +18,34 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
 import {Permission, PERMISSION_TYPE} from '../../AppPermission';
-import {FormFieldIcon} from '../../components/atoms';
-import {APIUrl, myColor} from '../../function/MyVar';
 import {HeaderPage} from '../../components';
-
-const screenWidth = Math.round(Dimensions.get('window').width);
-const screenHeight = Math.round(Dimensions.get('window').height);
+import {FormFieldIcon} from '../../components/atoms';
+import {
+  APIUrl,
+  myColor,
+  screenWidth,
+  formatRupiah,
+  rupiahToInt,
+} from '../../function/MyVar';
 
 const FormKelasKamar = ({navigation}) => {
+  const scrollRef = useRef();
+  const refHarga = useRef();
+  const refKapasitas = useRef();
   const dataRedux = useSelector((state) => state.AuthReducer);
-  const {control, handleSubmit, errors, reset, getValues, remove} = useForm();
+
+  // const {control, handleSubmit, errors, reset, getValues, remove} = useForm();
+
   const [inputList, setInputList] = useState([{item: ''}]);
   const [isSubmit, setIsSubmit] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
-  const [invalidFasilitas, setInvalidFasilitas] = useState(false);
+  const [invalidFasilitas, setInvalidFasilitas] = useState(true);
+  const [errorMsg, seterrorMsg] = useState({
+    nama: '',
+    harga: '',
+    kapasitas: '',
+    foto: '',
+  });
   const [dataFoto, setDataFoto] = useState({
     isUploaded: false,
     uri: '',
@@ -42,11 +55,12 @@ const FormKelasKamar = ({navigation}) => {
   const [kamar, setKamar] = useState({
     nama: '',
     harga: 0,
-    kapasitas: 0,
+    kapasitas: 1,
     fasilitas: inputList,
     owner: dataRedux.user.kostku,
     foto: '',
   });
+  const [formatHarga, setformatHarga] = useState(kamar.harga.toString());
 
   useEffect(() => {
     if (dataFoto.data != '') {
@@ -57,6 +71,7 @@ const FormKelasKamar = ({navigation}) => {
 
   useEffect(() => {
     setKamar({...kamar, fasilitas: JSON.stringify(inputList)});
+    cekFasilitas();
   }, [inputList]);
 
   const pickImage = async () => {
@@ -93,6 +108,11 @@ const FormKelasKamar = ({navigation}) => {
     );
   };
 
+  useEffect(() => {
+    setForm('harga', rupiahToInt(formatHarga));
+    // rupiahToInt(formatHarga);
+  }, [formatHarga]);
+
   const handleInputChange = (e, index, inputType) => {
     const list = [...inputList];
     list[index][inputType] = e;
@@ -109,41 +129,6 @@ const FormKelasKamar = ({navigation}) => {
     setInputList([...inputList, {item: ''}]);
   };
 
-  const onSubmit = (data) => {
-    // setIsSubmit(true);
-    if (invalidFasilitas != true) {
-      let i;
-      for (i = 0; i < inputList.length; i++) {
-        if (inputList[i].item == '') {
-          setIsSubmit(false);
-          goToTop();
-          return setInvalidFasilitas(true);
-        }
-      }
-      Alert.alert(
-        'Konfirmasi',
-        'Apakah anda yakin data yang diisi telah sesuai ?',
-        [
-          {
-            text: 'Batal',
-            onPress: () => setIsSubmit(false),
-            style: 'cancel',
-          },
-          {text: 'Ya', onPress: () => addData()},
-        ],
-        {cancelable: false},
-      );
-    } else {
-      setIsSubmit(false);
-      goToTop();
-    }
-  };
-
-  const onError = (errors, e) => {
-    cekFasilitas();
-    goToTop();
-  };
-
   const cekFasilitas = () => {
     let i;
     for (i = 0; i < inputList.length; i++) {
@@ -152,27 +137,48 @@ const FormKelasKamar = ({navigation}) => {
       }
     }
     return setInvalidFasilitas(false);
+    // if (inputList.includes('')) {
+    //   setInvalidFasilitas(true);
+    // } else {
+    //   setInvalidFasilitas(false);
+    // }
   };
 
   const addData = async () => {
     setIsSubmit(true);
-    axios
-      .post(APIUrl + '/api/class', kamar, {
-        headers: {
-          Authorization: `Bearer ${dataRedux.token}`,
-        },
-      })
-      .then((res) => {
-        setIsSubmit(false);
-        // console.log(kamar);
-        // navigation.pop(1);
-        navigation.popToTop();
-      })
-      .catch((error) => {
-        setIsSubmit(false);
-        console.log(error);
-        // console.log(kamar);
-      });
+    if (!invalidFasilitas) {
+      axios
+        .post(APIUrl + '/api/class', kamar, {
+          headers: {
+            Authorization: `Bearer ${dataRedux.token}`,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+
+          if (res.data.success) {
+            navigation.pop(1);
+          } else {
+            seterrorMsg({
+              nama: res.data.errors.nama ? res.data.errors.nama : '',
+              harga: res.data.errors.harga ? res.data.errors.harga : '',
+              kapasitas: res.data.errors.kapasitas
+                ? res.data.errors.kapasitas
+                : '',
+            });
+            setIsSubmit(false);
+          }
+          // setIsSubmit(false);
+          // navigation.popToTop();
+        })
+        .catch((error) => {
+          setIsSubmit(false);
+          console.log(error);
+          // console.log(kamar);
+        });
+    } else {
+      setIsSubmit(false);
+    }
   };
 
   const setForm = (inputType, value) => {
@@ -183,7 +189,7 @@ const FormKelasKamar = ({navigation}) => {
   };
 
   const goToTop = () => {
-    scroll.scrollTo({x: 0, y: 0, animated: true});
+    scrollRef.current.scrollTo({x: 0, y: 0, animated: true});
   };
 
   return (
@@ -199,33 +205,19 @@ const FormKelasKamar = ({navigation}) => {
         textStyle={{color: '#FFF'}}
       />
       <HeaderPage title="Tambah Kelas" />
-      {/* UPLOAD IMAGE SECTION */}
+
+      {/* Content Section  */}
       <ScrollView
-        ref={(c) => {
-          scroll = c;
-        }}
+        ref={scrollRef}
         contentContainerStyle={{paddingBottom: 25}}
         showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            alignItems: 'center',
-            paddingBottom: 10,
-            marginBottom: 5,
-          }}>
+        <View style={styles.buttonUpload}>
+          {/* UPLOAD IMAGE SECTION */}
           <TouchableNativeFeedback
             disabled={isPressed}
             onPress={() => pickImage()}>
             {dataFoto.isUploaded != true ? (
-              <View
-                style={{
-                  width: 0.83 * screenWidth,
-                  height: (2 / 3) * 0.83 * screenWidth,
-                  backgroundColor: '#636e72',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 10,
-                  marginTop: 15,
-                }}>
+              <View style={styles.blankImage}>
                 <FontAwesome name="upload" color="#fff" size={50} />
               </View>
             ) : (
@@ -233,126 +225,101 @@ const FormKelasKamar = ({navigation}) => {
                 source={{
                   uri: dataFoto.uri,
                 }}
-                style={{
-                  height: (2 / 3) * 0.83 * screenWidth,
-                  width: 0.83 * screenWidth,
-                  borderRadius: 10,
-                  marginTop: 15,
-                }}
+                style={styles.imageUploaded}
                 resizeMode="cover"
               />
             )}
           </TouchableNativeFeedback>
+          {errorMsg.foto != '' && (
+            <Text
+              style={[styles.textError, {textAlign: 'center', marginTop: 5}]}>
+              Foto Kamar Perlu Diupload
+            </Text>
+            //
+          )}
         </View>
+        {/* <Text>{kamar.harga}</Text> */}
 
         <View style={styles.formWrapper}>
+          {/* Nama Kamar Section  */}
           <View style={styles.fieldWrapper}>
-            <Controller
-              control={control}
-              render={({onChange, onBlur, value}) => (
-                <FormFieldIcon
-                  icon="door-closed"
-                  placeholder="Nama Kamar"
-                  onChangeText={(v) => {
-                    onChange(v);
-                    setForm('nama', v);
-                  }}
-                  value={value}
-                />
-              )}
-              name="nama"
-              rules={{required: true}}
-              defaultValue=""
+            <FormFieldIcon
+              icon="door-closed"
+              placeholder="Nama Kamar"
+              onChangeText={(v) => {
+                setForm('nama', v);
+              }}
+              onSubmitEditing={() => {
+                refHarga.current.focus();
+              }}
+              blurOnSubmit={false}
+              value={kamar.nama}
             />
-            {errors.nama && errors.nama.type === 'required' && (
+
+            {errorMsg.nama != '' && (
               <View style={styles.viewError}>
-                <Text style={styles.textError}>Nama Kost Perlu Diisi</Text>
+                <Text style={styles.textError}>{errorMsg.nama}</Text>
+              </View>
+            )}
+          </View>
+
+          {/* Harga Kamar Section  */}
+          <View style={styles.fieldWrapper}>
+            <FormFieldIcon
+              ref={refHarga}
+              icon="money-bill-alt"
+              placeholder="Harga Kamar"
+              keyboardType="numeric"
+              onChangeText={(v) => {
+                // setForm('harga', parseInt(v));
+                // console.log(v);
+                if (v.length < 1) {
+                  setformatHarga(formatRupiah('0'));
+                } else {
+                  setformatHarga(formatRupiah(v));
+                }
+              }}
+              onSubmitEditing={() => {
+                refKapasitas.current.focus();
+              }}
+              blurOnSubmit={false}
+              // value={kamar.harga.toString()}
+              value={formatHarga}
+            />
+
+            {errorMsg.harga != '' && (
+              <View style={styles.viewError}>
+                <Text style={styles.textError}>{errorMsg.harga}</Text>
               </View>
               //
             )}
           </View>
 
+          {/* Kapasitas Kamar Section  */}
           <View style={styles.fieldWrapper}>
-            <Controller
-              control={control}
-              render={({onChange, onBlur, value}) => (
-                <FormFieldIcon
-                  icon="money-bill-alt"
-                  placeholder="Harga Kamar"
-                  keyboardType="numeric"
-                  onChangeText={(v) => {
-                    onChange(v);
-                    setForm('harga', parseInt(v));
-                    console.log(value);
-                  }}
-                  value={value}
-                />
-              )}
-              name="harga"
-              rules={{required: true}}
-              defaultValue=""
+            <FormFieldIcon
+              ref={refKapasitas}
+              icon="users"
+              placeholder="Kapasitas kamar"
+              keyboardType="number-pad"
+              onChangeText={(value) => {
+                setForm('kapasitas', parseInt(value));
+              }}
+              value={kamar.kapasitas.toString()}
             />
 
-            {errors.harga && errors.harga.type === 'required' && (
+            {errorMsg.kapasitas != '' && (
               <View style={styles.viewError}>
-                <Text style={styles.textError}>Harga Perlu Diisi</Text>
+                <Text style={styles.textError}>{errorMsg.kapasitas}</Text>
               </View>
               //
             )}
           </View>
 
-          <View style={styles.fieldWrapper}>
-            <Controller
-              control={control}
-              render={({onChange, onBlur, value}) => (
-                <FormFieldIcon
-                  icon="users"
-                  placeholder="Kapasitas kamar"
-                  keyboardType="number-pad"
-                  onChangeText={(value) => {
-                    onChange(value);
-                    setForm('kapasitas', parseInt(value));
-                  }}
-                  value={value}
-                />
-              )}
-              name="kapasitas"
-              rules={{required: true}}
-              defaultValue=""
-            />
+          <View style={styles.fasilitasTitleWrapper}>
+            <MaterialIcons name="room-service" color={myColor.fbtx} size={25} />
 
-            {errors.kapasitas && errors.kapasitas.type === 'required' && (
-              <View style={styles.viewError}>
-                <Text style={styles.textError}>Kapasitas Perlu Diisi</Text>
-              </View>
-              //
-            )}
-          </View>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              flex: 1,
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                width: 30,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <MaterialIcons name="room-service" color="#05375A" size={25} />
-            </View>
-
-            <Text
-              style={{
-                flex: 1,
-                marginLeft: 10,
-                fontWeight: 'bold',
-                color: '#636e72',
-              }}>
-              Fasilitas
-            </Text>
+            <Text style={styles.titleFasilitas}>Fasilitas</Text>
           </View>
           {invalidFasilitas && (
             <View style={[styles.viewError, {marginBottom: 10}]}>
@@ -364,67 +331,21 @@ const FormKelasKamar = ({navigation}) => {
 
           {inputList.map((x, i) => {
             return (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  flex: 1,
-                  alignItems: 'center',
-                  marginBottom: 10,
-                }}
-                key={i}>
-                <View
-                  style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: 30,
-                  }}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      fontWeight: 'bold',
-                      color: myColor.fbtx,
-                    }}>
-                    {i + 1}
-                  </Text>
-                </View>
+              <View style={styles.wrapperItemFasilitas} key={i}>
+                <Text style={styles.normalText}>{i + 1}</Text>
 
-                <View
-                  style={{
-                    height: 40,
-                    borderWidth: 0.5,
-                    borderRadius: 10,
-                    flex: 1,
+                <TextInput
+                  placeholder={'Fasilitas ' + String(i + 1)}
+                  onChangeText={(e) => {
+                    handleInputChange(e, i, 'item');
+                  }}
+                  style={styles.inputItem}
+                  value={x.item}
+                />
 
-                    paddingHorizontal: 5,
-                  }}>
-                  <TextInput
-                    placeholder={'Fasilitas ' + String(i + 1)}
-                    onChangeText={(e) => {
-                      cekFasilitas();
-                      handleInputChange(e, i, 'item');
-                    }}
-                    style={{
-                      marginLeft: 10,
-                      flex: 1,
-                    }}
-                    onEndEditing={() => {
-                      if (kamar.fasilitas[i].item == '') {
-                        setInvalidFasilitas(true);
-                      }
-                    }}
-                    value={x.item}
-                  />
-                </View>
                 {inputList.length !== 1 && (
                   <TouchableNativeFeedback onPress={() => handleRemoveClick(i)}>
-                    <View
-                      style={{
-                        marginLeft: 5,
-                        height: 40,
-                        width: 30,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}>
+                    <View style={styles.deleteItem}>
                       <MaterialIcons
                         name="cancel"
                         color={myColor.alert}
@@ -437,39 +358,36 @@ const FormKelasKamar = ({navigation}) => {
             );
           })}
 
-          <View style={{marginBottom: 20, marginLeft: 30}}>
+          <View style={styles.wrapperAddFasilitas}>
             <TouchableNativeFeedback onPress={() => handleAddClick()}>
-              <View
-                style={{
-                  height: 30,
-                  backgroundColor: myColor.addfacility,
-                  borderRadius: 10,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text style={{color: 'white', fontWeight: 'bold'}}>
-                  Tambah Fasilitas
-                </Text>
+              <View style={styles.btAddFasilitas}>
+                <Text style={styles.textAddFasilitas}>Tambah Fasilitas</Text>
               </View>
             </TouchableNativeFeedback>
           </View>
           <TouchableNativeFeedback
-            onPress={handleSubmit(onSubmit, onError)}
+            // onPress={handleSubmit(onSubmit, onError)}
+            onPress={() => {
+              if (!invalidFasilitas) {
+                Alert.alert(
+                  'Konfirmasi',
+                  'Apakah anda yakin data yang diisi telah sesuai ?',
+                  [
+                    {
+                      text: 'Batal',
+                      onPress: () => setIsSubmit(false),
+                      style: 'cancel',
+                    },
+                    {text: 'Ya', onPress: () => addData()},
+                  ],
+                  {cancelable: false},
+                );
+              }
+            }}
             // onPress={() => console.log(kamar)}
           >
-            <View
-              style={{
-                borderRadius: 10,
-                height: 40,
-                width: 0.9 * screenWidth,
-                backgroundColor: myColor.myblue,
-                alignSelf: 'center',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Text style={{fontSize: 14, fontWeight: 'bold', color: '#fff'}}>
-                Submit
-              </Text>
+            <View style={styles.wrapperBtSubmit}>
+              <Text style={styles.textBtSubmit}>Submit</Text>
             </View>
           </TouchableNativeFeedback>
         </View>
@@ -502,4 +420,85 @@ const styles = StyleSheet.create({
   },
   textError: {color: myColor.alert, fontSize: 12, fontWeight: 'bold'},
   fieldWrapper: {marginBottom: 15},
+  buttonUpload: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  blankImage: {
+    width: 0.83 * screenWidth,
+    height: (2 / 3) * 0.83 * screenWidth,
+    backgroundColor: '#636e72',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    marginTop: 15,
+  },
+  imageUploaded: {
+    height: (2 / 3) * 0.83 * screenWidth,
+    width: 0.83 * screenWidth,
+    borderRadius: 10,
+    marginTop: 15,
+  },
+  fasilitasTitleWrapper: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+  },
+  fasilitasIcon: {
+    width: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  titleFasilitas: {
+    flex: 1,
+    marginLeft: 10,
+    fontWeight: 'bold',
+    color: myColor.fbtx,
+  },
+  wrapperAddFasilitas: {marginBottom: 20, marginLeft: 30},
+  btAddFasilitas: {
+    height: 30,
+    backgroundColor: myColor.addfacility,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textAddFasilitas: {color: '#fff', fontWeight: 'bold', fontSize: 14},
+  wrapperBtSubmit: {
+    borderRadius: 10,
+    height: 40,
+    width: 0.9 * screenWidth,
+    backgroundColor: myColor.myblue,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textBtSubmit: {fontSize: 14, fontWeight: 'bold', color: '#fff'},
+  wrapperItemFasilitas: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+    marginBottom: 10,
+    marginLeft: 20,
+  },
+  normalText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: myColor.fbtx,
+  },
+  inputItem: {
+    height: 40,
+    borderWidth: 0.5,
+    borderRadius: 10,
+    flex: 1,
+    paddingHorizontal: 10,
+    marginLeft: 10,
+  },
+  deleteItem: {
+    marginLeft: 5,
+    height: 40,
+    width: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

@@ -208,7 +208,7 @@ const DaftarKamar = ({navigation, route}) => {
             keyExtractor={(item) => item.id.toString()}
             extraData={selectedId}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{paddingBottom: 60}}
+            contentContainerStyle={{paddingBottom: 10}}
             ListFooterComponent={
               page < maxLimit && !isLoading ? (
                 <ButtonLoad

@@ -19,9 +19,9 @@ const ButtonLoad = ({...rest}) => {
           height: 40,
           width: screenWidth * 0.5,
           alignSelf: 'center',
-          marginTop: 10,
+
           elevation: 5,
-          borderRadius: 25,
+          borderRadius: 10,
           justifyContent: 'center',
           alignItems: 'center',
         }}>

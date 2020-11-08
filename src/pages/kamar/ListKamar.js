@@ -1,21 +1,17 @@
-import {useFocusEffect} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import axios from 'axios';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
   FlatList,
-  Image,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import {ItemKelas} from './component';
 import {FAB} from 'react-native-paper';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useSelector} from 'react-redux';
 import {
   ButtonLoad,
@@ -24,17 +20,15 @@ import {
   TagSearch,
 } from '../../components/atoms';
 import {myAxios} from '../../function/MyAxios';
-import {APIUrl, myColor, formatRupiah} from '../../function/MyVar';
-
-const screenWidth = Math.round(Dimensions.get('window').width);
-const screenHeight = Math.round(Dimensions.get('window').height);
+import {APIUrl, myColor, screenHeight, screenWidth} from '../../function/MyVar';
+import {ItemKelas} from './component';
 
 const ListKamar = ({navigation}) => {
+  const isFocused = useIsFocused();
+
+  const scrollRef = useRef();
   const dataRedux = useSelector((state) => state.AuthReducer);
   const [kamar, setKamar] = useState([]);
-  const [pengguna, setpengguna] = useState([]);
-  const [selectedId, setSelectedId] = useState(null);
-  const [isSubmit, setIsSubmit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTag, setSelectedTag] = useState(1);
   const [maxLimit, setmaxLimit] = useState(0);
@@ -82,26 +76,24 @@ const ListKamar = ({navigation}) => {
     }
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const source = axios.CancelToken.source();
-      console.log('focus', filter);
-      ambilApi(source.token);
-      return () => {
-        setisLoad(false);
-        setFilter({
-          ...filter,
-          namakeyword: '',
-          sortname: 'nama',
-          orderby: 'asc',
-        });
-        setSelectedTag(1);
-        source.cancel('Component got unmounted');
-        // console.log('unmounted');
-      };
-      // console.log('ayaya');
-    }, []),
-  );
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    console.log('focus', filter);
+    ambilApi(source.token);
+    return () => {
+      setisLoad(false);
+      setFilter({
+        ...filter,
+        namakeyword: '',
+        sortname: 'nama',
+        orderby: 'asc',
+      });
+      setSelectedTag(1);
+      source.cancel('Component got unmounted');
+      // console.log('unmounted');
+    };
+    // console.log('ayaya');
+  }, [isFocused]);
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -112,13 +104,12 @@ const ListKamar = ({navigation}) => {
 
     return () => {
       source.cancel('FIlter CANCELED');
-      // console.log('filter asu');
     };
   }, [filter]);
 
   const goToTop = () => {
     if (kamar.length > 0) {
-      scroll.scrollToIndex({animated: true, index: 0});
+      scrollRef.current.scrollToIndex({animated: true, index: 0});
     }
   };
 
@@ -149,50 +140,13 @@ const ListKamar = ({navigation}) => {
     }
   }, [page]);
 
-  const deleteData = (id) => {
-    setIsLoading(true);
-    axios
-      .delete(`https://dry-forest-53707.herokuapp.com/api/class/${id}`, {
-        headers: {
-          Authorization: `Bearer ${dataRedux.token}`,
-        },
-        cancelToken: source.token,
-      })
-      .then((repos) => {
-        loadData();
-      });
-  };
-
-  // const Item = ({item, onPress, style}) => (
-
-  // );
-
-  const renderItem = ({item, index, separator}) => {
-    return (
-      <Item
-        item={item}
-        onPress={() => {
-          setSelectedId(item.id);
-          console.log(APIUrl + '/kostdata/kelas_kamar/foto/' + item.foto);
-          // navigation.push('DetailKelas', item);
-        }}
-        style={{}}
-      />
-    );
-  };
-
   return (
     <View style={styles.container}>
       <StatusBar translucent backgroundColor="transparent" />
-      <View
-        style={{
-          backgroundColor: myColor.colorTheme,
-          paddingTop: StatusBar.currentHeight,
-          paddingHorizontal: 0.05 * screenWidth,
-        }}>
-        <View style={{}}>
-          <Text style={styles.title}>Daftar Kamar Kost</Text>
-        </View>
+
+      {/* Header and SearchBar Section  */}
+      <View style={styles.wrapperHeader}>
+        <Text style={styles.title}>Daftar Kamar Kost</Text>
         <View style={{marginBottom: 20}}>
           <SearchBar
             value={filter.namakeyword}
@@ -201,25 +155,13 @@ const ListKamar = ({navigation}) => {
           />
         </View>
       </View>
+
+      {/* Content Section  */}
       <View style={{flex: 1}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 10,
-            alignItems: 'center',
-            marginBottom: 10,
-            width: screenWidth,
-            paddingLeft: 0.05 * screenWidth,
-          }}>
-          <Text
-            style={{
-              marginRight: 10,
-              fontSize: 14,
-              fontWeight: 'bold',
-              color: myColor.darkText,
-            }}>
-            Urutkan
-          </Text>
+        <View style={styles.sortWrapper}>
+          <Text style={styles.sortTitle}>Urutkan</Text>
+
+          {/* Sort Option Section  */}
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <TagSearch
               tagColor={selectedTag == 1 ? myColor.myblue : 'white'}
@@ -253,33 +195,12 @@ const ListKamar = ({navigation}) => {
             }
           }}
         />
-        {/* <FlatList
-          ref={(c) => {
-            scroll = c;
-          }}
-          style={{marginTop: 10}}
-          data={kamar}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
-          showsVerticalScrollIndicator={false}
-          extraData={selectedId}
-          ListFooterComponent={
-            page < maxLimit && !isLoading ? (
-              <ButtonLoad
-                onPress={() => {
-                  setPage((prevState) => prevState + 1);
-                }}
-              />
-            ) : null
-          }
-        /> */}
+
+        {/* List Kamar Section  */}
         <FlatList
-          ref={(c) => {
-            scroll = c;
-          }}
+          ref={scrollRef}
           style={{marginTop: 10}}
           data={kamar}
-          renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           showsVerticalScrollIndicator={false}
           ListFooterComponent={
@@ -378,6 +299,25 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  wrapperHeader: {
+    backgroundColor: myColor.colorTheme,
+    paddingTop: StatusBar.currentHeight,
+    paddingHorizontal: 0.05 * screenWidth,
+  },
+  sortWrapper: {
+    flexDirection: 'row',
+    marginTop: 10,
+    alignItems: 'center',
+    marginBottom: 10,
+    width: screenWidth,
+    paddingLeft: 0.05 * screenWidth,
+  },
+  sortTitle: {
+    marginRight: 10,
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: myColor.darkText,
   },
 });
 

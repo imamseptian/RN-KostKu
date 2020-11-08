@@ -1,19 +1,17 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
+import React, {useEffect, useRef, useState} from 'react';
 import {
+  Animated,
+  StatusBar,
   StyleSheet,
   Text,
-  View,
-  StatusBar,
   TouchableOpacity,
-  FlatList,
-  Animated,
+  View,
 } from 'react-native';
-import {myColor, screenHeight, screenWidth} from '../../function/MyVar';
-import Feather from 'react-native-vector-icons/Feather';
-import {TabPemasukan, TabPengeluaran} from './';
-import {useSelector} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useSelector} from 'react-redux';
+import {myColor, screenWidth} from '../../function/MyVar';
+import {TabPemasukan, TabPengeluaran} from './';
 const DetailKeuangan = ({navigation, route}) => {
   const isFocused = useIsFocused();
   const dataRedux = useSelector((state) => state.AuthReducer);

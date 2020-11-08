@@ -1,7 +1,6 @@
 import axios from 'axios';
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
-  Dimensions,
   Image,
   ScrollView,
   StatusBar,
@@ -20,19 +19,13 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useDispatch} from 'react-redux';
 import {Permission, PERMISSION_TYPE} from '../../AppPermission';
 import RegisterSVG from '../../asset/image/register2.svg';
-import {APIUrl, myColor, screenHeight, screenWidth} from '../../function/MyVar';
+import {myColor, screenHeight, screenWidth, APIUrl} from '../../function/MyVar';
 
 const LoginScreen = ({navigation}) => {
-  const dispatch = useDispatch();
-  const refNamaBelakang = useRef();
-  const refEmail = useRef();
-  const refPassword = useRef();
-  const refPassword_Confirmation = useRef();
   const [isLoading, setIsLoading] = useState(false);
-  const [isStatus, setIsStatus] = useState({
-    pass: true,
-    confirm: true,
-  });
+  const [isPressed, setIsPressed] = useState(false);
+
+  //  DATA ERROR MESSAGE
   const [errorMsg, seterrorMsg] = useState({
     nama_depan: '',
     nama_belakang: '',
@@ -41,8 +34,7 @@ const LoginScreen = ({navigation}) => {
     password_confirmation: '',
   });
 
-  const [isPressed, setIsPressed] = useState(false);
-
+  //  DATA PENDAFTAR
   const [user, setUser] = useState({
     nama_depan: '',
     nama_belakang: '',
@@ -51,6 +43,7 @@ const LoginScreen = ({navigation}) => {
     password_confirmation: '',
   });
 
+  // DATA PHOTO
   const [dataFoto, setDataFoto] = useState({
     isUploaded: false,
     uri: '',
@@ -59,13 +52,19 @@ const LoginScreen = ({navigation}) => {
     base64: '',
   });
 
-  // useEffect(() => {
-  //   if (dataFoto.data != '') {
-  //     let image = 'data:' + dataFoto.type + ';base64,' + dataFoto.data;
-  //     setForm('foto', image);
-  //   }
-  // }, [dataFoto]);
+  // STATUS SHOW / HIDE PASSWORD
+  const [isStatus, setIsStatus] = useState({
+    pass: true,
+    confirm: true,
+  });
 
+  // REF KOLOM REGISTER
+  const refNamaBelakang = useRef();
+  const refEmail = useRef();
+  const refPassword = useRef();
+  const refPassword_Confirmation = useRef();
+
+  //  Toogle show/hide password
   const setStatus = (inputType, value) => {
     setIsStatus({
       ...isStatus,
@@ -73,6 +72,7 @@ const LoginScreen = ({navigation}) => {
     });
   };
 
+  // SET VALUE FIELD
   const setForm = (inputType, value) => {
     setUser({
       ...user,
@@ -80,38 +80,21 @@ const LoginScreen = ({navigation}) => {
     });
   };
 
-  useEffect(() => {
-    console.log('halo');
-
-    return console.log('Tutup Register');
-  }, []);
-
-  const cleanError = () => {
-    seterrorMsg({
-      nama_depan: '',
-      nama_belakang: '',
-      email: '',
-      password: '',
-      password_confirmation: '',
-    });
-  };
-
+  // SUBMIT FORM
   const submitRegister = () => {
     setIsLoading(true);
 
     axios
       .post(
-        `https://dry-forest-53707.herokuapp.com/api/auth/signup`,
+        `${APIUrl}/api/auth/signup`,
         dataFoto.isUploaded ? {...user, foto_profil: dataFoto.base64} : user,
       )
       .then((res) => {
-        //   console.log(res);
         console.log(res.data);
 
         if (res.data.success) {
           navigation.pop(1);
         } else {
-          console.log('proses error');
           let passwordError = '';
           let konfirmasiError = '';
           let arrPass = [];
@@ -128,8 +111,6 @@ const LoginScreen = ({navigation}) => {
               konfirmasiError = 'Konfirmasi Password tidak cocok';
             }
           }
-
-          console.log('bruuhhh');
           seterrorMsg({
             nama_depan: res.data.errors.nama_depan
               ? res.data.errors.nama_depan
@@ -141,24 +122,15 @@ const LoginScreen = ({navigation}) => {
             password: passwordError,
             password_confirmation: konfirmasiError,
           });
-          console.log('=============>', res.data.errors.nama_depan);
-          console.log('AYAYA');
           setIsLoading(false);
         }
-
-        // console.log(res.data);
-        // console.log(
-        //   APIUrl + '/kostdata/kost/foto/' + res.data.user.foto_profil,
-        // );
-        // navigation.pop(1);
       })
       .catch((error) => {
-        console.log(dataFoto.base64);
-        // console.log(error.response);
         setIsLoading(false);
       });
   };
 
+  // PICK IMAGE
   const pickImage = async () => {
     setIsPressed(true);
     await Permission.requestMultiple([
@@ -168,8 +140,6 @@ const LoginScreen = ({navigation}) => {
     ImagePicker.launchImageLibrary(
       {mediaType: 'photo', base64: true, maxWidth: 720, maxHeight: 480},
       (response) => {
-        // console.log('Response = ', response);
-
         if (response.didCancel) {
           console.log('User cancelled image picker');
           setIsPressed(false);
@@ -208,6 +178,7 @@ const LoginScreen = ({navigation}) => {
         textStyle={{color: '#FFF'}}
       />
 
+      {/* SECTION VIEW REGISTER SVG  */}
       <Animatable.View animation="bounceIn" style={styles.animSVG}>
         <View style={styles.wrapperSVG}>
           <RegisterSVG width={200} height={160} />
@@ -215,35 +186,17 @@ const LoginScreen = ({navigation}) => {
         </View>
       </Animatable.View>
 
+      {/* SECTION FORM REGISTER */}
       <Animatable.View animation="fadeInUpBig" style={styles.animForm}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View
-            style={{
-              width: 0.9 * screenWidth,
-              marginTop: 10,
-              alignItems: 'center',
-            }}>
-            <TouchableNativeFeedback onPress={() => pickImage()}>
-              <View
-                style={{
-                  height: 105,
-                  width: 105,
-                  borderRadius: 50,
-                  borderWidth: 3,
-                  borderColor: 'white',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  elevation: 5,
-                  marginBottom: 10,
-                }}>
+          {/* SECTION UPLOAD FOTO  */}
+          <View style={styles.wrapperUploadFoto}>
+            <TouchableNativeFeedback
+              disabled={isPressed}
+              onPress={() => pickImage()}>
+              <View style={styles.circleAvatar}>
                 {!dataFoto.isUploaded ? (
-                  <Text
-                    style={{
-                      textAlign: 'center',
-                      color: myColor.blackText,
-                      fontWeight: 'bold',
-                      fontSize: 12,
-                    }}>
+                  <Text style={styles.textUploadFoto}>
                     Tekan untuk upload foto profil *opsional
                   </Text>
                 ) : (
@@ -251,13 +204,14 @@ const LoginScreen = ({navigation}) => {
                     source={{
                       uri: dataFoto.uri,
                     }}
-                    style={{height: 100, width: 100, borderRadius: 50}}
+                    style={styles.avatar}
                   />
                 )}
               </View>
             </TouchableNativeFeedback>
           </View>
 
+          {/* SECTION NAMA DEPAN & BELAKANG  */}
           <View style={styles.wrapperNama}>
             <View>
               <View style={styles.fieldNama}>
@@ -271,20 +225,8 @@ const LoginScreen = ({navigation}) => {
                   blurOnSubmit={false}
                   onChangeText={(value) => setForm('nama_depan', value)}
                 />
-                {/* <Text
-                style={{
-                  fontSize: 12,
-                  fontWeight: 'bold',
-                  color: myColor.alert,
-                }}>
-                Nama Depan Harus Diisi
-              </Text> */}
               </View>
-              <Text
-                style={[
-                  styles.textError,
-                  {maxWidth: 0.43 * screenWidth, textAlign: 'center'},
-                ]}>
+              <Text style={[styles.textError, styles.widthErrorNama]}>
                 {errorMsg.nama_depan}
               </Text>
             </View>
@@ -302,36 +244,13 @@ const LoginScreen = ({navigation}) => {
                   onChangeText={(value) => setForm('nama_belakang', value)}
                 />
               </View>
-              <Text
-                style={[
-                  styles.textError,
-                  {maxWidth: 0.43 * screenWidth, textAlign: 'center'},
-                ]}>
+              <Text style={[styles.textError, styles.widthErrorNama]}>
                 {errorMsg.nama_belakang}
               </Text>
             </View>
           </View>
 
-          {/*           
-          <View>
-            <View style={styles.wrapperField}>
-              <TextInput
-                placeholder="Email"
-                style={styles.textInput}
-                onChangeText={(value) => setForm('email', value)}
-              />
-              <MaterialCommunityIcons
-                name="email"
-                color="#05375A"
-                size={25}
-                style={styles.iconField}
-              />
-            </View>
-            <Text style={[styles.textError, {marginLeft: 25}]}>
-              Email Harus Diisi
-            </Text>
-          </View> */}
-
+          {/* SECTION EMAIL  */}
           <View style={styles.wrapperLine}>
             <View style={styles.wrapperField}>
               <MaterialCommunityIcons
@@ -357,6 +276,7 @@ const LoginScreen = ({navigation}) => {
             </Text>
           </View>
 
+          {/* SECTION PASSWORD  */}
           <View style={styles.wrapperLine}>
             <View style={styles.wrapperField}>
               <MaterialCommunityIcons
@@ -365,7 +285,6 @@ const LoginScreen = ({navigation}) => {
                 size={25}
                 style={{marginRight: 5}}
               />
-
               <TextInput
                 placeholder="Password"
                 ref={refPassword}
@@ -394,6 +313,7 @@ const LoginScreen = ({navigation}) => {
             </Text>
           </View>
 
+          {/* SECTION KONFIRMASI PASSWORD  */}
           <View style={styles.wrapperLine}>
             <View style={styles.wrapperField}>
               <MaterialCommunityIcons
@@ -429,73 +349,13 @@ const LoginScreen = ({navigation}) => {
             </Text>
           </View>
 
-          {/* <View style={styles.wrapperField}>
-            <View>
-              <MaterialCommunityIcons
-                name="lock"
-                color="#05375A"
-                size={25}
-                style={styles.iconField}
-              />
-            </View>
-
-            <TextInput
-              placeholder="Password"
-              secureTextEntry={isStatus.pass}
-              style={styles.textInput}
-              onChangeText={(value) => setForm('password', value)}
-            />
-
-            <TouchableOpacity
-              style={{
-                position: 'absolute',
-                top: 7,
-                right: 12,
-                opacity: 0.5,
-              }}
-              onPress={() => setStatus('pass', !isStatus.pass)}>
-              <FontAwesome
-                name={isStatus.pass != true ? 'eye-slash' : 'eye'}
-                color="#05375A"
-                size={25}
-              />
-            </TouchableOpacity>
-          </View> */}
-
-          {/* <View style={styles.wrapperField}>
-            <TextInput
-              placeholder="Konfirmasi Password"
-              secureTextEntry={isStatus.confirm}
-              style={styles.textInput}
-              onChangeText={(value) => setForm('password_confirmation', value)}
-            />
-            <MaterialCommunityIcons
-              name="lock-alert"
-              color="#05375A"
-              size={25}
-              style={styles.iconField}
-            />
-            <TouchableOpacity
-              style={{
-                position: 'absolute',
-                top: 7,
-                right: 12,
-                opacity: 0.5,
-              }}
-              onPress={() => setStatus('confirm', !isStatus.confirm)}>
-              <FontAwesome
-                name={isStatus.confirm != true ? 'eye-slash' : 'eye'}
-                color="#05375A"
-                size={25}
-              />
-            </TouchableOpacity>
-          </View> */}
+          {/* BUTTON SUBMIT FORM  */}
           <TouchableOpacity
             onPress={() => {
               submitRegister();
             }}>
             <View style={styles.btLogin}>
-              <Text style={{color: 'white'}}>Register</Text>
+              <Text style={styles.textRegister}>Register</Text>
             </View>
           </TouchableOpacity>
         </ScrollView>
@@ -585,4 +445,29 @@ const styles = StyleSheet.create({
   wrapperLine: {
     marginBottom: 5,
   },
+  wrapperUploadFoto: {
+    width: 0.9 * screenWidth,
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  circleAvatar: {
+    height: 105,
+    width: 105,
+    borderRadius: 50,
+    borderWidth: 3,
+    borderColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5,
+    marginBottom: 10,
+  },
+  textUploadFoto: {
+    textAlign: 'center',
+    color: myColor.blackText,
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
+  avatar: {height: 100, width: 100, borderRadius: 50},
+  widthErrorNama: {maxWidth: 0.43 * screenWidth, textAlign: 'center'},
+  textRegister: {fontSize: 14, fontWeight: 'bold', color: '#fff'},
 });

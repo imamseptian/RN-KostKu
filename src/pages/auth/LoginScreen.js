@@ -20,14 +20,16 @@ import {setAuthRedux} from '../../store';
 
 const LoginScreen = ({navigation}) => {
   const dispatch = useDispatch();
-  const [showPassword, setshowPassword] = useState(false);
 
-  const refPassword = useRef();
+  // STATE HIDE/SHOW PASSWORD
+  const [showPassword, setshowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState({
     email: '',
     password: '',
   });
+
+  const refPassword = useRef();
 
   const setForm = (inputType, value) => {
     setUser({
@@ -48,15 +50,11 @@ const LoginScreen = ({navigation}) => {
 
   const submitLogin = () => {
     setIsLoading(true);
-    console.log('SUbmit Login');
     axios
       .post(`${APIUrl}/api/auth/login`, user)
       .then((res) => {
-        // let dataUser = res.data.user;
-
         if (res.data.success) {
           const dataPengguna = res.data.user;
-          // console.log(res.data);
           dispatch(setAuthRedux(dataPengguna, res.data.access_token));
 
           console.log('subs saat login :kostku- ', res.data.user.kostku);
@@ -66,9 +64,6 @@ const LoginScreen = ({navigation}) => {
           alert('Maaf Email atau Password Salah');
           setIsLoading(false);
         }
-        // console.log(res.data.success);
-
-        // navigation.push('ListKamar');
         setIsLoading(false);
       })
       .catch((error) => {
@@ -92,10 +87,10 @@ const LoginScreen = ({navigation}) => {
         .then((response) => {
           if (response.data.kostku != 0) {
             let topic = 'kostku-' + response.data.kostku;
-            console.log('sub topic=' + topic);
+
             fcmService.subscribeToTopic(topic);
           }
-          // console.log('topic ===>', response.data);
+
           setIsLoading(false);
           toHome();
         });
@@ -103,7 +98,6 @@ const LoginScreen = ({navigation}) => {
       if (axios.isCancel(error)) {
         setIsLoading(false);
       } else {
-        // handle error
         setIsLoading(false);
       }
     }
@@ -133,15 +127,20 @@ const LoginScreen = ({navigation}) => {
         textStyle={{color: '#FFF'}}
       />
 
+      {/* SECTION LOGIN SVG  */}
       <Animatable.View animation="bounceIn" style={styles.animSVG}>
         <View style={styles.wrapperSVG}>
           <LoginSVG width={200} height={200} />
           <Text style={styles.fontSVG}>Login</Text>
         </View>
       </Animatable.View>
+
+      {/* SECTION LOGIN FORM  */}
       <Animatable.View animation="fadeInUpBig" style={styles.animForm}>
         <Text style={styles.text1}>Selamat Datang</Text>
         <Text style={styles.text2}>Silahkan Login dengan Akun Anda</Text>
+
+        {/* SECTION EMAIL  */}
         <View style={styles.wrapperField}>
           <FontAwesome
             name="user-o"
@@ -159,6 +158,8 @@ const LoginScreen = ({navigation}) => {
             blurOnSubmit={false}
           />
         </View>
+
+        {/* SECTION PASSWORD  */}
         <View style={styles.wrapperField}>
           <FontAwesome
             name="lock"
@@ -184,6 +185,8 @@ const LoginScreen = ({navigation}) => {
             />
           </TouchableOpacity>
         </View>
+
+        {/* SECTION BUTTON LOGIN  */}
         <TouchableOpacity onPress={() => submitLogin()}>
           <View style={styles.btLogin}>
             <Text style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>
@@ -193,6 +196,7 @@ const LoginScreen = ({navigation}) => {
         </TouchableOpacity>
         <Text style={{textAlign: 'center', marginTop: 10}}>Atau</Text>
 
+        {/* SECTION LINK REGISTER  */}
         <TouchableOpacity onPress={() => navigation.push('RegisterScreen')}>
           <Text style={styles.textDaftar}>
             Belum punya akun ? Silahkan Daftar

@@ -5,7 +5,7 @@ import {myColor} from '../../function/MyVar';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
-const FormFieldIcon = ({icon, ...rest}) => {
+const FormFieldIcon = React.forwardRef((props, ref) => {
   return (
     <View
       style={{
@@ -18,15 +18,11 @@ const FormFieldIcon = ({icon, ...rest}) => {
         alignItems: 'center',
         paddingHorizontal: 5,
       }}>
-      <FontAwesome5 name={icon} color={myColor.fbtx} size={15} />
-      <TextInput
-        placeholder="Nama Kamar"
-        style={{marginLeft: 5, flex: 1}}
-        {...rest}
-      />
+      <FontAwesome5 name={props.icon} color={myColor.fbtx} size={15} />
+      <TextInput ref={ref} style={{marginLeft: 5, flex: 1}} {...props} />
     </View>
   );
-};
+});
 
 export default FormFieldIcon;
 

@@ -18,12 +18,22 @@ import {
 import {SharedElement} from 'react-navigation-shared-element';
 
 const ItemKelas = (props) => {
+  const [errorImage, seterrorImage] = useState(false);
   const [uriImage, seturiImage] = useState(
-    APIUrl + '/kostdata/kelas_kamar/foto/' + props.data.foto,
+    // APIUrl + '/kostdata/kelas_kamar/foto/' + props.data.foto,
+    defaultAsset.kelas_kamar,
   );
 
   return (
-    <TouchableNativeFeedback onPress={props.onPress}>
+    <TouchableNativeFeedback
+      onPress={props.onPress}
+      onLongPress={() =>
+        console.log(APIUrl + '/kostdata/kelas_kamar/foto/' + props.data.foto)
+      }
+      // onPress={() => {
+      //   console.log(APIUrl + '/kostdata/kelas_kamar/foto/' + props.data.foto);
+      // }}
+    >
       <View style={styles.item}>
         <View
           style={{
@@ -40,9 +50,14 @@ const ItemKelas = (props) => {
                 width: 120,
               }}
               source={{
-                uri: uriImage,
+                uri: errorImage
+                  ? defaultAsset.kelas_kamar
+                  : APIUrl + '/kostdata/kelas_kamar/foto/' + props.data.foto,
               }}
-              onError={() => seturiImage(defaultAsset.kelas_kamar)}
+              onError={() => {
+                // seturiImage(defaultAsset.kelas_kamar);
+                seterrorImage(true);
+              }}
               resizeMode="stretch"
             />
           </SharedElement>
@@ -124,7 +139,7 @@ export default ItemKelas;
 const styles = StyleSheet.create({
   item: {
     width: screenWidth * 0.9,
-    marginBottom: 15,
+    marginBottom: 10,
     marginHorizontal: 0.05 * screenWidth,
     borderRadius: 10,
     margin: 3,

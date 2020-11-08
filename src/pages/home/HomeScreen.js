@@ -1,4 +1,4 @@
-import {useFocusEffect} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import {
@@ -8,7 +8,6 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {Text} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {
   HomeKamarSection,
@@ -16,15 +15,18 @@ import {
   HomeTitleDrawer,
   HomeTopMenu,
 } from '../../components';
-import {TransaksiSection} from './component';
 import {HomeClipper} from '../../components/atoms';
 import {myAxios} from '../../function/MyAxios';
 import {APIUrl, myColor} from '../../function/MyVar';
+import {TransaksiSection} from './component';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
 const HomeScreen = ({navigation, route}) => {
+  // STATE WHEN SCREEN FOCUSED
+  const isFocused = useIsFocused();
+
   // Variabel Homescreen
   const dataRedux = useSelector((state) => state.AuthReducer);
   const [isLoading, setIsLoading] = useState(false);
@@ -72,50 +74,44 @@ const HomeScreen = ({navigation, route}) => {
   }, []);
 
   // Fungsi saat app focus homescreen
-  useFocusEffect(
-    React.useCallback(() => {
-      const source = axios.CancelToken.source();
-      if (dataRedux.user.kostku != 0) {
-        console.log(dataHomescreen.penghuni.length);
-        setIsLoading(true);
-        myAxios.getAxios(
-          APIUrl + '/api/homescreen/' + dataRedux.user.kostku,
-          dataRedux.token,
-          source.token,
-          onGet,
-        );
-        function onGet(status, data) {
-          if (status == 'success') {
-            console.log('Get data kost success');
-            // console.log(data);
-            setdataHomescreen({
-              ...dataHomescreen,
-              penghuni: data.data_penghuni,
-              kamar: data.data_kamar,
-              transaksi: data.transaksi,
-              uang: data.uang,
-            });
-            setIsLoading(false);
-          } else if (status == 'cancel') {
-            console.log('caught cancel filter');
-            setIsLoading(false);
-          } else {
-            console.log(data);
-            setIsLoading(false);
-          }
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    if (dataRedux.user.kostku != 0) {
+      console.log(dataHomescreen.penghuni.length);
+      setIsLoading(true);
+      myAxios.getAxios(
+        APIUrl + '/api/homescreen/' + dataRedux.user.kostku,
+        dataRedux.token,
+        source.token,
+        onGet,
+      );
+      function onGet(status, data) {
+        if (status == 'success') {
+          console.log('Get data kost success');
+          // console.log(data);
+          setdataHomescreen({
+            ...dataHomescreen,
+            penghuni: data.data_penghuni,
+            kamar: data.data_kamar,
+            transaksi: data.transaksi,
+            uang: data.uang,
+          });
+          setIsLoading(false);
+        } else if (status == 'cancel') {
+          console.log('caught cancel filter');
+          setIsLoading(false);
+        } else {
+          console.log(data);
+          setIsLoading(false);
         }
-
-        // setTimeout(() => {
-
-        // }, 1500);
       }
+    }
 
-      return () => {
-        source.cancel('Component got unmounted');
-        console.log('HomeScreen unmounted');
-      };
-    }, []),
-  );
+    return () => {
+      source.cancel('Component got unmounted');
+      console.log('HomeScreen lost focus');
+    };
+  }, [isFocused]);
 
   return (
     <View
@@ -132,13 +128,7 @@ const HomeScreen = ({navigation, route}) => {
       <HomeClipper />
 
       {/* WRAPPER ATAS SAMPAI CLIPPER  */}
-      <View
-        style={{
-          paddingTop: StatusBar.currentHeight,
-          alignItems: 'center',
-          width: screenWidth,
-          height: 0.5 * screenWidth,
-        }}>
+      <View style={styles.contentWrapper}>
         <HomeTitleDrawer bukaDrawer={() => navigation.toggleDrawer()} />
         <HomeTopMenu uang={dataHomescreen.uang} />
       </View>
@@ -178,5 +168,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: myColor.myblue,
     fontWeight: 'bold',
+  },
+  contentWrapper: {
+    paddingTop: StatusBar.currentHeight,
+    alignItems: 'center',
+    width: screenWidth,
+    height: 0.5 * screenWidth,
   },
 });
