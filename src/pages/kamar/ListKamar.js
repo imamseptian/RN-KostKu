@@ -258,8 +258,9 @@ const styles = StyleSheet.create({
     fontSize: 28,
   },
   title: {
-    fontSize: 30,
-    color: '#f5f6fa',
+    fontSize: 24,
+    fontFamily: 'OpenSans-Bold',
+    color: '#fff',
     fontWeight: 'bold',
   },
   fab: {
@@ -316,8 +317,8 @@ const styles = StyleSheet.create({
   sortTitle: {
     marginRight: 10,
     fontSize: 14,
-    fontWeight: 'bold',
-    color: myColor.darkText,
+    fontFamily: 'OpenSans-SemiBold',
+    color: myColor.fbtx,
   },
 });
 

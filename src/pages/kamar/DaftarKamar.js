@@ -178,7 +178,7 @@ const DaftarKamar = ({navigation, route}) => {
           paddingHorizontal: 0.05 * screenWidth,
         }}>
         <View style={{}}>
-          <Text style={styles.title}>Daftar Kamar Kost</Text>
+          <Text style={styles.title}>{route.params.nama}</Text>
         </View>
         <View style={{marginBottom: 20}}>
           <SearchBar
@@ -305,9 +305,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 30,
+    fontSize: 24,
+    fontFamily: 'OpenSans-Bold',
     color: '#f5f6fa',
-    fontWeight: 'bold',
   },
   loading: {
     position: 'absolute',

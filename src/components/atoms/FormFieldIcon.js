@@ -1,11 +1,9 @@
-import React from 'react';
+import React, {forwardRef} from 'react';
 import {StyleSheet, Text, View, TextInput, Dimensions} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {myColor} from '../../function/MyVar';
-const screenWidth = Math.round(Dimensions.get('window').width);
-const screenHeight = Math.round(Dimensions.get('window').height);
+import {myColor, screenWidth, screenHeight} from '../../function/MyVar';
 
-const FormFieldIcon = React.forwardRef((props, ref) => {
+const FormFieldIcon = forwardRef((props, ref) => {
   return (
     <View
       style={{

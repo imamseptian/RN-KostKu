@@ -90,7 +90,6 @@ const CustomDrawer = (props) => {
               <View style={{marginLeft: 15}}>
                 <Title style={styles.title}>
                   {dataRedux.user.nama_depan} {dataRedux.user.nama_belakang}{' '}
-                  {dataRedux.user.kostku}
                 </Title>
                 <Caption style={styles.caption}>
                   {dataRedux.user.namakost}
@@ -117,21 +116,21 @@ const CustomDrawer = (props) => {
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({color, size}) => (
-                <Icon name="home-outline" color={color} size={size} />
+                // <Icon name="home-outline" color={color} size={size} />
+                <View style={styles.iconWrapper}>
+                  <Icon name="home-outline" color={myColor.fbtx} size={size} />
+                </View>
               )}
-              label="Home"
+              label={() => (
+                <Text style={{fontFamily: 'OpenSans-SemiBold', fontSize: 12}}>
+                  Beranda
+                </Text>
+              )}
               onPress={() => {
                 props.navigation.navigate('HomeStackScreen');
                 props.navigation.navigate('HomeStackScreen', {
                   screen: 'HomeScreen',
                 });
-                // props.navigation.closeDrawer();
-                // props.navigation.popToTop();
-                // props.navigation.push('HomeScreen');
-                // props.navigation.reset({
-                //   index: 0,
-                //   routes: [{name: 'HomeScreen'}],
-                // });
               }}
             />
           </Drawer.Section>
@@ -139,9 +138,15 @@ const CustomDrawer = (props) => {
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({color, size}) => (
-                <Icon name="bed" color={color} size={size} />
+                <View style={styles.iconWrapper}>
+                  <Icon name="bed" color={myColor.fbtx} size={25} />
+                </View>
               )}
-              label="List Kamar"
+              label={() => (
+                <Text style={{fontFamily: 'OpenSans-SemiBold', fontSize: 12}}>
+                  Kamar
+                </Text>
+              )}
               onPress={() => {
                 // props.navigation.push('ListKamar');
                 props.navigation.navigate('KamarStackScreen', {
@@ -160,13 +165,19 @@ const CustomDrawer = (props) => {
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({color, size}) => (
-                <FontAwesome5
-                  name="money-bill-wave"
-                  color={color}
-                  size={size}
-                />
+                <View style={styles.iconWrapper}>
+                  <FontAwesome5
+                    name="money-bill-wave"
+                    color={myColor.fbtx}
+                    size={25}
+                  />
+                </View>
               )}
-              label="Keuangan"
+              label={() => (
+                <Text style={{fontFamily: 'OpenSans-SemiBold', fontSize: 12}}>
+                  Keuangan
+                </Text>
+              )}
               onPress={() => {
                 // props.navigation.push('ListKamar');
                 // props.navigation.navigate('KeuanganStackScreen', {
@@ -191,9 +202,15 @@ const CustomDrawer = (props) => {
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({color, size}) => (
-                <FontAwesome5 name="print" color={color} size={size} />
+                <View style={styles.iconWrapper}>
+                  <FontAwesome5 name="print" color={myColor.fbtx} size={25} />
+                </View>
               )}
-              label="Cetak Laporan"
+              label={() => (
+                <Text style={{fontFamily: 'OpenSans-SemiBold', fontSize: 12}}>
+                  Cetak Laporan
+                </Text>
+              )}
               onPress={() => {
                 props.navigation.navigate('KeuanganStackScreen', {
                   screen: 'Laporan',
@@ -205,9 +222,15 @@ const CustomDrawer = (props) => {
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({color, size}) => (
-                <Ionicons name="newspaper" color={color} size={size} />
+                <View style={styles.iconWrapper}>
+                  <Ionicons name="newspaper" color={myColor.fbtx} size={25} />
+                </View>
               )}
-              label="Halaman Bayar"
+              label={() => (
+                <Text style={{fontFamily: 'OpenSans-SemiBold', fontSize: 12}}>
+                  Halaman Bayar
+                </Text>
+              )}
               onPress={() => {
                 // props.navigation.push('ListKamar');
                 props.navigation.navigate('PembayaranStackScreen', {
@@ -226,9 +249,15 @@ const CustomDrawer = (props) => {
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({color, size}) => (
-                <FontAwesome5 name="users" color={color} size={size} />
+                <View style={styles.iconWrapper}>
+                  <FontAwesome5 name="users" color={myColor.fbtx} size={25} />
+                </View>
               )}
-              label="Penghuni"
+              label={() => (
+                <Text style={{fontFamily: 'OpenSans-SemiBold', fontSize: 12}}>
+                  Peghuni
+                </Text>
+              )}
               onPress={() => {
                 // props.navigation.push('ListKamar');
                 props.navigation.navigate('PenghuniStackScreen', {
@@ -247,9 +276,15 @@ const CustomDrawer = (props) => {
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
               icon={({color, size}) => (
-                <AntDesign name="form" color={color} size={size} />
+                <View style={styles.iconWrapper}>
+                  <AntDesign name="form" color={myColor.fbtx} size={25} />
+                </View>
               )}
-              label="Pendaftar"
+              label={() => (
+                <Text style={{fontFamily: 'OpenSans-SemiBold', fontSize: 12}}>
+                  Pendaftar
+                </Text>
+              )}
               onPress={() => {
                 // props.navigation.navigate('PendaftarScreen');
                 props.navigation.navigate('PendaftarStackScreen', {
@@ -263,6 +298,7 @@ const CustomDrawer = (props) => {
                 //   routes: [{name: 'ListPendaftar'}],
                 // });
               }}
+              style={{fontFamily: 'OpenSans-Bold', fontSize: 12}}
             />
           </Drawer.Section>
         </View>
@@ -270,9 +306,15 @@ const CustomDrawer = (props) => {
       <Drawer.Section style={styles.bottomDrawerSection}>
         <DrawerItem
           icon={({color, size}) => (
-            <Icon name="exit-to-app" color={color} size={size} />
+            <View style={styles.iconWrapper}>
+              <Icon name="exit-to-app" color={myColor.fbtx} size={25} />
+            </View>
           )}
-          label="Sign Out"
+          label={() => (
+            <Text style={{fontFamily: 'OpenSans-SemiBold', fontSize: 12}}>
+              Log Out
+            </Text>
+          )}
           onPress={() => {
             signOut();
           }}
@@ -292,11 +334,12 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   title: {
-    fontSize: 16,
     marginTop: 3,
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 16,
   },
   caption: {
+    fontFamily: 'OpenSans-Regular',
     fontSize: 14,
     lineHeight: 14,
   },
@@ -327,5 +370,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 12,
     paddingHorizontal: 16,
+  },
+  iconWrapper: {
+    height: 30,
+    width: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

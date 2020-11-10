@@ -201,14 +201,14 @@ export default HomeKamarSection;
 
 const styles = StyleSheet.create({
   sectionTitle: {
-    fontSize: 20,
     color: myColor.titleHome,
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 18,
   },
   seeAll: {
-    fontSize: 12,
     color: myColor.myblue,
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 12,
   },
   titleKamar: {
     fontSize: 16,

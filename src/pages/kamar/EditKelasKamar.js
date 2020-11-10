@@ -18,7 +18,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
 import {Permission, PERMISSION_TYPE} from '../../AppPermission';
-import {HeaderPage} from '../../components';
+import {HeaderPage, TextFormField} from '../../components';
 import {FormFieldIcon} from '../../components/atoms';
 import {
   APIUrl,
@@ -134,51 +134,54 @@ const EditKelasKamar = ({navigation, route}) => {
 
   const editData = () => {
     setIsSubmit(true);
+    if (!invalidFasilitas) {
+      let id = kamar.id;
+
+      axios
+        .put(
+          `${APIUrl}/api/class/${id}`,
+          dataFoto.isUploaded
+            ? {
+                ...kamar,
+                newImg: 'data:' + dataFoto.type + ';base64,' + dataFoto.data,
+              }
+            : kamar,
+          {
+            headers: {
+              Authorization: `Bearer ${dataRedux.token}`,
+            },
+          },
+        )
+        .then((res) => {
+          console.log(res.data);
+          // setIsSubmit(false);
+          if (res.data.success) {
+            navigation.popToTop();
+          } else {
+            seterrorMsg({
+              nama: res.data.errors.nama ? res.data.errors.nama : '',
+              harga: res.data.errors.harga ? res.data.errors.harga : '',
+              kapasitas: res.data.errors.kapasitas
+                ? res.data.errors.kapasitas
+                : '',
+            });
+            setIsSubmit(false);
+          }
+
+          // navigation.pop(2);
+
+          // navigation.goBack(2);
+        })
+        .catch((error) => {
+          setIsSubmit(false);
+          console.log(error);
+        });
+    } else {
+      setIsSubmit(false);
+    }
     // console.log(kamar);
 
     // let image = 'data:' + dataFoto.type + ';base64,' + dataFoto.data;
-
-    let id = kamar.id;
-
-    axios
-      .put(
-        `${APIUrl}/api/class/${id}`,
-        dataFoto.isUploaded
-          ? {
-              ...kamar,
-              newImg: 'data:' + dataFoto.type + ';base64,' + dataFoto.data,
-            }
-          : kamar,
-        {
-          headers: {
-            Authorization: `Bearer ${dataRedux.token}`,
-          },
-        },
-      )
-      .then((res) => {
-        console.log(res.data);
-        // setIsSubmit(false);
-        if (res.data.success) {
-          navigation.popToTop();
-        } else {
-          seterrorMsg({
-            nama: res.data.errors.nama ? res.data.errors.nama : '',
-            harga: res.data.errors.harga ? res.data.errors.harga : '',
-            kapasitas: res.data.errors.kapasitas
-              ? res.data.errors.kapasitas
-              : '',
-          });
-          setIsSubmit(false);
-        }
-
-        // navigation.pop(2);
-
-        // navigation.goBack(2);
-      })
-      .catch((error) => {
-        setIsSubmit(false);
-        console.log(error);
-      });
   };
 
   const cekFasilitas = () => {
@@ -219,7 +222,7 @@ const EditKelasKamar = ({navigation, route}) => {
         textContent={'Tunggu Sebentar'}
         textStyle={{color: '#FFF'}}
       />
-      <HeaderPage title="Tambah Kelas" />
+      <HeaderPage title="Edit Kelas" />
 
       {/* Content Section  */}
       <ScrollView
@@ -232,13 +235,9 @@ const EditKelasKamar = ({navigation, route}) => {
             disabled={isPressed}
             onPress={() => pickImage()}>
             {dataFoto.isUploaded != true ? (
-              <Image
-                source={{
-                  uri: APIUrl + '/kostdata/kelas_kamar/foto/' + kamar.foto,
-                }}
-                style={styles.imageUploaded}
-                resizeMode="cover"
-              />
+              <View style={styles.blankImage}>
+                <FontAwesome name="upload" color="#fff" size={50} />
+              </View>
             ) : (
               <Image
                 source={{
@@ -256,12 +255,32 @@ const EditKelasKamar = ({navigation, route}) => {
             </Text>
             //
           )}
-          <Text>{kamar.foto}</Text>
         </View>
+        {/* <Text>{kamar.harga}</Text> */}
+        {/* <Button
+          title="Press Me"
+          onPress={() => {
+            console.log('Panjang harga', formatHarga.length);
+          }}
+        /> */}
 
         <View style={styles.formWrapper}>
           {/* Nama Kamar Section  */}
-          <View style={styles.fieldWrapper}>
+          <TextFormField
+            title="Nama Kamar"
+            placeholder="Nama Kamar"
+            onChangeText={(v) => {
+              setForm('nama', v);
+            }}
+            onSubmitEditing={() => {
+              refHarga.current.focus();
+            }}
+            blurOnSubmit={false}
+            value={kamar.nama}
+            pesanError={errorMsg.nama}
+          />
+
+          {/* <View style={styles.fieldWrapper}>
             <FormFieldIcon
               icon="door-closed"
               placeholder="Nama Kamar"
@@ -280,13 +299,13 @@ const EditKelasKamar = ({navigation, route}) => {
                 <Text style={styles.textError}>{errorMsg.nama}</Text>
               </View>
             )}
-          </View>
+          </View> */}
 
           {/* Harga Kamar Section  */}
-          <View style={styles.fieldWrapper}>
+          {/* <View style={styles.fieldWrapper}>
             <FormFieldIcon
-              ref={refHarga}
               icon="money-bill-alt"
+              ref={refHarga}
               placeholder="Harga Kamar"
               keyboardType="numeric"
               onChangeText={(v) => {
@@ -302,6 +321,7 @@ const EditKelasKamar = ({navigation, route}) => {
                 refKapasitas.current.focus();
               }}
               blurOnSubmit={false}
+              // value={kamar.harga.toString()}
               value={formatHarga}
             />
 
@@ -311,13 +331,35 @@ const EditKelasKamar = ({navigation, route}) => {
               </View>
               //
             )}
-          </View>
+          </View> */}
+          <TextFormField
+            title="Harga Kamar"
+            ref={refHarga}
+            placeholder="Harga Kamar"
+            keyboardType="numeric"
+            onChangeText={(v) => {
+              // setForm('harga', parseInt(v));
+              // console.log(v);
+              if (v.length < 5) {
+                setformatHarga(formatRupiah('0', 'Rp. '));
+              } else {
+                setformatHarga(formatRupiah(v, 'Rp. '));
+              }
+            }}
+            onSubmitEditing={() => {
+              refKapasitas.current.focus();
+            }}
+            blurOnSubmit={false}
+            // value={kamar.harga.toString()}
+            value={formatHarga}
+            pesanError={errorMsg.harga}
+          />
 
           {/* Kapasitas Kamar Section  */}
-          <View style={styles.fieldWrapper}>
+          {/* <View style={styles.fieldWrapper}>
             <FormFieldIcon
-              ref={refKapasitas}
-              icon="users"
+            icon="users"
+            ref={refKapasitas}
               placeholder="Kapasitas kamar"
               keyboardType="number-pad"
               onChangeText={(value) => {
@@ -332,7 +374,18 @@ const EditKelasKamar = ({navigation, route}) => {
               </View>
               //
             )}
-          </View>
+          </View> */}
+          <TextFormField
+            title="Kapasitas Kamar"
+            ref={refKapasitas}
+            placeholder="Kapasitas kamar"
+            keyboardType="number-pad"
+            onChangeText={(value) => {
+              setForm('kapasitas', parseInt(value));
+            }}
+            value={kamar.kapasitas.toString()}
+            pesanError={errorMsg.kapasitas}
+          />
 
           <View style={styles.fasilitasTitleWrapper}>
             <MaterialIcons name="room-service" color={myColor.fbtx} size={25} />
@@ -386,21 +439,19 @@ const EditKelasKamar = ({navigation, route}) => {
           <TouchableNativeFeedback
             // onPress={handleSubmit(onSubmit, onError)}
             onPress={() => {
-              if (!invalidFasilitas) {
-                Alert.alert(
-                  'Konfirmasi',
-                  'Apakah anda yakin data yang diisi telah sesuai ?',
-                  [
-                    {
-                      text: 'Batal',
-                      onPress: () => setIsSubmit(false),
-                      style: 'cancel',
-                    },
-                    {text: 'Ya', onPress: () => editData()},
-                  ],
-                  {cancelable: false},
-                );
-              }
+              Alert.alert(
+                'Konfirmasi',
+                'Apakah anda yakin data yang diisi telah sesuai ?',
+                [
+                  {
+                    text: 'Batal',
+                    onPress: () => setIsSubmit(false),
+                    style: 'cancel',
+                  },
+                  {text: 'Ya', onPress: () => editData()},
+                ],
+                {cancelable: false},
+              );
             }}
             // onPress={() => console.log(kamar)}
           >
@@ -424,7 +475,6 @@ const styles = StyleSheet.create({
   },
   formWrapper: {
     flex: 1,
-    paddingHorizontal: 0.05 * screenWidth,
   },
   textInput: {
     fontSize: 14,
@@ -434,9 +484,13 @@ const styles = StyleSheet.create({
     height: 50,
   },
   viewError: {
-    marginLeft: 30,
+    marginLeft: 40,
   },
-  textError: {color: myColor.alert, fontSize: 12, fontWeight: 'bold'},
+  textError: {
+    color: myColor.alert,
+    fontSize: 12,
+    fontFamily: 'OpenSans-SemiBold',
+  },
   fieldWrapper: {marginBottom: 15},
   buttonUpload: {
     alignItems: 'center',
@@ -461,6 +515,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     alignItems: 'center',
+    marginHorizontal: 0.05 * screenWidth,
   },
   fasilitasIcon: {
     width: 30,
@@ -473,13 +528,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: myColor.fbtx,
   },
-  wrapperAddFasilitas: {marginBottom: 20, marginLeft: 30},
+  wrapperAddFasilitas: {marginBottom: 20, marginLeft: 20},
   btAddFasilitas: {
     height: 30,
     backgroundColor: myColor.addfacility,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    marginHorizontal: 0.05 * screenWidth,
   },
   textAddFasilitas: {color: '#fff', fontWeight: 'bold', fontSize: 14},
   wrapperBtSubmit: {
@@ -498,6 +554,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
     marginLeft: 20,
+    marginHorizontal: 0.05 * screenWidth,
   },
   normalText: {
     fontSize: 12,
@@ -506,11 +563,14 @@ const styles = StyleSheet.create({
   },
   inputItem: {
     height: 40,
-    borderWidth: 0.5,
-    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: myColor.divider,
+    borderRadius: 5,
     flex: 1,
     paddingHorizontal: 10,
     marginLeft: 10,
+    fontFamily: 'OpenSans-Regular',
+    fontSize: 12,
   },
   deleteItem: {
     marginLeft: 5,

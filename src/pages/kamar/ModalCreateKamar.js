@@ -12,6 +12,7 @@ import {
 import axios from 'axios';
 import {myColor, APIUrl} from '../../function/MyVar';
 import {myAxios} from '../../function/MyAxios';
+import Feather from 'react-native-vector-icons/Feather';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
@@ -75,7 +76,7 @@ const ModalCreateKamar = (props) => {
           paddingHorizontal: 10,
           paddingBottom: 20,
           width: screenWidth * 0.88,
-          borderRadius: 10,
+          borderRadius: 5,
           backgroundColor: 'white',
           elevation: 5,
           alignItems: 'center',
@@ -84,7 +85,7 @@ const ModalCreateKamar = (props) => {
           style={{
             borderBottomWidth: 1,
             paddingVertical: 10,
-            borderColor: myColor.darkText,
+            borderColor: myColor.divider,
             width: screenWidth * 0.88,
             alignItems: 'center',
             justifyContent: 'center',
@@ -92,9 +93,9 @@ const ModalCreateKamar = (props) => {
           }}>
           <Text
             style={{
-              fontWeight: 'bold',
               color: myColor.blackText,
-              fontSize: 15,
+              fontFamily: 'OpenSans-Bold',
+              fontSize: 16,
             }}>
             Tambah Kamar
           </Text>
@@ -115,6 +116,7 @@ const ModalCreateKamar = (props) => {
             onChangeText={(value) => {
               setForm('nama', value);
             }}
+            style={{fontFamily: 'OpenSans-Regular', fontSize: 12}}
           />
         </View>
 
@@ -139,9 +141,15 @@ const ModalCreateKamar = (props) => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Text style={{color: '#fff', fontSize: 24, fontWeight: 'bold'}}>
+              <Feather name="minus" color="#fff" size={25} />
+              {/* <Text
+                style={{
+                  color: '#fff',
+                  fontFamily: 'OpenSans-Bold',
+                  fontSize: 24,
+                }}>
                 -
-              </Text>
+              </Text> */}
             </View>
           </TouchableOpacity>
           <View
@@ -167,6 +175,11 @@ const ModalCreateKamar = (props) => {
                   setBanyak(parseInt(e));
                 }
               }}
+              style={{
+                fontFamily: 'OpenSans-SemiBold',
+                fontSize: 14,
+                textAlign: 'center',
+              }}
             />
           </View>
           <TouchableOpacity
@@ -182,9 +195,15 @@ const ModalCreateKamar = (props) => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Text style={{color: '#fff', fontSize: 20, fontWeight: 'bold'}}>
+              <Feather name="plus" color="#fff" size={25} />
+              {/* <Text
+                style={{
+                  color: '#fff',
+                  fontFamily: 'OpenSans-Bold',
+                  fontSize: 20,
+                }}>
                 +
-              </Text>
+              </Text> */}
             </View>
           </TouchableOpacity>
         </View>
@@ -200,7 +219,12 @@ const ModalCreateKamar = (props) => {
               justifyContent: 'center',
               marginBottom: 10,
             }}>
-            <Text style={{fontSize: 14, fontWeight: 'bold', color: '#fff'}}>
+            <Text
+              style={{
+                fontFamily: 'OpenSans-Bold',
+                fontSize: 12,
+                color: '#fff',
+              }}>
               Tambahkan
             </Text>
           </View>
@@ -212,12 +236,17 @@ const ModalCreateKamar = (props) => {
               width: 0.7 * screenWidth,
               borderRadius: 5,
               backgroundColor: myColor.bgfb,
-              borderWidth: 0.5,
+              borderWidth: 1,
+              borderColor: myColor.divider,
               alignItems: 'center',
               justifyContent: 'center',
             }}>
             <Text
-              style={{fontSize: 14, fontWeight: 'bold', color: myColor.fbtx}}>
+              style={{
+                fontFamily: 'OpenSans-Bold',
+                fontSize: 12,
+                color: myColor.fbtx,
+              }}>
               Tutup
             </Text>
           </View>

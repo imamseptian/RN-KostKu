@@ -1,21 +1,18 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
   Animated,
-  Dimensions,
   Image,
+  Modal,
   StatusBar,
   StyleSheet,
   Text,
-  View,
-  Modal,
   TouchableNativeFeedback,
+  View,
 } from 'react-native';
+import ImageViewer from 'react-native-image-zoom-viewer';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {SharedElement} from 'react-navigation-shared-element';
-import {PenghuniBerkas, PenghuniInfo, PenghuniTagihan} from './';
-import ImageViewer from 'react-native-image-zoom-viewer';
-import StepIndicator from 'react-native-step-indicator';
-import {myColor, APIUrl, screenWidth, screenHeight} from '../../function/MyVar';
+import {APIUrl, myColor, screenWidth} from '../../function/MyVar';
 import {KelasInfo} from './component';
 
 const DetailKelasKamar = ({navigation, route}) => {
@@ -120,7 +117,14 @@ const DetailKelasKamar = ({navigation, route}) => {
         </TouchableNativeFeedback>
       </View>
       <View style={{flex: 1, paddingTop: 15}}>
-        <Text style={{textAlign: 'center', fontSize: 20}}>{item.nama}</Text>
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 18,
+            fontFamily: 'OpenSans-Bold',
+          }}>
+          {item.nama}
+        </Text>
         <Animated.View
           style={{
             flex: 1,
@@ -132,6 +136,7 @@ const DetailKelasKamar = ({navigation, route}) => {
             onPress={() =>
               navigation.push('DaftarKamar', {
                 id: item.id,
+                nama: item.nama,
                 kapasitas: item.kapasitas,
               })
             }
@@ -184,6 +189,7 @@ const DetailKelasKamar = ({navigation, route}) => {
             backgroundColor: myColor.alert,
             justifyContent: 'center',
             alignItems: 'center',
+            zIndex: 2,
           }}>
           <FontAwesome name="pencil" size={20} color="#fff" />
         </View>

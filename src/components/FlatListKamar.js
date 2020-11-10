@@ -57,9 +57,10 @@ const FlatListKamar = (props) => {
                 numberOfLines={1}
                 style={{
                   maxWidth: 0.9 * screenWidth - 130,
-                  fontSize: 13,
-                  fontWeight: 'bold',
-                  color: myColor.darkText,
+                  fontSize: 14,
+                  fontFamily: 'OpenSans-Bold',
+                  color: myColor.fbtx,
+                  marginBottom: 3,
                 }}>
                 {kamar.nama}
               </Text>
@@ -68,8 +69,8 @@ const FlatListKamar = (props) => {
                 numberOfLines={1}
                 style={{
                   maxWidth: 0.9 * screenWidth - 130,
-                  fontSize: 13,
-                  fontWeight: 'bold',
+                  fontSize: 12,
+                  fontFamily: 'OpenSans-SemiBold',
                   color: myColor.darkText,
                 }}>
                 Kapasitas : {kamar.penghuni.length}/{kamar.kapasitas}
@@ -86,8 +87,8 @@ const FlatListKamar = (props) => {
               }}>
               <Text
                 style={{
-                  fontSize: 11,
-                  fontWeight: 'bold',
+                  fontSize: 12,
+                  fontFamily: 'OpenSans-Regular',
                   color: myColor.darkText,
                 }}>
                 Detail
@@ -95,16 +96,20 @@ const FlatListKamar = (props) => {
               <MaterialIcons
                 name="navigate-next"
                 style={{marginRight: -13}}
-                color="#636e72"
+                color={myColor.darkText}
                 size={20}
               />
               <MaterialIcons
                 name="navigate-next"
                 style={{marginRight: -13}}
-                color="#636e72"
+                color={myColor.darkText}
                 size={20}
               />
-              <MaterialIcons name="navigate-next" color="#636e72" size={20} />
+              <MaterialIcons
+                name="navigate-next"
+                color={myColor.darkText}
+                size={20}
+              />
             </View>
           </View>
         </View>
@@ -134,7 +139,7 @@ const FlatListKamar = (props) => {
                 style={{
                   color: 'white',
                   fontSize: 12,
-                  fontWeight: 'bold',
+                  fontFamily: 'OpenSans-SemiBold',
                 }}>
                 Penuh
               </Text>
@@ -175,9 +180,9 @@ const FlatListKamar = (props) => {
               }}>
               <Text
                 style={{
-                  color: myColor.darkText,
+                  color: myColor.fbtx,
                   fontSize: 12,
-                  fontWeight: 'bold',
+                  fontFamily: 'OpenSans-SemiBold',
                 }}>
                 Tersedia
               </Text>

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, {useEffect, useRef, useState} from 'react';
-import {Controller, useForm} from 'react-hook-form';
 import {
   Alert,
   Image,
@@ -18,14 +17,13 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
 import {Permission, PERMISSION_TYPE} from '../../AppPermission';
-import {HeaderPage} from '../../components';
-import {FormFieldIcon} from '../../components/atoms';
+import {HeaderPage, TextFormField} from '../../components';
 import {
   APIUrl,
-  myColor,
-  screenWidth,
   formatRupiah,
+  myColor,
   rupiahToInt,
+  screenWidth,
 } from '../../function/MyVar';
 
 const FormKelasKamar = ({navigation}) => {
@@ -60,7 +58,9 @@ const FormKelasKamar = ({navigation}) => {
     owner: dataRedux.user.kostku,
     foto: '',
   });
-  const [formatHarga, setformatHarga] = useState(kamar.harga.toString());
+  const [formatHarga, setformatHarga] = useState(
+    formatRupiah(kamar.harga.toString(), 'Rp. '),
+  );
 
   useEffect(() => {
     if (dataFoto.data != '') {
@@ -144,7 +144,7 @@ const FormKelasKamar = ({navigation}) => {
     // }
   };
 
-  const addData = async () => {
+  const addData = () => {
     setIsSubmit(true);
     if (!invalidFasilitas) {
       axios
@@ -239,10 +239,30 @@ const FormKelasKamar = ({navigation}) => {
           )}
         </View>
         {/* <Text>{kamar.harga}</Text> */}
+        {/* <Button
+          title="Press Me"
+          onPress={() => {
+            console.log('Panjang harga', formatHarga.length);
+          }}
+        /> */}
 
         <View style={styles.formWrapper}>
           {/* Nama Kamar Section  */}
-          <View style={styles.fieldWrapper}>
+          <TextFormField
+            title="Nama Kamar"
+            placeholder="Nama Kamar"
+            onChangeText={(v) => {
+              setForm('nama', v);
+            }}
+            onSubmitEditing={() => {
+              refHarga.current.focus();
+            }}
+            blurOnSubmit={false}
+            value={kamar.nama}
+            pesanError={errorMsg.nama}
+          />
+
+          {/* <View style={styles.fieldWrapper}>
             <FormFieldIcon
               icon="door-closed"
               placeholder="Nama Kamar"
@@ -261,13 +281,13 @@ const FormKelasKamar = ({navigation}) => {
                 <Text style={styles.textError}>{errorMsg.nama}</Text>
               </View>
             )}
-          </View>
+          </View> */}
 
           {/* Harga Kamar Section  */}
-          <View style={styles.fieldWrapper}>
+          {/* <View style={styles.fieldWrapper}>
             <FormFieldIcon
-              ref={refHarga}
               icon="money-bill-alt"
+              ref={refHarga}
               placeholder="Harga Kamar"
               keyboardType="numeric"
               onChangeText={(v) => {
@@ -293,13 +313,35 @@ const FormKelasKamar = ({navigation}) => {
               </View>
               //
             )}
-          </View>
+          </View> */}
+          <TextFormField
+            title="Harga Kamar"
+            ref={refHarga}
+            placeholder="Harga Kamar"
+            keyboardType="numeric"
+            onChangeText={(v) => {
+              // setForm('harga', parseInt(v));
+              // console.log(v);
+              if (v.length < 5) {
+                setformatHarga(formatRupiah('0', 'Rp. '));
+              } else {
+                setformatHarga(formatRupiah(v, 'Rp. '));
+              }
+            }}
+            onSubmitEditing={() => {
+              refKapasitas.current.focus();
+            }}
+            blurOnSubmit={false}
+            // value={kamar.harga.toString()}
+            value={formatHarga}
+            pesanError={errorMsg.harga}
+          />
 
           {/* Kapasitas Kamar Section  */}
-          <View style={styles.fieldWrapper}>
+          {/* <View style={styles.fieldWrapper}>
             <FormFieldIcon
-              ref={refKapasitas}
-              icon="users"
+            icon="users"
+            ref={refKapasitas}
               placeholder="Kapasitas kamar"
               keyboardType="number-pad"
               onChangeText={(value) => {
@@ -314,7 +356,18 @@ const FormKelasKamar = ({navigation}) => {
               </View>
               //
             )}
-          </View>
+          </View> */}
+          <TextFormField
+            title="Kapasitas Kamar"
+            ref={refKapasitas}
+            placeholder="Kapasitas kamar"
+            keyboardType="number-pad"
+            onChangeText={(value) => {
+              setForm('kapasitas', parseInt(value));
+            }}
+            value={kamar.kapasitas.toString()}
+            pesanError={errorMsg.kapasitas}
+          />
 
           <View style={styles.fasilitasTitleWrapper}>
             <MaterialIcons name="room-service" color={myColor.fbtx} size={25} />
@@ -368,21 +421,19 @@ const FormKelasKamar = ({navigation}) => {
           <TouchableNativeFeedback
             // onPress={handleSubmit(onSubmit, onError)}
             onPress={() => {
-              if (!invalidFasilitas) {
-                Alert.alert(
-                  'Konfirmasi',
-                  'Apakah anda yakin data yang diisi telah sesuai ?',
-                  [
-                    {
-                      text: 'Batal',
-                      onPress: () => setIsSubmit(false),
-                      style: 'cancel',
-                    },
-                    {text: 'Ya', onPress: () => addData()},
-                  ],
-                  {cancelable: false},
-                );
-              }
+              Alert.alert(
+                'Konfirmasi',
+                'Apakah anda yakin data yang diisi telah sesuai ?',
+                [
+                  {
+                    text: 'Batal',
+                    onPress: () => setIsSubmit(false),
+                    style: 'cancel',
+                  },
+                  {text: 'Ya', onPress: () => addData()},
+                ],
+                {cancelable: false},
+              );
             }}
             // onPress={() => console.log(kamar)}
           >
@@ -406,7 +457,6 @@ const styles = StyleSheet.create({
   },
   formWrapper: {
     flex: 1,
-    paddingHorizontal: 0.05 * screenWidth,
   },
   textInput: {
     fontSize: 14,
@@ -416,9 +466,13 @@ const styles = StyleSheet.create({
     height: 50,
   },
   viewError: {
-    marginLeft: 30,
+    marginLeft: 40,
   },
-  textError: {color: myColor.alert, fontSize: 12, fontWeight: 'bold'},
+  textError: {
+    color: myColor.alert,
+    fontSize: 12,
+    fontFamily: 'OpenSans-SemiBold',
+  },
   fieldWrapper: {marginBottom: 15},
   buttonUpload: {
     alignItems: 'center',
@@ -443,6 +497,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     alignItems: 'center',
+    marginHorizontal: 0.05 * screenWidth,
   },
   fasilitasIcon: {
     width: 30,
@@ -455,13 +510,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: myColor.fbtx,
   },
-  wrapperAddFasilitas: {marginBottom: 20, marginLeft: 30},
+  wrapperAddFasilitas: {marginBottom: 20, marginLeft: 20},
   btAddFasilitas: {
     height: 30,
     backgroundColor: myColor.addfacility,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    marginHorizontal: 0.05 * screenWidth,
   },
   textAddFasilitas: {color: '#fff', fontWeight: 'bold', fontSize: 14},
   wrapperBtSubmit: {
@@ -480,6 +536,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
     marginLeft: 20,
+    marginHorizontal: 0.05 * screenWidth,
   },
   normalText: {
     fontSize: 12,
@@ -488,11 +545,14 @@ const styles = StyleSheet.create({
   },
   inputItem: {
     height: 40,
-    borderWidth: 0.5,
-    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: myColor.divider,
+    borderRadius: 5,
     flex: 1,
     paddingHorizontal: 10,
     marginLeft: 10,
+    fontFamily: 'OpenSans-Regular',
+    fontSize: 12,
   },
   deleteItem: {
     marginLeft: 5,

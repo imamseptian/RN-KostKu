@@ -20,6 +20,7 @@ import {useDispatch} from 'react-redux';
 import {Permission, PERMISSION_TYPE} from '../../AppPermission';
 import RegisterSVG from '../../asset/image/register2.svg';
 import {myColor, screenHeight, screenWidth, APIUrl} from '../../function/MyVar';
+import {NoTelpFormField, TextFormField, MyPicker} from '../../components';
 
 const LoginScreen = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -197,7 +198,7 @@ const LoginScreen = ({navigation}) => {
               <View style={styles.circleAvatar}>
                 {!dataFoto.isUploaded ? (
                   <Text style={styles.textUploadFoto}>
-                    Tekan untuk upload foto profil *opsional
+                    Tekan untuk upload foto profil
                   </Text>
                 ) : (
                   <Image
@@ -418,15 +419,16 @@ const styles = StyleSheet.create({
     width: 0.43 * screenWidth,
     alignItems: 'center',
   },
-  inputNama: {},
+  inputNama: {fontFamily: 'OpenSans-Regular', fontSize: 12},
   textInput: {
+    fontFamily: 'OpenSans-Regular',
     fontSize: 12,
     flex: 1,
   },
 
   btLogin: {
     backgroundColor: myColor.myblue,
-    marginTop: 10,
+
     alignItems: 'center',
     padding: 10,
     borderRadius: 10,
@@ -437,8 +439,8 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   textError: {
+    fontFamily: 'OpenSans-Bold',
     fontSize: 12,
-    fontWeight: 'bold',
     color: myColor.alert,
     maxWidth: 0.9 * screenWidth - 50,
   },
@@ -464,10 +466,15 @@ const styles = StyleSheet.create({
   textUploadFoto: {
     textAlign: 'center',
     color: myColor.blackText,
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 12,
   },
   avatar: {height: 100, width: 100, borderRadius: 50},
   widthErrorNama: {maxWidth: 0.43 * screenWidth, textAlign: 'center'},
-  textRegister: {fontSize: 14, fontWeight: 'bold', color: '#fff'},
+  textRegister: {
+    fontSize: 14,
+    fontFamily: 'OpenSans-SemiBold',
+
+    color: '#fff',
+  },
 });

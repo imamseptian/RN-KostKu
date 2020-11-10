@@ -1,7 +1,7 @@
-import {Picker} from '@react-native-community/picker';
+import {Picker} from '@react-native-picker/picker';
 import axios from 'axios';
-import React, {useEffect, useState, useRef} from 'react';
-import {Controller, useForm} from 'react-hook-form';
+import React, {useEffect, useRef, useState} from 'react';
+import {useForm} from 'react-hook-form';
 import {
   Alert,
   Dimensions,
@@ -10,18 +10,15 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   TouchableNativeFeedback,
   TouchableOpacity,
   View,
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
-import Entypo from 'react-native-vector-icons/Entypo';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {Permission, PERMISSION_TYPE} from '../../AppPermission';
+import {NoTelpFormField, TextFormField, MyPicker} from '../../components';
 import {fcmService} from '../../FCMService';
 import {myColor} from '../../function/MyVar';
 import {setUserRedux} from '../../store';
@@ -36,8 +33,8 @@ const KostForm = ({navigation}) => {
   const [isPressed, setIsPressed] = useState(false);
   const [user, setUser] = useState({
     nama: '',
-    provinsi: 0,
-    kota: 0,
+    provinsi: undefined,
+    kota: undefined,
     alamat: '',
     jenis: 1,
     notelp: '',
@@ -45,6 +42,21 @@ const KostForm = ({navigation}) => {
     owner: dataRedux.user.id,
     active: true,
   });
+  const [errorMsg, seterrorMsg] = useState({
+    nama: '',
+    provinsi: '',
+    kota: '',
+    alamat: '',
+    jenis: '',
+    notelp: '',
+    desc: '',
+  });
+
+  const jenisKost = [
+    {id: 1, nama: 'Campuran'},
+    {id: 2, nama: 'Pria'},
+    {id: 3, nama: 'Wanita'},
+  ];
 
   const refNoTelp = useRef();
   const refDeskripsi = useRef();
@@ -85,9 +97,6 @@ const KostForm = ({navigation}) => {
   const [provinsi, setProvinsi] = useState([]);
   const [kota, setKota] = useState([]);
 
-  const [invalidProv, setinvalidProv] = useState(false);
-  const [invalidKota, setinvalidKota] = useState(false);
-  const [invalidJenis, setinvalidJenis] = useState(false);
   const [dataFoto, setDataFoto] = useState({
     isUploaded: false,
     uri: '',
@@ -170,43 +179,7 @@ const KostForm = ({navigation}) => {
     );
   };
 
-  const onSubmit = (data) => {
-    if (user.provinsi == 0 || user.kota == 0 || user.jenis == 0) {
-      if (user.provinsi == 0) {
-        setinvalidProv(true);
-      }
-      if (user.kota == 0) {
-        setinvalidKota(true);
-      }
-    } else {
-      setIsSubmit(true);
-      Alert.alert(
-        'Konfirmasi',
-        'Apakah anda yakin data yang diisi telah sesuai ?',
-        [
-          {
-            text: 'Batal',
-            onPress: () => setIsSubmit(false),
-            style: 'cancel',
-          },
-          {text: 'Ya', onPress: () => addData()},
-        ],
-        {cancelable: false},
-      );
-    }
-  };
   // const scrollRef = useRef(ScrollView);
-
-  const onError = (errors, e) => {
-    if (user.provinsi == 0) {
-      setinvalidProv(true);
-    }
-    if (user.kota == 0) {
-      setinvalidKota(true);
-    }
-
-    goToTop();
-  };
 
   const goToHome = () => {
     navigation.reset({
@@ -216,6 +189,7 @@ const KostForm = ({navigation}) => {
   };
 
   const addData = () => {
+    console.log('addData Start');
     if (dataFoto.isUploaded) {
       axios
         .post(
@@ -229,15 +203,50 @@ const KostForm = ({navigation}) => {
         )
         .then((res) => {
           // console.log('sukses');
-          const dataPengguna = res.data.user;
-          console.log('sukses matamu ', res.data);
-          let topic = 'kostku-' + res.data.data.id;
+          // const myarr = {
+          //   nama: '',
+          //   provinsi: '',
+          //   kota: '',
+          //   alamat: '',
+          //   jenis: '',
+          //   notelp: '',
+          //   desc: '',
+          // };
+          if (res.data.success) {
+            // navigation.pop(1);
+            const dataPengguna = res.data.user;
+            console.log('sukses matamu ', res.data);
+            let topic = 'kostku-' + res.data.data.id;
 
-          fcmService.subscribeToTopic(topic);
-          dispatch(setUserRedux(dataPengguna));
+            fcmService.subscribeToTopic(topic);
+            dispatch(setUserRedux(dataPengguna));
 
-          // console.log(res.data);
-          goToHome();
+            // console.log(res.data);
+            goToHome();
+          } else {
+            seterrorMsg({
+              nama: res.data.errors.nama ? res.data.errors.nama : '',
+              provinsi: res.data.errors.provinsi
+                ? res.data.errors.provinsi
+                : '',
+              kota: res.data.errors.kota ? res.data.errors.kota : '',
+              alamat: res.data.errors.alamat ? res.data.errors.alamat : '',
+              jenis: res.data.errors.jenis ? res.data.errors.jenis : '',
+              notelp: res.data.errors.notelp ? res.data.errors.notelp : '',
+              desc: res.data.errors.desc ? res.data.errors.desc : '',
+            });
+            setIsSubmit(false);
+          }
+
+          // const dataPengguna = res.data.user;
+          // console.log('sukses matamu ', res.data);
+          // let topic = 'kostku-' + res.data.data.id;
+
+          // fcmService.subscribeToTopic(topic);
+          // dispatch(setUserRedux(dataPengguna));
+
+          // // console.log(res.data);
+          // goToHome();
         })
         .catch((error) => {
           setIsSubmit(false);
@@ -250,17 +259,43 @@ const KostForm = ({navigation}) => {
           },
         })
         .then((res) => {
-          const dataPengguna = res.data.user;
-          console.log('sukses matamu ', res.data);
-          let topic = 'kostku-' + res.data.data.id;
-          console.log('Sukses dan Subs to ', topic);
+          if (res.data.success) {
+            // navigation.pop(1);
+            const dataPengguna = res.data.user;
+            console.log('sukses matamu ', res.data);
+            let topic = 'kostku-' + res.data.data.id;
 
-          fcmService.subscribeToTopic(topic);
-          dispatch(setUserRedux(dataPengguna));
+            fcmService.subscribeToTopic(topic);
+            dispatch(setUserRedux(dataPengguna));
 
-          setIsSubmit(false);
-          // console.log(res.data);
-          goToHome();
+            // console.log(res.data);
+            goToHome();
+          } else {
+            seterrorMsg({
+              nama: res.data.errors.nama ? res.data.errors.nama : '',
+              provinsi: res.data.errors.provinsi
+                ? res.data.errors.provinsi
+                : '',
+              kota: res.data.errors.kota ? res.data.errors.kota : '',
+              alamat: res.data.errors.alamat ? res.data.errors.alamat : '',
+              jenis: res.data.errors.jenis ? res.data.errors.jenis : '',
+              notelp: res.data.errors.notelp ? res.data.errors.notelp : '',
+              desc: res.data.errors.desc ? res.data.errors.desc : '',
+            });
+            setIsSubmit(false);
+          }
+
+          // const dataPengguna = res.data.user;
+          // console.log('sukses matamu ', res.data);
+          // let topic = 'kostku-' + res.data.data.id;
+          // console.log('Sukses dan Subs to ', topic);
+
+          // fcmService.subscribeToTopic(topic);
+          // dispatch(setUserRedux(dataPengguna));
+
+          // setIsSubmit(false);
+          // // console.log(res.data);
+          // goToHome();
         })
         .catch((error) => {
           console.log('gagal');
@@ -307,6 +342,7 @@ const KostForm = ({navigation}) => {
                 marginHorizontal: 0.1 * screenWidth,
                 alignItems: 'center',
                 justifyContent: 'center',
+                marginBottom: 10,
               }}>
               <Text style={{color: '#fff', fontSize: 14, fontWeight: 'bold'}}>
                 Tekan disini untuk upload Foto Kost
@@ -327,115 +363,55 @@ const KostForm = ({navigation}) => {
                 maxHeight: 200,
                 borderRadius: 10,
                 marginHorizontal: 0.1 * screenWidth,
+                marginBottom: 10,
               }}
               resizeMode="cover"
             />
           )}
         </TouchableNativeFeedback>
+        {/* <Text>{JSON.stringify(user)}</Text> */}
 
-        <View style={styles.formWrapper}>
-          <Controller
-            control={control}
-            render={({onChange, onBlur, value}) => (
-              <View style={styles.fieldForm}>
-                <FontAwesome name="home" size={25} style={{opacity: 0.5}} />
-                <TextInput
-                  placeholder="Nama Kost"
-                  style={{marginLeft: 5, flex: 1}}
-                  onChangeText={(value) => {
-                    onChange(value);
-                    setForm('nama', value);
-                  }}
-                  value={value}
-                />
-              </View>
-            )}
-            name="nama"
-            rules={{required: true}}
-            defaultValue=""
-          />
+        <TextFormField
+          title="Nama Kost"
+          placeholder="Masukan Nama Kost"
+          onChangeText={(value) => {
+            setForm('nama', value);
+          }}
+          value={user.nama}
+          pesanError={errorMsg.nama}
+        />
 
-          {errors.nama && errors.nama.type === 'required' && (
-            <View style={styles.viewError}>
-              <Text style={styles.textError}>Nama Kost Perlu Diisi</Text>
-            </View>
-            //
-          )}
-        </View>
+        <MyPicker
+          title="Provinsi"
+          pesanError={errorMsg.provinsi}
+          selectedValue={user.provinsi}
+          data={provinsi}
+          itemName="nama"
+          placeholder="Pilih Provinsi"
+          onChangeFunction={(value) => setForm('provinsi', value)}
+        />
 
-        <View style={styles.formWrapper}>
-          <View>
-            <View style={styles.fieldForm}>
-              <FontAwesome5 name="city" size={25} style={{opacity: 0.5}} />
-              <Picker
-                selectedValue={user.provinsi}
-                style={{height: 40, flex: 1}}
-                onValueChange={(itemValue, itemIndex) => {
-                  if (itemValue != null) {
-                    setinvalidProv(false);
-                    setForm('provinsi', itemValue);
-                    console.log(URLkota);
-                  }
-                }}>
-                <Picker.Item label="Pilih Provinsi" />
-                {provinsi.map((item, index) => {
-                  return (
-                    <Picker.Item
-                      key={index}
-                      label={item.nama}
-                      value={item.id}
-                    />
-                  );
-                })}
-              </Picker>
-            </View>
-            {invalidProv && (
-              <View style={styles.viewError}>
-                <Text style={styles.textError}>Provinsi Perlu Dipilih</Text>
-              </View>
-            )}
-          </View>
-        </View>
+        <MyPicker
+          title="Kota"
+          pesanError={errorMsg.kota}
+          selectedValue={user.kota}
+          data={kota}
+          itemName="nama"
+          placeholder="Pilih Kota"
+          onChangeFunction={(value) => setForm('kota', value)}
+        />
 
-        <View style={styles.formWrapper}>
-          <View>
-            <View style={styles.fieldForm}>
-              <MaterialCommunityIcons
-                name="home-city"
-                size={25}
-                style={{opacity: 0.5}}
-              />
-              <Picker
-                selectedValue={user.kota}
-                style={{height: 50, flex: 1, fontSize: 3}}
-                textStyle={{fontSize: 12}}
-                onValueChange={(itemValue, itemIndex) => {
-                  if (itemValue != null) {
-                    setinvalidKota(false);
-                    setForm('kota', itemValue);
-                  }
-                }}>
-                <Picker.Item label="Pilih Kota" />
-                {kota.map((item, index) => {
-                  return (
-                    <Picker.Item
-                      key={index}
-                      label={item.nama}
-                      value={item.id}
-                    />
-                  );
-                })}
-              </Picker>
-            </View>
-            {invalidKota && (
-              <View style={styles.viewError}>
-                <Text style={styles.textError}>Kota Perlu Dipilih</Text>
-              </View>
-            )}
-          </View>
-        </View>
+        <MyPicker
+          title="Jenis Kost"
+          pesanError={errorMsg.jenis}
+          selectedValue={user.jenis}
+          data={jenisKost}
+          itemName="nama"
+          placeholder="Pilih Jenis"
+          onChangeFunction={(value) => setForm('jenis', value)}
+        />
 
-        <View style={styles.formWrapper}>
+        {/* <View style={styles.formWrapper}>
           <View>
             <View style={styles.fieldForm}>
               <MaterialCommunityIcons
@@ -465,120 +441,51 @@ const KostForm = ({navigation}) => {
               </View>
             )}
           </View>
-        </View>
+        </View> */}
 
-        <View style={styles.formWrapper}>
-          <View>
-            <View style={styles.fieldForm}>
-              <Entypo name="address" size={25} style={{opacity: 0.5}} />
+        <TextFormField
+          title="Alamat Kost"
+          placeholder="Masukan Alamat Kost"
+          onChangeText={(value) => {
+            setForm('alamat', value);
+          }}
+          value={user.alamat}
+          pesanError={errorMsg.alamat}
+          onSubmitEditing={() => {
+            refNoTelp.current.focus();
+          }}
+          blurOnSubmit={false}
+        />
 
-              <Controller
-                control={control}
-                render={({onChange, onBlur, value}) => (
-                  <TextInput
-                    placeholder="Alamat Kost"
-                    style={{marginLeft: 5, flex: 1}}
-                    onChangeText={(value) => {
-                      onChange(value);
-                      setForm('alamat', value);
-                    }}
-                    onSubmitEditing={() => {
-                      refNoTelp.current.focus();
-                    }}
-                    blurOnSubmit={false}
-                    value={value}
-                  />
-                )}
-                name="alamat"
-                rules={{required: true}}
-                defaultValue=""
-              />
-            </View>
-            {errors.alamat && errors.alamat.type === 'required' && (
-              <View style={styles.viewError}>
-                <Text style={styles.textError}>Alamat Kost Perlu Diisi</Text>
-              </View>
-              //
-            )}
-          </View>
-        </View>
+        <NoTelpFormField
+          ref={refNoTelp}
+          title="Nomor Telepon Kost"
+          onChangeText={(value) => {
+            setForm('notelp', value);
+          }}
+          value={user.notelp}
+          keyboardType="number-pad"
+          pesanError={errorMsg.notelp}
+          awalan="+62"
+          onSubmitEditing={() => {
+            refDeskripsi.current.focus();
+          }}
+          blurOnSubmit={false}
+        />
 
-        <View style={styles.formWrapper}>
-          <View>
-            <View style={styles.fieldForm}>
-              <FontAwesome name="phone" size={25} style={{opacity: 0.5}} />
-              <Controller
-                control={control}
-                render={({onChange, onBlur, value}) => (
-                  <TextInput
-                    ref={refNoTelp}
-                    placeholder="No Telepon"
-                    style={{marginLeft: 5, flex: 1}}
-                    onChangeText={(value) => {
-                      onChange(value);
-                      setForm('notelp', value);
-                    }}
-                    value={value}
-                    keyboardType="numeric"
-                    onSubmitEditing={() => {
-                      refDeskripsi.current.focus();
-                    }}
-                    blurOnSubmit={false}
-                  />
-                )}
-                name="notelp"
-                rules={{required: true}}
-                defaultValue=""
-              />
-            </View>
-            {errors.notelp && errors.notelp.type === 'required' && (
-              <View style={styles.viewError}>
-                <Text style={styles.textError}>
-                  Nomor Telepon Kost Perlu Diisi
-                </Text>
-              </View>
-              //
-            )}
-          </View>
-        </View>
+        <TextFormField
+          ref={refDeskripsi}
+          title="Deskripsi Kost"
+          placeholder="Deskrips Kost"
+          onChangeText={(value) => {
+            setForm('desc', value);
+          }}
+          value={user.desc}
+          multiline={true}
+          pesanError={errorMsg.desc}
+        />
 
-        <View style={styles.formWrapper}>
-          <View>
-            <View style={[styles.fieldForm, {height: 80}]}>
-              <Controller
-                control={control}
-                render={({onChange, onBlur, value}) => (
-                  <TextInput
-                    ref={refDeskripsi}
-                    placeholder="Deskripsi"
-                    style={{
-                      marginLeft: 5,
-                    }}
-                    placeholder="Deskripsi Tambahan"
-                    multiline={true}
-                    onChangeText={(value) => {
-                      onChange(value);
-                      setForm('desc', value);
-                    }}
-                    value={value}
-                  />
-                )}
-                name="desc"
-                rules={{required: true}}
-                defaultValue=""
-              />
-            </View>
-            {errors.desc && errors.desc.type === 'required' && (
-              <View style={styles.viewError}>
-                <Text style={styles.textError}>Deskripsi Kost Perlu Diisi</Text>
-              </View>
-              //
-            )}
-          </View>
-        </View>
-        <TouchableOpacity
-          onPress={handleSubmit(onSubmit, onError)}
-          disabled={isSubmit}>
+        <TouchableOpacity onPress={() => addData()} disabled={isSubmit}>
           <View
             style={{
               height: 40,
@@ -634,7 +541,7 @@ const styles = StyleSheet.create({
     // elevation: 5,
   },
   formWrapper: {
-    marginTop: 15,
+    marginBottom: 15,
     marginHorizontal: 0.05 * screenWidth,
   },
   fieldForm: {

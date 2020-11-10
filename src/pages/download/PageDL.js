@@ -11,7 +11,7 @@ import {
 import RNFetchBlob from 'rn-fetch-blob';
 import {Permission, PERMISSION_TYPE} from '../../AppPermission';
 import {myAxios} from '../../function/MyAxios';
-import {Picker} from '@react-native-community/picker';
+import {Picker} from '@react-native-picker/picker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import LaporanSVG from '../../asset/icon/LaporanSVG.svg';
 import {useSelector} from 'react-redux';

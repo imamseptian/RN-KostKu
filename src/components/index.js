@@ -14,6 +14,10 @@ import FlatListTransaksiBayar from './FlatListTransaksiBayar';
 import BoxProfile from './BoxProfile';
 import BoxInfoKost from './BoxInfoKost';
 import HeaderPage from './HeaderPage';
+import TextFormField from './TextFormField';
+import NoTelpFormField from './NoTelpFormField';
+import MyPicker from './MyPicker';
+import PickerFormField from './PickerFormField';
 
 export {
   FlatListPendaftar,
@@ -32,4 +36,8 @@ export {
   BoxProfile,
   BoxInfoKost,
   HeaderPage,
+  TextFormField,
+  NoTelpFormField,
+  MyPicker,
+  PickerFormField,
 };

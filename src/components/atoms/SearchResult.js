@@ -47,7 +47,7 @@ export default SearchResult;
 const styles = StyleSheet.create({
   resultText: {
     color: myColor.darkText,
-    fontWeight: 'bold',
     fontSize: 14,
+    fontFamily: 'OpenSans-SemiBold',
   },
 });

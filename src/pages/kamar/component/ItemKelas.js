@@ -69,8 +69,8 @@ const ItemKelas = (props) => {
             }}>
             <Text
               style={{
-                fontWeight: 'bold',
                 fontSize: 14,
+                fontFamily: 'OpenSans-SemiBold',
                 color: myColor.fbtx,
               }}>
               {props.data.nama}
@@ -78,8 +78,8 @@ const ItemKelas = (props) => {
 
             <Text
               style={{
-                fontWeight: 'bold',
                 fontSize: 12,
+                fontFamily: 'OpenSans-Regular',
                 marginTop: 5,
                 color: myColor.darkText,
               }}>
@@ -106,7 +106,7 @@ const ItemKelas = (props) => {
             <Text
               style={{
                 fontSize: 12,
-                fontWeight: 'bold',
+                fontFamily: 'OpenSans-Bold',
               }}>
               {props.data.banyak}
             </Text>
@@ -123,7 +123,7 @@ const ItemKelas = (props) => {
             <Text
               style={{
                 fontSize: 12,
-                fontWeight: 'bold',
+                fontFamily: 'OpenSans-Bold',
               }}>
               {props.data.penghuni}
             </Text>

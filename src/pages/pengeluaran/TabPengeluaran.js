@@ -11,7 +11,7 @@ import {
 } from '../../function/MyVar';
 import {FAB} from 'react-native-paper';
 import {ModalAddPengeluaran} from './';
-import {Picker} from '@react-native-community/picker';
+import {Picker} from '@react-native-picker/picker';
 import {myAxios} from '../../function/MyAxios';
 import axios from 'axios';
 const TabPengeluaran = (props) => {

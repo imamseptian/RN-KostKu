@@ -189,12 +189,26 @@ const LoginScreen = ({navigation}) => {
         {/* SECTION BUTTON LOGIN  */}
         <TouchableOpacity onPress={() => submitLogin()}>
           <View style={styles.btLogin}>
-            <Text style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 13,
+                fontFamily: 'OpenSans-SemiBold',
+                fontSize: 14,
+              }}>
               Login
             </Text>
           </View>
         </TouchableOpacity>
-        <Text style={{textAlign: 'center', marginTop: 10}}>Atau</Text>
+        <Text
+          style={{
+            textAlign: 'center',
+            marginTop: 10,
+            fontFamily: 'OpenSans-Regular',
+            fontSize: 12,
+          }}>
+          Atau
+        </Text>
 
         {/* SECTION LINK REGISTER  */}
         <TouchableOpacity onPress={() => navigation.push('RegisterScreen')}>
@@ -248,8 +262,10 @@ const styles = StyleSheet.create({
   },
   textInput: {
     borderColor: '#E8E8E8',
-    fontSize: 13,
+    fontSize: 12,
     flex: 1,
+    fontFamily: 'OpenSans-Regular',
+    fontSize: 12,
   },
   iconField: {},
   btLogin: {
@@ -263,5 +279,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 10,
     textDecorationLine: 'underline',
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 12,
   },
 });

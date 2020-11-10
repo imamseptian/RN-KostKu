@@ -41,5 +41,7 @@ const styles = StyleSheet.create({
   searchTextInput: {
     flex: 1,
     marginRight: 15,
+    fontSize: 12,
+    fontFamily: 'OpenSans-Regular',
   },
 });

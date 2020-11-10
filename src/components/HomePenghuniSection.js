@@ -158,14 +158,14 @@ export default HomePenghuniSection;
 
 const styles = StyleSheet.create({
   sectionTitle: {
-    fontSize: 20,
     color: myColor.titleHome,
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 18,
   },
   seeAll: {
+    fontFamily: 'OpenSans-Bold',
     fontSize: 12,
     color: myColor.myblue,
-    fontWeight: 'bold',
   },
   imageScrollWrapper: {height: 60, width: 60, borderRadius: 30, elevation: 5},
   avatarScroll: {

@@ -36,8 +36,8 @@ const HomeTopMenu = (props) => {
           style={{
             width: 0.85 * screenWidth,
             height: 25,
-            borderBottomWidth: 0.5,
-            borderBottomColor: myColor.blackText,
+            borderBottomWidth: 1,
+            borderBottomColor: myColor.divider,
             justifyContent: 'space-between',
             alignItems: 'center',
             paddingHorizontal: 5,
@@ -108,9 +108,10 @@ export default HomeTopMenu;
 
 const styles = StyleSheet.create({
   textPendapatan: {
+    fontFamily: 'OpenSans-Bold',
     fontSize: 12,
-    fontWeight: 'bold',
-    color: myColor.darkText,
+
+    color: myColor.fbtx,
   },
   featureBox: {
     width: 0.17 * screenWidth,
@@ -120,8 +121,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   textFeature: {
+    fontFamily: 'OpenSans-Bold',
     fontSize: 12,
-    fontWeight: 'bold',
-    color: myColor.darkText,
+    color: myColor.fbtx,
   },
 });

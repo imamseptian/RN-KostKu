@@ -6,7 +6,8 @@ const TagSearch = ({tagName, tagColor, textColor, ...rest}) => {
   return (
     <TouchableOpacity {...rest}>
       <View style={[styles.sortOption, {backgroundColor: tagColor}]}>
-        <Text style={{color: textColor, fontWeight: 'bold', fontSize: 12}}>
+        <Text
+          style={{color: textColor, fontSize: 12, fontFamily: 'OpenSans-Bold'}}>
           {tagName}
         </Text>
       </View>
