@@ -48,6 +48,7 @@ const myColor = {
   fbtx1: '#a5a5a5',
   grayprofile: '#F2F5FA',
   graytextprof: '#8E9EA8',
+  grayGoogle: '#696968',
   divider: '#bfc6cf',
 };
 

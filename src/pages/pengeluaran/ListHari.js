@@ -24,7 +24,12 @@ const ListHari = (props) => {
           paddingHorizontal: 10,
           marginBottom: 5,
         }}>
-        <Text style={{fontSize: 14, fontWeight: 'bold', color: myColor.fbtx}}>
+        <Text
+          style={{
+            fontSize: 14,
+            fontFamily: 'OpenSans-SemiBold',
+            color: myColor.fbtx,
+          }}>
           {props.data.hari}-{props.bulan.nama}-{props.tahun}
         </Text>
       </View>

@@ -15,7 +15,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useSelector} from 'react-redux';
 import {TabBayar} from '../../components/atoms';
 import {myAxios} from '../../function/MyAxios';
-import {APIUrl, myColor} from '../../function/MyVar';
+import {APIUrl, myColor, formatRupiah} from '../../function/MyVar';
 import {
   ModalBayar,
   ModalDaftarPenghuni,
@@ -116,7 +116,6 @@ const HalamanBayar = () => {
       delay,
       useNativeDriver: true,
     }).start();
-
 
   useEffect(() => {
     animation(1, 500);
@@ -222,8 +221,8 @@ const HalamanBayar = () => {
               <Text
                 style={{
                   fontSize: 14,
-                  fontWeight: 'bold',
                   color: myColor.darkText,
+                  fontFamily: 'OpenSans-SemiBold',
                 }}>
                 {'>>'} Klik Disini untuk memilih penghuni {'<<'}
               </Text>
@@ -303,8 +302,10 @@ const HalamanBayar = () => {
                 </View>
 
                 <View style={{marginTop: 5}}>
-                  <Text style={[styles.nama, {fontSize: 12}]}>
-                    {penghuni.nama_kamar} (Rp {penghuni.harga_kamar} / Bulan){' '}
+                  <Text style={styles.harga}>
+                    {penghuni.nama_kamar} ({' '}
+                    {formatRupiah(penghuni.harga_kamar.toString(), 'Rp. ')} /
+                    Bulan){' '}
                   </Text>
                 </View>
               </View>
@@ -382,7 +383,13 @@ export default HalamanBayar;
 const styles = StyleSheet.create({
   nama: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-SemiBold',
+    color: myColor.fbtx,
+    maxWidth: 0.5 * screenWidth,
+  },
+  harga: {
+    fontSize: 12,
+    fontFamily: 'OpenSans-Regular',
     color: myColor.darkText,
     maxWidth: 0.5 * screenWidth,
   },

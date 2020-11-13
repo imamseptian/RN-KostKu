@@ -48,7 +48,7 @@ class FlatListPenghuni extends React.PureComponent {
               bottom: -5,
               elevation: 2,
             }}>
-            <Text style={styles.textCard}>
+            <Text style={[styles.textCard, {fontFamily: 'OpenSans-SemiBold'}]}>
               {item.hari}-{item.bulan}-{item.tahun}
             </Text>
           </View>
@@ -76,7 +76,11 @@ class FlatListPenghuni extends React.PureComponent {
               flexDirection: 'row',
             }}>
             <View style={{marginRight: 10}}>
-              <Text style={[styles.textCard, {fontSize: 16}]}>
+              <Text
+                style={[
+                  styles.textCard,
+                  {fontSize: 16, fontFamily: 'OpenSans-SemiBold'},
+                ]}>
                 {item.nama_depan} {item.nama_belakang}
               </Text>
 
@@ -98,9 +102,9 @@ export default FlatListPenghuni;
 
 const styles = StyleSheet.create({
   textCard: {
-    color: myColor.darkText,
+    color: myColor.fbtx,
     marginBottom: 5,
-    fontWeight: 'bold',
     fontSize: 12,
+    fontFamily: 'OpenSans-Regular',
   },
 });

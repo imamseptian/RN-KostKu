@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, Dimensions} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {myColor} from '../function/MyVar';
+import {myColor, formatRupiah} from '../function/MyVar';
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 
@@ -65,7 +65,9 @@ const FlatListTransaksi = (props) => {
             style={[styles.text, {maxWidth: 0.7 * screenWidth - 100}]}>
             {props.data.judul}
           </Text>
-          <Text style={styles.price}>Rp {props.data.jumlah}</Text>
+          <Text style={styles.price}>
+            {formatRupiah(props.data.jumlah.toString(), 'Rp. ')}
+          </Text>
         </View>
       </View>
     </View>
@@ -76,13 +78,13 @@ export default FlatListTransaksi;
 
 const styles = StyleSheet.create({
   text: {
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 13,
     color: myColor.blackText,
   },
   price: {
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-Regular',
     fontSize: 12,
-    color: myColor.fbtx1,
+    color: myColor.fbtx,
   },
 });

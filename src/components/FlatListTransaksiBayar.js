@@ -6,6 +6,7 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
+import {myColor, formatRupiah} from '../function/MyVar';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
@@ -24,47 +25,16 @@ const FlatListTransaksiBayar = (props) => {
           margin: 3,
           alignItems: 'center',
           paddingVertical: 10,
+          justifyContent: 'space-between',
+          paddingHorizontal: 10,
         }}>
-        <View style={{width: 0.5 * screenWidth, paddingHorizontal: 5}}>
-          <Text
-            numberOfLines={2}
-            style={{
-              fontSize: 12,
-              fontWeight: 'bold',
-              color: 'black',
-              maxWidth: 0.5 * screenWidth,
-            }}>
-            {props.data.judul}
-          </Text>
-        </View>
-        <View
-          style={{
-            width: 0.3 * screenWidth,
-            paddingHorizontal: 5,
-          }}>
-          <Text
-            numberOfLines={2}
-            style={{
-              textAlign: 'right',
-              fontSize: 12,
-              fontWeight: 'bold',
-              color: 'black',
-              maxWidth: 0.3 * screenWidth,
-            }}>
-            Rp {props.data.jumlah}
-          </Text>
-          <Text
-            numberOfLines={2}
-            style={{
-              textAlign: 'right',
-              fontSize: 10,
-              fontWeight: 'bold',
-              color: 'black',
-              maxWidth: 0.3 * screenWidth,
-            }}>
-            {props.data.hari}-{props.data.bulan}-{props.data.tahun}
-          </Text>
-        </View>
+        <Text numberOfLines={2} style={styles.judul}>
+          {props.data.hari}-{props.data.bulan}-{props.data.tahun}
+        </Text>
+
+        <Text numberOfLines={2} style={styles.harga}>
+          {formatRupiah(props.data.jumlah.toString(), 'Rp. ')}
+        </Text>
       </View>
     </TouchableNativeFeedback>
   );
@@ -72,4 +42,18 @@ const FlatListTransaksiBayar = (props) => {
 
 export default FlatListTransaksiBayar;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  judul: {
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 12,
+    maxWidth: 0.5 * screenWidth,
+    color: myColor.fbtx,
+  },
+  harga: {
+    fontFamily: 'OpenSans-Regular',
+    fontSize: 12,
+    maxWidth: 0.4 * screenWidth,
+    color: myColor.darkText,
+    textAlign: 'right',
+  },
+});

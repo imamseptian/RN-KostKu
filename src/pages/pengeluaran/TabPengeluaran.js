@@ -8,6 +8,7 @@ import {
   startingYear,
   dataBulan,
   dataTahun,
+  formatRupiah,
 } from '../../function/MyVar';
 import {FAB} from 'react-native-paper';
 import {ModalAddPengeluaran} from './';
@@ -149,7 +150,7 @@ const TabPengeluaran = (props) => {
                 <Text
                   style={{
                     fontSize: 12,
-                    fontWeight: 'bold',
+                    fontFamily: 'OpenSans-SemiBold',
                     color: myColor.fbtx,
                   }}>
                   {item.judul}
@@ -159,16 +160,16 @@ const TabPengeluaran = (props) => {
                   <Text
                     style={{
                       fontSize: 12,
-                      fontWeight: 'bold',
-                      color: myColor.darkText,
+                      fontFamily: 'OpenSans-Regular',
+                      color: myColor.fbtx,
                       textAlign: 'right',
                     }}>
-                    {item.jumlah}
+                    {formatRupiah(item.jumlah.toString(), 'Rp. ')}
                   </Text>
                   <Text
                     style={{
                       fontSize: 12,
-                      fontWeight: 'bold',
+                      fontFamily: 'OpenSans-Regular',
                       color: myColor.fbtx,
                       textAlign: 'right',
                     }}>

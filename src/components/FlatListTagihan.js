@@ -1,34 +1,17 @@
 import React from 'react';
 import {
+  Dimensions,
   StyleSheet,
   Text,
-  View,
-  Dimensions,
   TouchableNativeFeedback,
+  View,
 } from 'react-native';
-const screenWidth = Dimensions.get('window').width;
-import {myColor} from '../function/MyVar';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {formatRupiah, myColor} from '../function/MyVar';
+
+const screenWidth = Dimensions.get('window').width;
 
 const FlatListTagihan = ({data}) => {
-  function formatRupiah(angka, prefix) {
-    let potong = angka.substring(0, angka.length - 2);
-    let number_string = potong.replace(/[^,\d]/g, '').toString(),
-      split = number_string.split(','),
-      sisa = split[0].length % 3,
-      rupiah = split[0].substr(0, sisa),
-      ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-    // tambahkan titik jika yang di input sudah menjadi angka ribuan
-    if (ribuan) {
-      separator = sisa ? '.' : '';
-      rupiah += separator + ribuan.join('.');
-    }
-
-    rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-    return prefix == undefined ? rupiah : rupiah ? 'Rp. ' + rupiah : '';
-  }
-
   return (
     <TouchableNativeFeedback onPress={() => alert('todo')}>
       <View
@@ -59,14 +42,11 @@ const FlatListTagihan = ({data}) => {
             marginLeft: 5,
             justifyContent: 'center',
           }}>
-          <Text
-            numberOfLines={1}
-            style={{fontWeight: 'bold', color: myColor.myblue, fontSize: 16}}>
+          <Text numberOfLines={1} style={styles.textJudul}>
             {data.judul}
           </Text>
-          <Text
-            style={{fontWeight: 'bold', color: myColor.darkText, fontSize: 12}}>
-            {formatRupiah(data.jumlah.toString(), 'Rp.')}
+          <Text style={styles.textHarga}>
+            {formatRupiah(data.jumlah.toString(), 'Rp. ')}
           </Text>
         </View>
         <MaterialIcons
@@ -84,4 +64,16 @@ const FlatListTagihan = ({data}) => {
 
 export default FlatListTagihan;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  textInfo: {fontFamily: 'OpenSans-Regular', fontSize: 13},
+  textJudul: {
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 16,
+    color: myColor.myblue,
+  },
+  textHarga: {
+    fontFamily: 'OpenSans-Regular',
+    fontSize: 14,
+    color: myColor.darkText,
+  },
+});

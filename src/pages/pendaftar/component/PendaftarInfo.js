@@ -71,7 +71,7 @@ const PendaftarInfo = ({data}) => {
               size={25}
               color={myColor.darkText}
             />
-            <Text style={{marginLeft: 10}}>Laki-Laki</Text>
+            <Text style={styles.textInfo}>Laki-Laki</Text>
           </View>
         ) : (
           <View
@@ -85,7 +85,7 @@ const PendaftarInfo = ({data}) => {
               size={25}
               color={myColor.darkText}
             />
-            <Text style={{marginLeft: 10}}>Perempuan</Text>
+            <Text style={styles.textInfo}>Perempuan</Text>
           </View>
         )}
 
@@ -96,7 +96,7 @@ const PendaftarInfo = ({data}) => {
             marginBottom: 15,
           }}>
           <Fontisto name="date" size={25} color={myColor.darkText} />
-          <Text style={{marginLeft: 10}}>
+          <Text style={styles.textInfo}>
             {data.hari}-{data.bulan}-{data.tahun}
           </Text>
         </View>
@@ -112,7 +112,7 @@ const PendaftarInfo = ({data}) => {
             size={25}
             color={myColor.darkText}
           />
-          <Text style={{marginLeft: 10}}>{data.notelp}</Text>
+          <Text style={styles.textInfo}>{data.notelp}</Text>
         </View>
 
         <View
@@ -122,7 +122,7 @@ const PendaftarInfo = ({data}) => {
             marginBottom: 15,
           }}>
           <MaterialIcons name="email" size={25} color={myColor.darkText} />
-          <Text style={{marginLeft: 10}}>{data.email}</Text>
+          <Text style={styles.textInfo}>{data.email}</Text>
         </View>
 
         <View
@@ -136,7 +136,7 @@ const PendaftarInfo = ({data}) => {
             size={25}
             color={myColor.darkText}
           />
-          <Text style={{marginLeft: 10}}>
+          <Text style={styles.textInfo}>
             {data.alamat}, {asalDaerah.kota}, {asalDaerah.provinsi}
           </Text>
         </View>
@@ -148,7 +148,7 @@ const PendaftarInfo = ({data}) => {
             marginBottom: 15,
           }}>
           <MaterialIcons name="info" size={25} color={myColor.darkText} />
-          <Text style={{marginLeft: 10}}>
+          <Text style={styles.textInfo}>
             {data.status === 1 ? 'Pelajar' : 'Pekerja'}
           </Text>
         </View>
@@ -160,7 +160,7 @@ const PendaftarInfo = ({data}) => {
             marginBottom: 15,
           }}>
           <MaterialIcons name="web" size={25} color={myColor.darkText} />
-          <Text style={{marginLeft: 10}}>
+          <Text style={styles.textInfo}>
             {data.status === 1 ? 'Belajar di' : 'Bejerja di '}{' '}
             {data.tempat_kerja_pendidikan}
           </Text>
@@ -172,4 +172,6 @@ const PendaftarInfo = ({data}) => {
 
 export default PendaftarInfo;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  textInfo: {fontSize: 13, fontFamily: 'OpenSans-Regular', marginLeft: 10},
+});

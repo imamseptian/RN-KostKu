@@ -7,28 +7,11 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
-import {myColor} from '../../function/MyVar';
+import {myColor, formatRupiah} from '../../function/MyVar';
 
 const screenWidth = Math.round(Dimensions.get('window').width);
 const screenHeight = Math.round(Dimensions.get('window').height);
 const ModalRiwayat = (props) => {
-  function formatRupiah(angka, prefix) {
-    let number_string = angka.replace(/[^,\d]/g, '').toString(),
-      split = number_string.split(','),
-      sisa = split[0].length % 3,
-      rupiah = split[0].substr(0, sisa),
-      ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-    // tambahkan titik jika yang di input sudah menjadi angka ribuan
-    if (ribuan) {
-      separator = sisa ? '.' : '';
-      rupiah += separator + ribuan.join('.');
-    }
-
-    rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-    return prefix == undefined ? rupiah : rupiah ? 'Rp. ' + rupiah : '';
-  }
-
   return (
     <View
       style={{
@@ -117,17 +100,17 @@ export default ModalRiwayat;
 
 const styles = StyleSheet.create({
   subtitle: {
-    width: 0.25 * screenWidth,
+    width: 0.2 * screenWidth,
     paddingRight: 5,
+    color: myColor.fbtx,
+    fontFamily: 'OpenSans-SemiBold',
     fontSize: 12,
-    color: myColor.blackText,
-    fontWeight: 'bold',
   },
   konten: {
-    width: 0.53 * screenWidth,
+    width: 0.58 * screenWidth,
     fontSize: 12,
-    fontWeight: 'bold',
-    color: myColor.darkText,
+    fontFamily: 'OpenSans-Regular',
+    fontSize: 12,
   },
   fieldWrapper: {
     flexDirection: 'row',
@@ -136,5 +119,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     alignItems: 'center',
     paddingVertical: 5,
+  },
+  judul: {
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 12,
+    color: myColor.fbtx,
   },
 });

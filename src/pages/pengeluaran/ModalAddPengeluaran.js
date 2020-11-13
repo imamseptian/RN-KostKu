@@ -95,7 +95,9 @@ const ModalAddPengeluaran = (props) => {
             paddingVertical: 10,
             alignItems: 'center',
           }}>
-          <Text>Tambah Data Pengeluaran</Text>
+          <Text style={{fontFamily: 'OpenSans-Bold', fontSize: 14}}>
+            Tambah Data Pengeluaran
+          </Text>
         </View>
 
         <View
@@ -114,6 +116,7 @@ const ModalAddPengeluaran = (props) => {
               marginBottom: 15,
             }}>
             <TextInput
+              style={styles.textInput}
               placeholder="Judul pengeluaran"
               onChangeText={(e) => setpengeluaran({...pengeluaran, judul: e})}
             />
@@ -129,6 +132,7 @@ const ModalAddPengeluaran = (props) => {
               marginBottom: 15,
             }}>
             <TextInput
+              style={styles.textInput}
               placeholder="Nominal Pengeluaran"
               keyboardType="numeric"
               onChangeText={(e) => {
@@ -152,6 +156,7 @@ const ModalAddPengeluaran = (props) => {
               marginBottom: 30,
             }}>
             <TextInput
+              style={styles.textInput}
               placeholder="Deskripsi"
               multiline={true}
               onChangeText={(e) => setpengeluaran({...pengeluaran, desc: e})}
@@ -161,14 +166,19 @@ const ModalAddPengeluaran = (props) => {
             <View
               style={{
                 width: 0.7 * screenWidth,
-                height: 40,
+                height: 35,
                 borderRadius: 10,
                 backgroundColor: myColor.myblue,
                 marginBottom: 15,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Text style={{fontSize: 14, fontWeight: 'bold', color: '#fff'}}>
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontFamily: 'OpenSans-Bold',
+                  color: '#fff',
+                }}>
                 Tambahkan
               </Text>
             </View>
@@ -181,7 +191,7 @@ const ModalAddPengeluaran = (props) => {
             <View
               style={{
                 width: 0.7 * screenWidth,
-                height: 40,
+                height: 35,
                 borderRadius: 10,
                 backgroundColor: 'white',
                 borderWidth: 1,
@@ -191,8 +201,8 @@ const ModalAddPengeluaran = (props) => {
               }}>
               <Text
                 style={{
-                  fontSize: 14,
-                  fontWeight: 'bold',
+                  fontSize: 12,
+                  fontFamily: 'OpenSans-Bold',
                   color: myColor.fbtx,
                 }}>
                 Tutup
@@ -207,4 +217,9 @@ const ModalAddPengeluaran = (props) => {
 
 export default ModalAddPengeluaran;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  textInput: {
+    fontFamily: 'OpenSans-Regular',
+    fontSize: 12,
+  },
+});

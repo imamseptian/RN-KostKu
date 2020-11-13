@@ -17,6 +17,9 @@ const PenghuniInfo = ({data}) => {
   });
 
   useEffect(() => {
+    console.log('useeffect penghuni info');
+    console.log(data);
+    console.log('-----------------------------');
     const source = axios.CancelToken.source();
     let one =
       'https://dev.farizdotid.com/api/daerahindonesia/kota/' + data.kota;
@@ -45,13 +48,14 @@ const PenghuniInfo = ({data}) => {
         }),
       )
       .catch((errors) => {
+        console.log('ERROR PENGHUNI INFO');
         // react on errors.
       });
 
     return () => {
       source.cancel('Api Canceled');
     };
-  });
+  }, [data]);
 
   return (
     <View>
@@ -76,7 +80,7 @@ const PenghuniInfo = ({data}) => {
               size={25}
               color={myColor.darkText}
             />
-            <Text style={{marginLeft: 10}}>Laki-Laki</Text>
+            <Text style={[styles.textInfo, {marginLeft: 10}]}>Laki-Laki</Text>
           </View>
         ) : (
           <View
@@ -90,7 +94,7 @@ const PenghuniInfo = ({data}) => {
               size={25}
               color={myColor.darkText}
             />
-            <Text style={{marginLeft: 10}}>Perempuan</Text>
+            <Text style={[styles.textInfo, {marginLeft: 10}]}>Perempuan</Text>
           </View>
         )}
 
@@ -101,7 +105,7 @@ const PenghuniInfo = ({data}) => {
             marginBottom: 15,
           }}>
           <Fontisto name="date" size={25} color={myColor.darkText} />
-          <Text style={{marginLeft: 10}}>
+          <Text style={[styles.textInfo, {marginLeft: 10}]}>
             {data.hari}-{data.bulan}-{data.tahun}
           </Text>
         </View>
@@ -117,7 +121,7 @@ const PenghuniInfo = ({data}) => {
             size={25}
             color={myColor.darkText}
           />
-          <Text style={{marginLeft: 10}}>{data.notelp}</Text>
+          <Text style={[styles.textInfo, {marginLeft: 10}]}>{data.notelp}</Text>
         </View>
 
         <View
@@ -127,7 +131,7 @@ const PenghuniInfo = ({data}) => {
             marginBottom: 15,
           }}>
           <MaterialIcons name="email" size={25} color={myColor.darkText} />
-          <Text style={{marginLeft: 10}}>{data.email}</Text>
+          <Text style={[styles.textInfo, {marginLeft: 10}]}>{data.email}</Text>
         </View>
 
         <View
@@ -141,7 +145,7 @@ const PenghuniInfo = ({data}) => {
             size={25}
             color={myColor.darkText}
           />
-          <Text style={{marginLeft: 10}}>
+          <Text style={[styles.textInfo, {marginLeft: 10}]}>
             {data.alamat}, {asalDaerah.kota}, {asalDaerah.provinsi}
           </Text>
         </View>
@@ -153,7 +157,7 @@ const PenghuniInfo = ({data}) => {
             marginBottom: 15,
           }}>
           <MaterialIcons name="info" size={25} color={myColor.darkText} />
-          <Text style={{marginLeft: 10}}>
+          <Text style={[styles.textInfo, {marginLeft: 10}]}>
             {data.status === 1 ? 'Pelajar' : 'Pekerja'}
           </Text>
         </View>
@@ -165,7 +169,7 @@ const PenghuniInfo = ({data}) => {
             marginBottom: 15,
           }}>
           <MaterialIcons name="web" size={25} color={myColor.darkText} />
-          <Text style={{marginLeft: 10}}>
+          <Text style={[styles.textInfo, {marginLeft: 10}]}>
             {data.status === 1 ? 'Belajar di' : 'Bejerja di '}{' '}
             {data.tempat_kerja_pendidikan}
           </Text>
@@ -177,4 +181,6 @@ const PenghuniInfo = ({data}) => {
 
 export default PenghuniInfo;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  textInfo: {fontFamily: 'OpenSans-Regular', fontSize: 13},
+});

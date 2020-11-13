@@ -11,6 +11,9 @@ const PenghuniTagihan = ({data}) => {
   const [dataTagihan, setdataTagihan] = useState([]);
   const dataRedux = useSelector((state) => state.AuthReducer);
   useEffect(() => {
+    console.log('useeffect penghuni tagihan');
+    console.log(data);
+    console.log('*************************************');
     const source = axios.CancelToken.source();
     myAxios.getAxios(
       APIUrl + '/api/gettagihan/' + data.id,
@@ -34,7 +37,8 @@ const PenghuniTagihan = ({data}) => {
         console.log('caught cancel filter');
         // setIsLoading(false);
       } else {
-        console.log(data);
+        // console.log(data);
+        console.log('ERROR PENGHUNI TAGIHAN');
         // setIsLoading(false);
       }
     }
@@ -43,7 +47,7 @@ const PenghuniTagihan = ({data}) => {
       source.cancel('Component got unmounted');
       console.log('Tagihan unmounted');
     };
-  }, []);
+  }, [data]);
 
   return (
     <ScrollView contentContainerStyle={{paddingBottom: 20}}>
@@ -56,8 +60,10 @@ const PenghuniTagihan = ({data}) => {
           width: 0.9 * screenWidth,
           marginHorizontal: 0.05 * screenWidth,
         }}>
-        <Text>Tagihan Aktif : {dataTagihan.length}</Text>
-        <Text>Lihat Semua</Text>
+        <Text style={styles.textInfo}>
+          Tagihan Aktif : {dataTagihan.length}
+        </Text>
+        <Text style={styles.textInfo}>Lihat Semua</Text>
       </View>
 
       <View style={{flex: 1}}>
@@ -71,4 +77,6 @@ const PenghuniTagihan = ({data}) => {
 
 export default PenghuniTagihan;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  textInfo: {fontFamily: 'OpenSans-Regular', fontSize: 13},
+});

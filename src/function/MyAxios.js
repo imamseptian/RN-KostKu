@@ -18,7 +18,7 @@ class MyAxios {
           onPost('cancel', error);
         } else {
           onPost('error', error);
-          throw error;
+          // throw error;
         }
       });
   };

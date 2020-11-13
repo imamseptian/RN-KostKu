@@ -31,7 +31,18 @@ const DetailPenghuni = ({navigation, route}) => {
   const {item} = route.params;
   const datapage = [
     {id: 'page0', page: <PenghuniInfo data={item} />},
-    {id: 'page1', page: <PenghuniBerkas data={item} />},
+    {
+      id: 'page1',
+      page: (
+        <PenghuniBerkas
+          data={item}
+          onPress={() => {
+            setimageIndex(1);
+            setshowImg(true);
+          }}
+        />
+      ),
+    },
     {id: 'page3', page: <PenghuniTagihan data={item} />},
   ];
 
@@ -145,7 +156,12 @@ const DetailPenghuni = ({navigation, route}) => {
         </TouchableNativeFeedback>
       </View>
       <View style={{flex: 1, paddingTop: 15}}>
-        <Text style={{textAlign: 'center', fontSize: 20}}>
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 20,
+            fontFamily: 'OpenSans-SemiBold',
+          }}>
           {item.nama_depan} {item.nama_belakang}
         </Text>
         <Animated.FlatList

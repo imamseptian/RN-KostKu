@@ -28,7 +28,7 @@ const TabBayar = (props) => {
             style={{
               color:
                 props.selectedTab == props.id ? myColor.fbtx : myColor.fbtx1,
-              fontWeight: 'bold',
+              fontFamily: 'OpenSans-SemiBold',
               fontSize: 14,
               marginVertical: 2,
             }}>

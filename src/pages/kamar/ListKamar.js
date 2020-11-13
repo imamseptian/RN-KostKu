@@ -49,8 +49,9 @@ const ListKamar = ({navigation}) => {
     });
   };
 
-  const ambilApi = async (myToken) => {
+  const ambilApi = (myToken) => {
     // const source = axios.CancelToken.source();
+    console.log('INI AMBIL API', isFocused);
     setIsLoading(true);
     myAxios.postAxios(
       APIUrl + '/api/classes?page=1',
@@ -78,9 +79,14 @@ const ListKamar = ({navigation}) => {
 
   useEffect(() => {
     const source = axios.CancelToken.source();
-    console.log('focus', filter);
-    ambilApi(source.token);
+    if (isFocused) {
+      console.log('FOCUS LIST KAMAR --------------------');
+      console.log('focus', filter);
+      ambilApi(source.token);
+    }
+
     return () => {
+      console.log('LOST FOCUS LIST KAMAR --------------------');
       setisLoad(false);
       setFilter({
         ...filter,
@@ -88,6 +94,7 @@ const ListKamar = ({navigation}) => {
         sortname: 'nama',
         orderby: 'asc',
       });
+
       setSelectedTag(1);
       source.cancel('Component got unmounted');
       // console.log('unmounted');

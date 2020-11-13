@@ -69,7 +69,11 @@ const TabTransaksi = (props) => {
             justifyContent: 'center',
           }}>
           <Text
-            style={{fontSize: 14, color: myColor.darkText, fontWeight: 'bold'}}>
+            style={{
+              fontSize: 14,
+              color: myColor.darkText,
+              fontFamily: 'OpenSans-SemiBold',
+            }}>
             Tagihan tidak ditemukan
           </Text>
         </View>
@@ -121,7 +125,7 @@ const TabTransaksi = (props) => {
             style={{
               fontSize: 14,
               color: props.penghuni === undefined ? myColor.blackText : '#fff',
-              fontWeight: 'bold',
+              fontFamily: 'OpenSans-Bold',
             }}>
             Bayar
           </Text>

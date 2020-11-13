@@ -34,7 +34,18 @@ const DetailPendaftar = ({navigation, route}) => {
   const {item} = route.params;
   const datapage = [
     {id: 'page0', page: <PendaftarInfo data={item} />},
-    {id: 'page1', page: <PendaftarBerkas data={item} />},
+    {
+      id: 'page1',
+      page: (
+        <PendaftarBerkas
+          data={item}
+          onPress={() => {
+            setimageIndex(1);
+            setshowImg(true);
+          }}
+        />
+      ),
+    },
   ];
 
   const labels = ['Info', 'Berkas'];
@@ -210,7 +221,12 @@ const DetailPendaftar = ({navigation, route}) => {
         </TouchableNativeFeedback>
       </View>
       <View style={{flex: 1, paddingTop: 30}}>
-        <Text style={{textAlign: 'center', fontSize: 20}}>
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 20,
+            fontFamily: 'OpenSans-SemiBold',
+          }}>
           {item.nama_depan} {item.nama_belakang}
         </Text>
         <Animated.FlatList
@@ -283,7 +299,11 @@ const DetailPendaftar = ({navigation, route}) => {
               alignItems: 'center',
             }}>
             <Text
-              style={{fontSize: 12, fontWeight: 'bold', color: myColor.fbtx}}>
+              style={{
+                fontSize: 12,
+                fontFamily: 'OpenSans-Bold',
+                color: myColor.fbtx,
+              }}>
               Terima
             </Text>
           </View>
@@ -315,7 +335,12 @@ const DetailPendaftar = ({navigation, route}) => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text style={{fontSize: 12, fontWeight: 'bold', color: '#fff'}}>
+            <Text
+              style={{
+                fontSize: 12,
+                fontFamily: 'OpenSans-Bold',
+                color: '#fff',
+              }}>
               Tolak
             </Text>
           </View>

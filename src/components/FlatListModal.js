@@ -88,7 +88,7 @@ const FlatListModal = (props) => {
                   style={{
                     fontSize: 12,
                     fontWeight: 'bold',
-                    color: props.data.tagihan > 0 ? myColor.blackText : '#fff',
+                    color: props.data.tagihan < 1 ? myColor.blackText : '#fff',
                   }}>
                   {0 - props.data.tagihan}
                   {/* {props.data.id} */}
@@ -98,7 +98,7 @@ const FlatListModal = (props) => {
           </View>
 
           <View style={{marginTop: 5}}>
-            <Text style={[styles.nama, {fontSize: 12}]}>
+            <Text style={styles.harga}>
               {props.data.nama_kamar} (Rp {props.data.harga_kamar} / Bulan){' '}
             </Text>
           </View>
@@ -110,4 +110,13 @@ const FlatListModal = (props) => {
 
 export default FlatListModal;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  nama: {
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 14,
+  },
+  harga: {
+    fontFamily: 'OpenSans-Regular',
+    fontSize: 12,
+  },
+});

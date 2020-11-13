@@ -63,10 +63,10 @@ const ModalDaftarPenghuni = (props) => {
         }}>
         <Text
           style={{
-            fontWeight: 'bold',
+            fontFamily: 'OpenSans-SemiBold',
             fontSize: 14,
-            color: myColor.blackText,
-            marginBottom: 5,
+            color: myColor.fbtx,
+            marginBottom: 10,
           }}>
           Cari Penghuni Kost
         </Text>

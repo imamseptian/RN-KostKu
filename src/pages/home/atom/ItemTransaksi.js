@@ -39,7 +39,7 @@ const ItemTransaksi = (props) => {
           numberOfLines={1}
           style={{
             fontSize: 12,
-            fontWeight: 'bold',
+            fontFamily: 'OpenSans-SemiBold',
             color: myColor.fbtx,
             maxWidth: 0.5 * screenWidth,
           }}>
@@ -48,7 +48,12 @@ const ItemTransaksi = (props) => {
             : props.data.judul}
         </Text>
         <View style={{alignItems: 'center', flexDirection: 'row'}}>
-          <Text style={{fontSize: 12, fontWeight: 'bold', color: myColor.fbtx}}>
+          <Text
+            style={{
+              fontSize: 12,
+              fontFamily: 'OpenSans-Regular',
+              color: myColor.fbtx,
+            }}>
             {formatRupiah(props.data.jumlah.toString(), 'Rp. ')}
           </Text>
           <AntDesign

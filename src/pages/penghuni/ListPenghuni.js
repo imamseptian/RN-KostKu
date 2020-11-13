@@ -1,6 +1,6 @@
-import {useFocusEffect} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import axios from 'axios';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
@@ -25,6 +25,8 @@ import {APIUrl, myColor} from '../../function/MyVar';
 const screenWidth = Math.round(Dimensions.get('window').width);
 
 const ListPenghuni = ({navigation}) => {
+  const isFocused = useIsFocused();
+  const scrollRef = useRef();
   const [selectedTag, setSelectedTag] = useState(1);
   const dataRedux = useSelector((state) => state.AuthReducer);
   const [penghuni, setPenghuni] = useState([]);
@@ -49,7 +51,12 @@ const ListPenghuni = ({navigation}) => {
     });
   };
 
-  const ambilApi = async (myToken) => {
+  const ambilApi = (myToken) => {
+    console.log('INI AMBIL API PENGHUNI');
+    console.log(myToken);
+    console.log(filter);
+    console.log(dataRedux.token);
+    console.log('#####################');
     setIsLoading(true);
     myAxios.postAxios(
       APIUrl + '/api/daftarpenghuni?page=1',
@@ -68,31 +75,34 @@ const ListPenghuni = ({navigation}) => {
       } else if (status == 'cancel') {
         console.log('caught cancel filter');
       } else {
+        console.log('error ambil api list penghuni');
         console.log(data);
         setIsLoading(false);
       }
     }
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const source = axios.CancelToken.source();
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    if (isFocused) {
+      console.log('FOCUS LIST PENGHUNI');
       ambilApi(source.token);
-      return () => {
-        setisLoad(false);
-        setFilter({
-          ...filter,
-          namakeyword: '',
-          sortname: 'nama',
-          orderby: 'asc',
-        });
-        setSelectedTag(1);
-        // setPenghuni([]);
-        setbanyakData(0);
-        source.cancel('Penghuni Screen got unmounted');
-      };
-    }, []),
-  );
+    }
+    return () => {
+      console.log('LOST FOCUS LIST PENGHUNI');
+      setisLoad(false);
+      setFilter({
+        ...filter,
+        namakeyword: '',
+        sortname: 'nama_depan',
+        orderby: 'asc',
+      });
+      setSelectedTag(1);
+
+      setbanyakData(0);
+      source.cancel('Penghuni Screen got unmounted');
+    };
+  }, [isFocused]);
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -136,25 +146,9 @@ const ListPenghuni = ({navigation}) => {
     };
   }, [filter]);
 
-  const renderItem = ({item, index, separator}) => {
-    return (
-      <Item
-        item={item}
-        onPress={() => {
-          // navigation.push('DetailPenghuni', {penghuni: item});
-          navigation.push('DetailPenghuni', {item});
-        }}
-      />
-    );
-  };
-
-  const Item = ({item, onPress, style}) => (
-    <FlatListPenghuni item={item} onPress={onPress} />
-  );
-
   const goToTop = () => {
     if (penghuni.length > 0) {
-      scroll.scrollToIndex({animated: true, index: 0});
+      scrollRef.current.scrollToIndex({animated: true, index: 0});
     }
   };
 
@@ -253,11 +247,8 @@ const ListPenghuni = ({navigation}) => {
         <View style={{paddingBottom: 50}}>
           {/* <FlatListPendaftar /> */}
           <FlatList
-            ref={(c) => {
-              scroll = c;
-            }}
+            ref={scrollRef}
             data={penghuni}
-            renderItem={renderItem}
             keyExtractor={(item) => item.id.toString()}
             // extraData={selectedId}
             showsVerticalScrollIndicator={false}
@@ -271,6 +262,17 @@ const ListPenghuni = ({navigation}) => {
                 />
               ) : null
             }
+            renderItem={({item, index, separator}) => {
+              return (
+                <FlatListPenghuni
+                  item={item}
+                  onPress={() => {
+                    // navigation.push('DetailPenghuni', {penghuni: item});
+                    navigation.push('DetailPenghuni', {item});
+                  }}
+                />
+              );
+            }}
           />
         </View>
       </View>

@@ -104,7 +104,8 @@ const DetailKeuangan = ({navigation, route}) => {
           paddingBottom: 10,
           position: 'relative',
         }}>
-        <Text style={{fontSize: 14, fontWeight: 'bold', color: '#fff'}}>
+        <Text
+          style={{fontSize: 14, fontFamily: 'OpenSans-Bold', color: '#fff'}}>
           Pemasukan dan Pengeluaran Kost
         </Text>
         <TouchableOpacity
@@ -152,8 +153,8 @@ const DetailKeuangan = ({navigation, route}) => {
               <Text
                 style={{
                   color: currentPage == 0 ? '#fff' : myColor.fbtx,
-                  fontSize: 13,
-                  fontWeight: 'bold',
+                  fontSize: 12,
+                  fontFamily: 'OpenSans-Bold',
                 }}>
                 Pengeluaran
               </Text>
@@ -181,8 +182,8 @@ const DetailKeuangan = ({navigation, route}) => {
               <Text
                 style={{
                   color: currentPage == 1 ? '#fff' : myColor.fbtx,
-                  fontSize: 13,
-                  fontWeight: 'bold',
+                  fontSize: 12,
+                  fontFamily: 'OpenSans-Bold',
                 }}>
                 Pemasukan
               </Text>

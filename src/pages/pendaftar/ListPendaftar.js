@@ -1,9 +1,8 @@
-import {useFocusEffect} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
-  Dimensions,
   FlatList,
   ScrollView,
   StatusBar,
@@ -20,11 +19,10 @@ import {
   TagSearch,
 } from '../../components/atoms';
 import {myAxios} from '../../function/MyAxios';
-import {APIUrl, myColor} from '../../function/MyVar';
-
-const screenWidth = Math.round(Dimensions.get('window').width);
+import {APIUrl, myColor, screenWidth} from '../../function/MyVar';
 
 const ListPendaftar = ({navigation, route}) => {
+  const isFocused = useIsFocused();
   const [selectedTag, setSelectedTag] = useState(1);
   const dataRedux = useSelector((state) => state.AuthReducer);
   const [pendaftar, setPendaftar] = useState([]);
@@ -39,10 +37,6 @@ const ListPendaftar = ({navigation, route}) => {
     id_kostan: dataRedux.user.kostku,
   });
   const [maxLimit, setmaxLimit] = useState(0);
-
-  const Item = ({item, onPress, style}) => (
-    <FlatListPendaftar item={item} onPress={onPress} />
-  );
 
   const setForm = (inputType, value) => {
     setFilter({
@@ -78,24 +72,24 @@ const ListPendaftar = ({navigation, route}) => {
     }
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const source = axios.CancelToken.source();
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    if (isFocused) {
       ambilApi(source.token);
-      return () => {
-        setisLoad(false);
-        setFilter({
-          ...filter,
-          namakeyword: '',
-          sortname: 'tanggal_daftar',
-          orderby: 'asc',
-        });
-        setSelectedTag(1);
+    }
+    return () => {
+      setisLoad(false);
+      setFilter({
+        ...filter,
+        namakeyword: '',
+        sortname: 'tanggal_daftar',
+        orderby: 'asc',
+      });
+      setSelectedTag(1);
 
-        source.cancel('Component got unmounted');
-      };
-    }, []),
-  );
+      source.cancel('Component got unmounted');
+    };
+  }, [isFocused]);
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -135,18 +129,6 @@ const ListPendaftar = ({navigation, route}) => {
       }
     }
   }, [page]);
-
-  const renderItem = ({item, index, separator}) => {
-    return (
-      <Item
-        item={item}
-        onPress={() => {
-          // navigation.push('DetailPendaftar', {pendaftar: item});
-          navigation.push('DetailPendaftar', {item});
-        }}
-      />
-    );
-  };
 
   const goToTop = () => {
     if (pendaftar.length > 0) {
@@ -263,7 +245,6 @@ const ListPendaftar = ({navigation, route}) => {
               scroll = c;
             }}
             data={pendaftar}
-            renderItem={renderItem}
             keyExtractor={(item) => item.id.toString()}
             // extraData={selectedId}
             showsVerticalScrollIndicator={false}
@@ -277,6 +258,16 @@ const ListPendaftar = ({navigation, route}) => {
                 />
               ) : null
             }
+            renderItem={({item, index, separator}) => {
+              return (
+                <FlatListPendaftar
+                  item={item}
+                  onPress={() => {
+                    navigation.push('DetailPendaftar', {item});
+                  }}
+                />
+              );
+            }}
           />
           {/* <View style={{}} /> */}
         </View>

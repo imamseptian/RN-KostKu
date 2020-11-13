@@ -21,14 +21,19 @@ const ListData = (props) => {
           style={{height: 50, width: 50, borderRadius: 25}}
         />
         <View style={{marginLeft: 10}}>
-          <Text style={{fontSize: 14, fontWeight: 'bold', color: myColor.fbtx}}>
+          <Text
+            style={{
+              fontSize: 14,
+              fontFamily: 'OpenSans-SemiBold',
+              color: myColor.fbtx,
+            }}>
             {props.data.nama_depan} {props.data.nama_belakang}
           </Text>
           <Text
             style={{
               fontSize: 12,
-              fontWeight: 'bold',
-              color: myColor.fbtx1,
+              fontFamily: 'OpenSans-Regular',
+              color: myColor.darkText,
             }}>
             {props.data.waktu} WIB
           </Text>
@@ -38,7 +43,7 @@ const ListData = (props) => {
         <Text
           style={{
             fontSize: 14,
-            fontWeight: 'bold',
+            fontFamily: 'OpenSans-Regular',
             color: myColor.fbtx,
           }}>
           {formatRupiah(props.data.jumlah.toString(), 'Rp. ')}
